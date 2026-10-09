@@ -1,0 +1,302 @@
+title: "Beacon: six weeks to a campus event check-in pilot"
+timezone: Asia/Kolkata
+period:
+  start: 2026-08-24
+  end: 2026-10-02
+  weekdays_only: true
+  target_messages_per_channel_day: 12-16
+premise: >
+  Six students are building Beacon, a small event check-in and attendance dashboard
+  for a university entrepreneurship cell. The first pilot is a campus demo on
+  2026-10-02. They chat across three Slack-style work channels and two Discord-style
+  community channels. The team changes its mind several times as the pilot nears.
+personas:
+  - id: priya
+    name: Priya Shah
+    role: tech lead
+    style: Clear, calm, writes decisions with reasons and asks for explicit owners.
+  - id: arjun
+    name: Arjun Rao
+    role: backend engineer
+    style: Terse, lower-case, short status updates and quick acknowledgments.
+  - id: meera
+    name: Meera Iyer
+    role: product lead
+    style: Precise, uses checklists, dates, acceptance criteria, and meeting recaps.
+  - id: zoya
+    name: Zoya Khan
+    role: pilot coordinator
+    style: Natural Hinglish in Latin script; owns campus logistics and volunteer training.
+  - id: leo
+    name: Leo D'Souza
+    role: designer
+    style: Emoji-heavy, visual language, casual enthusiasm, occasional mockup links.
+  - id: nikhil
+    name: Nikhil Menon
+    role: infrastructure engineer
+    style: Pastes exact commands, logs, code fences, and links; explains fixes briefly.
+channels:
+  - {id: eng, name: eng, platform_style: slack, topic: "Backend, data, deploys, bugs"}
+  - {id: product, name: product, platform_style: slack, topic: "Scope, decisions, user feedback"}
+  - {id: ops, name: ops, platform_style: slack, topic: "Pilot logistics, owners, deadlines"}
+  - {id: build-help, name: build-help, platform_style: discord, topic: "Fast debugging and peer help"}
+  - {id: random, name: random, platform_style: discord, topic: "Off-topic talk and lightweight updates"}
+filler_topics:
+  - classes and exam scheduling
+  - cafeteria food, rain, and commute delays
+  - CSS spacing, icon choices, and copy edits
+  - ordinary standup notes and small refactors
+  - jokes, typos, lol, +1, and short acknowledgments
+  - harmless example links and occasional code blocks
+facts:
+  - id: F01
+    key_tokens: []
+    date: 2026-08-24
+    channel: product
+    owner: meera
+    fact: "Beacon's pilot target is the entrepreneurship cell's 2026-10-02 campus demo; the first release covers QR check-in and an attendance dashboard."
+  - id: F02
+    key_tokens: []
+    date: 2026-08-24
+    channel: eng
+    owner: priya
+    fact: "The team chooses MongoDB for the prototype because event payloads may vary."
+    label_notes: "Reversed by F17; current database is Postgres."
+  - id: F03
+    key_tokens: []
+    date: 2026-08-25
+    channel: ops
+    owner: zoya
+    fact: "Zoya owns the pilot venue booking and must confirm Seminar Hall B by 2026-09-04."
+  - id: F04
+    key_tokens: []
+    date: 2026-08-26
+    channel: product
+    owner: meera
+    fact: "The pilot success bar is 95% successful check-ins for 100 attendees, measured from exported attendance rows."
+  - id: F05
+    key_tokens: ["https://git.example.com/beacon/checkin-api", "/healthz"]
+    date: 2026-08-27
+    channel: eng
+    owner: nikhil
+    fact: "The API repository is at https://git.example.com/beacon/checkin-api; the sample deploy uses the /healthz endpoint."
+  - id: F06
+    key_tokens: []
+    date: 2026-08-28
+    channel: product
+    owner: leo
+    fact: "Leo owns the QR scanner interaction mockup and its first review deadline is 2026-09-03."
+  - id: F07
+    key_tokens: []
+    date: 2026-08-31
+    channel: eng
+    owner: arjun
+    fact: "Check-in deduplication uses attendee_id plus event_id; scanning the same ticket twice should return the existing attendance record."
+  - id: F08
+    key_tokens: ["17:00 IST"]
+    date: 2026-09-01
+    channel: ops
+    owner: meera
+    fact: "The weekly pilot sync is set for Wednesdays at 17:00 IST."
+    label_notes: "F15 later changes the time to 18:30 IST."
+  - id: F09
+    key_tokens: ["28P01", "docker compose down -v && docker compose up -d"]
+    date: 2026-09-02
+    channel: build-help
+    owner: nikhil
+    fact: "Local Postgres startup fails with exact error code 28P01 (password authentication failed); running `docker compose down -v && docker compose up -d` resets the stale demo volume and fixes it."
+  - id: F10
+    key_tokens: []
+    date: 2026-09-03
+    channel: product
+    owner: leo
+    fact: "The reviewed scanner screen uses a large camera target and a manual code entry fallback for cracked-camera phones."
+  - id: F11
+    key_tokens: []
+    date: 2026-09-04
+    channel: ops
+    owner: zoya
+    fact: "Seminar Hall B booking is confirmed for the 2026-10-02 pilot, capacity 120."
+  - id: F12
+    key_tokens: []
+    date: 2026-09-07
+    channel: eng
+    owner: priya
+    fact: "The first database sketch stores scan events separately from attendance rows, so retries can be audited."
+  - id: F13
+    key_tokens: ["firefly"]
+    date: 2026-09-08
+    channel: random
+    owner: leo
+    fact: "The team's internal demo nickname is Firefly; Beacon remains the public product name."
+  - id: F14
+    key_tokens: ["QR_EXPIRED", "expires_at"]
+    date: 2026-09-09
+    channel: build-help
+    owner: arjun
+    fact: "The scanner returns exact error `QR_EXPIRED` for codes older than 15 minutes; Arjun fixes the test fixture by setting `expires_at` in UTC."
+  - id: F15
+    key_tokens: ["18:30 IST"]
+    date: 2026-09-10
+    channel: ops
+    owner: meera
+    fact: "The Wednesday pilot sync moves from 17:00 to 18:30 IST starting 2026-09-16 because Zoya has lab until 18:00."
+  - id: F16
+    key_tokens: []
+    date: 2026-09-11
+    channel: product
+    owner: meera
+    fact: "The team plans an SMS fallback for attendees without smartphones."
+    label_notes: "F25 later drops SMS for the pilot."
+  - id: F17
+    key_tokens: []
+    date: 2026-09-14
+    channel: eng
+    owner: priya
+    thread_instruction: >
+      Make one thread of at least five messages. Priya proposes Postgres instead
+      of MongoDB; Arjun explains the export join pain; Nikhil explains constraints
+      for deduplication; Meera asks about the timeline impact; Priya confirms the
+      Postgres decision. Plant this fact across the thread. No single message may
+      contain all the reasons.
+    fact: "The team chooses Postgres to replace MongoDB after discussing relational reporting joins, deduplication constraints, and the migration timeline."
+    label_notes: "Reverses F02; current database decision is Postgres. Relevant evidence spans multiple thread messages."
+  - id: F18
+    key_tokens: ["uv run alembic upgrade head"]
+    date: 2026-09-15
+    channel: eng
+    owner: nikhil
+    fact: "The migration command for the Postgres switch is `uv run alembic upgrade head`; Nikhil owns migration verification by 2026-09-18."
+  - id: F19
+    key_tokens: []
+    date: 2026-09-16
+    channel: ops
+    owner: zoya
+    fact: "Zoya needs a volunteer roster of six people by 2026-09-23; two volunteers must staff the manual entry desk."
+  - id: F20
+    key_tokens: []
+    date: 2026-09-17
+    channel: product
+    owner: priya
+    thread_instruction: >
+      Make this a two-message thread: Priya asks whether to freeze QR format v2
+      for the pilot; Meera's short reply is exactly 'yes, do that'. Plant the
+      fact on the reply, which only makes sense with its parent.
+    fact: "Meera approves freezing QR format v2 for the pilot in a short thread reply."
+  - id: F21
+    key_tokens: ["23505", "ON CONFLICT (event_id, attendee_id) DO NOTHING"]
+    date: 2026-09-18
+    channel: build-help
+    owner: nikhil
+    fact: "A staging scan fails with `23505` unique_violation after retry; `INSERT ... ON CONFLICT (event_id, attendee_id) DO NOTHING` makes the attendance write idempotent."
+  - id: F22
+    key_tokens: []
+    date: 2026-09-21
+    channel: eng
+    owner: arjun
+    fact: "Arjun owns the CSV attendance export and its deadline is 2026-09-25; columns are event_id, attendee_id, checked_in_at."
+  - id: F23
+    key_tokens: ["8:15"]
+    date: 2026-09-22
+    channel: random
+    owner: zoya
+    language: hinglish_only
+    fact: "Kal ke volunteer drill ke liye gate 3 pe 8:15 baje milna hai; main extra lanyards laungi."
+    label_notes: "For tomorrow's volunteer drill, meet at gate 3 at 08:15; Zoya will bring extra lanyards. Never translate this fact in corpus text."
+  - id: F24
+    key_tokens: []
+    date: 2026-09-23
+    channel: ops
+    owner: zoya
+    fact: "The six-person volunteer roster is complete; Ira and Dev staff manual entry, while the other four handle QR lanes."
+  - id: F25
+    key_tokens: []
+    date: 2026-09-24
+    channel: product
+    owner: meera
+    fact: "SMS fallback is dropped for the pilot due to carrier setup delay; staff will use manual code entry instead."
+    label_notes: "Reverses F16; current pilot fallback is manual code entry."
+  - id: F26
+    key_tokens: []
+    date: 2026-09-25
+    channel: eng
+    owner: arjun
+    fact: "The CSV attendance export ships on its deadline with the three agreed columns."
+  - id: F27
+    key_tokens: ["CORS_ORIGIN_DENIED", "ALLOWED_ORIGINS", "https://demo.beacon.example"]
+    date: 2026-09-28
+    channel: build-help
+    owner: nikhil
+    fact: "Staging returns exact error `CORS_ORIGIN_DENIED` for the dashboard; setting `ALLOWED_ORIGINS=https://demo.beacon.example` and redeploying fixes it."
+  - id: F28
+    key_tokens: []
+    date: 2026-09-29
+    channel: product
+    owner: leo
+    fact: "The dashboard's attendance count refreshes every 30 seconds rather than live streaming, to keep the pilot stable."
+  - id: F29
+    key_tokens: ["16:00 IST"]
+    date: 2026-09-30
+    channel: ops
+    owner: meera
+    fact: "The final rehearsal is 2026-10-01 at 16:00 IST in Seminar Hall B; Priya checks API health and Zoya walks volunteers through the lanes."
+  - id: F30
+    key_tokens: []
+    date: 2026-10-02
+    channel: ops
+    owner: zoya
+    fact: "The pilot records 98 successful check-ins out of 100 attendees, exceeding the 95% success bar; two use manual code entry."
+  - id: F31
+    key_tokens: ["28000", "DATABASE_URL"]
+    date: 2026-09-03
+    channel: build-help
+    owner: arjun
+    fact: "Postgres returns error `28000` because role `beacon` does not exist: the DATABASE_URL has the wrong username. Correcting the username fixes it; resetting the volume does not."
+  - id: F32
+    key_tokens: ["15:00 IST"]
+    date: 2026-09-15
+    channel: product
+    owner: meera
+    fact: "Design review is Thursdays at 15:00 IST."
+    label_notes: "Distractor for pilot sync time; design review is a separate meeting."
+  - id: F33
+    key_tokens: []
+    date: 2026-09-08
+    channel: [random, ops]
+    owner: [leo, meera]
+    channel_instructions:
+      random: "Leo wrongly says the demo is October 3. Do not correct him in this channel."
+      ops: "Meera corrects Leo's earlier #random post: the demo is October 2."
+    fact: "Leo posts the wrong demo date (October 3) in #random; Meera corrects it to October 2 in #ops."
+    label_notes: "The correct date is October 2; both channels are relevant, but Meera's correction is the direct answer."
+  - id: F34
+    key_tokens: []
+    date: 2026-09-24
+    channel: random
+    owner: arjun
+    fact: "Arjun jokes, 'mongo would've let me skip migrations lol'."
+    label_notes: "Post-reversal MongoDB mention is only a joke; F17's Postgres decision remains current."
+  - id: F35
+    key_tokens: []
+    date: 2026-09-22
+    channel: product
+    owner: null
+    fact: "The team discusses paid ticketing after the pilot but reaches no decision and assigns no owner."
+    label_notes: "Use for unanswerable questions asking who owns paid ticketing or what was decided."
+  - id: F36
+    key_tokens: ["18:00 IST"]
+    date: 2026-09-29
+    channel: eng
+    owner: [nikhil, priya]
+    thread_instruction: >
+      Nikhil asks to freeze deploys after 18:00 IST on October 1. Priya replies
+      exactly '+1, go with that'. Plant the fact on Priya's reply; the reply
+      alone must not mention the freeze.
+    fact: "Priya approves Nikhil's proposal to freeze deploys after 18:00 IST on 2026-10-01 in a short thread reply."
+  - id: F37
+    key_tokens: ["23505", "ON CONFLICT (event_id, attendee_id) DO NOTHING"]
+    date: 2026-09-21
+    channel: eng
+    owner: arjun
+    fact: "Arjun recaps the earlier #build-help thread: error `23505` came from a duplicate attendance write on retry, and `ON CONFLICT (event_id, attendee_id) DO NOTHING` fixes it."
+    label_notes: "Cross-channel recap of F21; either channel can provide evidence, but the exact full SQL fix is in F21."

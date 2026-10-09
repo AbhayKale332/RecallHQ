@@ -1,0 +1,48 @@
+{
+  "model": "gpt-5.4-mini",
+  "cap_tokens": 300000,
+  "runs": [
+    {
+      "purpose": "initial candidate verification",
+      "total_tokens": 234494
+    },
+    {
+      "purpose": "claim revision",
+      "total_tokens": 6427
+    },
+    {
+      "purpose": "context recheck",
+      "total_tokens": 10479
+    },
+    {
+      "purpose": "additional Q01 evidence parts",
+      "total_tokens": 4050
+    },
+    {
+      "purpose": "context recheck for short replies and plant authors",
+      "total_tokens": 5635
+    },
+    {
+      "purpose": "Q35 plant claim revision",
+      "total_tokens": 1153
+    },
+    {
+      "purpose": "Q35 wording refinement",
+      "total_tokens": 1162
+    },
+    {
+      "purpose": "author-context plant check",
+      "total_tokens": 498
+    },
+    {
+      "purpose": "F14 and F21 repaired plant checks",
+      "total_tokens": 866
+    }
+  ],
+  "total_tokens": 264764,
+  "audit_file": "evals/ref-verifications.jsonl",
+  "input_tokens": 211104,
+  "output_tokens": 53660,
+  "cached_input_tokens": 0,
+  "estimated_usd": 0.399798
+}

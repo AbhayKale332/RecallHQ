@@ -1,0 +1,27 @@
+{
+  "note": "Standard API list-price equivalent; actual billed amount is not available from local logs.",
+  "generation": {
+    "calls": 289,
+    "input_tokens": 714772,
+    "output_tokens": 414985,
+    "cached_input_tokens": 257792,
+    "model": "gpt-5.4-mini",
+    "estimated_usd": 2.229502
+  },
+  "ref_verification": {
+    "calls": 152,
+    "input_tokens": 210374,
+    "output_tokens": 53524,
+    "cached_input_tokens": 0,
+    "model": "gpt-5.4-mini",
+    "estimated_usd": 0.398639
+  },
+  "embeddings": {
+    "calls": 24,
+    "input_tokens": 182417,
+    "chunks": 2391,
+    "model": "text-embedding-3-small",
+    "estimated_usd": 0.003648
+  },
+  "estimated_total_usd": 2.631789
+}

@@ -1,0 +1,15 @@
+Interview-tips/
+# secrets
+.env
+.env.*
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# generated synthetic artifacts and local database state
+data/synthetic/raw/
+.ruff_cache/
+.coverage

@@ -1,0 +1,138 @@
+# Human-reviewed corrections after the four-call cap. Raw model responses remain untouched.
+repairs:
+  "product:2026-08-28":
+    attempt: 0
+    messages:
+      "20260828-03":
+        plants: []
+      "20260828-07":
+        plants: [F06]
+        refs: []
+  "product:2026-09-07":
+    attempt: 1
+    messages:
+      "20260907-07":
+        parent_id: null
+  "random:2026-09-08":
+    attempt: 3
+    messages:
+      "20260908-08":
+        text: "Aaj mujhe campus office se last-round volunteers ki list mil gayi, par kuch log classes ke kaaran late aa sakte hain. Main unko ek chhota briefing note bhej dungi taaki koi confusion na ho."
+      "20260908-11":
+        text: "Wait, isn't the campus demo October 3? I put that on the slide 😅 Anyway, I'm fixing icon alignment now."
+        plants: [F33]
+  "product:2026-09-15":
+    attempt: 3
+    messages:
+      "20260915-06":
+        text: |-
+          Checklist for scope freeze:
+          - QR check-in flow stays as-is
+          - dashboard shows exported attendance rows
+          - no add-on modules this week
+          Acceptance criteria:
+          - pilot demo flow fits in one walkthrough
+          - nothing blocks the 2026-10-02 campus run
+  "build-help:2026-09-15":
+    attempt: 0
+    messages:
+      "20260915-15":
+        refs: [F31, F01]
+  "build-help:2026-09-09":
+    attempt: 0
+    messages:
+      "20260909-02":
+        text: "+1. the broken scanner fixture was old. i set `expires_at` in UTC; expired codes return `QR_EXPIRED` and the test is stable now."
+  "build-help:2026-09-18":
+    attempt: 2
+    messages:
+      "20260918-03":
+        text: "found it — staging retry was hitting `23505` unique_violation on the attendance insert. switched it to `INSERT ... ON CONFLICT (event_id, attendee_id) DO NOTHING`, retry is idempotent now, no more double writes."
+  "random:2026-09-24":
+    attempt: 1
+    messages:
+      "20260924-03":
+        plants: []
+      "20260924-12":
+        plants: [F34]
+        refs: []
+  "eng:2026-09-25":
+    attempt: 1
+    messages:
+      "20260925-01":
+        plants: []
+      "20260925-02":
+        plants: [F26]
+        refs: [F22]
+  "eng:2026-09-21":
+    attempt: 2
+    messages:
+      "20260921-01":
+        text: "Quick sync: Arjun owns the CSV attendance export due 2026-09-25. Keep the columns event_id, attendee_id, checked_in_at."
+        plants: [F22]
+      "20260921-05":
+        text: "recap from the earlier #build-help thread: `23505` came from a duplicate attendance write on retry. `ON CONFLICT (event_id, attendee_id) DO NOTHING` is the fix; the export code wasn't the cause."
+        plants: [F37]
+        refs: [F21]
+      "20260921-07":
+        text: "FYI the sample deploy still responds at /healthz, so the basic smoke path is fine. If a local issue comes up, compare env vars first; mismatches are common."
+  "product:2026-09-22":
+    attempt: 1
+    messages:
+      "20260922-09":
+        text: "We've discussed paid ticketing for after the pilot, but there is no decision and no owner for it today."
+        plants: [F35]
+  "eng:2026-09-14":
+    attempt: 0
+    messages:
+      "20260914-03":
+        author: arjun
+        text: "+1. with mongo it was okay for loose payloads, but the attendance export wants joins way more than i expected. postgres should save us some glue code."
+        refs: [F02, F17, F04]
+      "20260914-04":
+        author: nikhil
+        text: "yep, Postgres makes the dedup rule cleaner too. we can put a unique constraint around the scan identity and keep retries auditable without weird app-level hacks."
+        refs: [F17, F12]
+      "20260914-06":
+        text: "Decision: Postgres replaces MongoDB for the prototype. The switch stays limited to the data layer, and the 2026-10-02 pilot remains on schedule."
+  "eng:2026-09-29":
+    attempt: 0
+    messages:
+      "20260929-03":
+        text: "Staging is healthy again after the origin fix, and /healthz is green. For the pilot, can we freeze deploys after 18:00 IST on 2026-10-01? I'd like a quiet rollout window."
+  "ops:2026-09-08":
+    attempt: 2
+    messages:
+      "20260908-07":
+        text: "Good. Hall B stays the venue. Zoya, please share the desk layout when you've checked the entrance; the volunteer flow needs to be clear."
+      "20260908-08":
+        text: "Yep, I'll take it. Aaj main volunteers ko ek short briefing bhej dungi: kaun entry pe rahega, kaun scanner ke paas, aur kaun attendance sheet monitor karega. Thoda aur tight kar dete hain taaki kal ko confusion na ho."
+      "20260908-09":
+        created_at: "2026-09-08T14:10:00+05:30"
+      "20260908-10":
+        created_at: "2026-09-08T14:18:00+05:30"
+      "20260908-11":
+        created_at: "2026-09-08T14:25:00+05:30"
+      "20260908-12":
+        created_at: "2026-09-08T14:40:00+05:30"
+      "20260908-13":
+        created_at: "2026-09-08T15:05:00+05:30"
+      "20260908-14":
+        created_at: "2026-09-08T15:18:00+05:30"
+        text: "Looks good. The venue booking is confirmed; volunteer briefing and scan-flow checks are still in progress. Please call out anything blocking the pilot."
+        refs: [F11, F19, F07]
+  "random:2026-09-23":
+    attempt: 0
+    messages:
+      "20260923-09":
+        text: "Waise kal wala volunteer drill gate 3 pe 8:15 baje hua tha. Main extra lanyards le aayi thi, aur jo late hua usko flow phir samjhana pada 😤"
+  "random:2026-09-25":
+    attempt: 1
+    messages:
+      "20260925-03":
+        text: "Aaj gate 3 ke paas bahut bheed thi, so I took the longer route. Lanyards bag me hain, koi chahiye ho to bolna. Us din wali drill ka scene better tha waise."
+  "eng:2026-09-30":
+    attempt: 0
+    messages:
+      "20260930-07":
+        text: "Gate 3 pe 8:15 wale volunteer drill se lesson yeh hai: manual desk walon ko pehle brief karo, warna line messy ho jaati hai. Main extra lanyards aur volunteer list le aaungi."

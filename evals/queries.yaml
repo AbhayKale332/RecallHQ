@@ -1,0 +1,4140 @@
+queries:
+- id: Q01
+  type: catch_up
+  split: dev
+  tags:
+  - F17
+  - F18
+  - F20
+  - easy
+  - paraphrase
+  query: 'Catch me up on Sep 14–18: what changed about the database, how was migration checked, and what happened
+    to QR format v2?'
+  answerable: true
+  answer: Postgres replaced MongoDB after discussion of reporting joins and dedupe constraints, with no pilot delay.
+    Nikhil verified the migration using `uv run alembic upgrade head` by Sep 18. Meera approved freezing QR format
+    v2 for the pilot.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:eng:20260914-02
+    - synthetic:eng:20260914-06
+    - synthetic:eng:20260915-01
+    - synthetic:eng:20260918-07
+    - synthetic:ops:20260916-08
+  - part: p2
+    message_ids:
+    - synthetic:eng:20260914-06
+    - synthetic:eng:20260915-01
+    - synthetic:eng:20260918-07
+    - synthetic:ops:20260916-08
+  - part: p3
+    message_ids:
+    - synthetic:build-help:20260918-02
+    - synthetic:eng:20260915-02
+    - synthetic:eng:20260917-04
+    - synthetic:ops:20260916-09
+    - synthetic:ops:20260918-05
+    - synthetic:product:20260916-08
+    - synthetic:product:20260918-04
+    - synthetic:random:20260917-09
+    - synthetic:random:20260918-06
+  - part: p4
+    message_ids:
+    - synthetic:build-help:20260918-02
+    - synthetic:ops:20260918-05
+    - synthetic:product:20260918-04
+    - synthetic:random:20260918-06
+  - part: p5
+    message_ids:
+    - synthetic:product:20260917-01
+  - part: p6
+    message_ids:
+    - synthetic:product:20260917-02
+  window:
+  - '2026-09-14'
+  - '2026-09-18'
+  parts:
+  - id: p1
+    fact_ids:
+    - F17
+    claim: Priya raised a Postgres switch for the prototype
+  - id: p2
+    fact_ids:
+    - F17
+    claim: Postgres replaced MongoDB for the pilot
+  - id: p3
+    fact_ids:
+    - F18
+    claim: Nikhil planned to verify the migration with uv run alembic upgrade head
+  - id: p4
+    fact_ids:
+    - F18
+    claim: Nikhil ran uv run alembic upgrade head and confirmed the migration passed
+  - id: p5
+    fact_ids:
+    - F20
+    claim: Priya asked whether to freeze QR format v2 for the pilot
+  - id: p6
+    fact_ids:
+    - F20
+    claim: Meera approved freezing QR format v2 for the pilot
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: '2026-09-14'
+    before: '2026-09-19'
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260916-03: 1
+    synthetic:build-help:20260916-13: 1
+    synthetic:build-help:20260916-14: 1
+    synthetic:build-help:20260917-13: 1
+    synthetic:build-help:20260918-01: 1
+    synthetic:build-help:20260918-02: 2
+    synthetic:eng:20260914-02: 3
+    synthetic:eng:20260914-03: 1
+    synthetic:eng:20260914-04: 1
+    synthetic:eng:20260914-05: 1
+    synthetic:eng:20260914-06: 2
+    synthetic:eng:20260914-10: 1
+    synthetic:eng:20260914-16: 1
+    synthetic:eng:20260915-01: 2
+    synthetic:eng:20260915-02: 3
+    synthetic:eng:20260915-05: 1
+    synthetic:eng:20260915-15: 1
+    synthetic:eng:20260916-01: 1
+    synthetic:eng:20260916-04: 1
+    synthetic:eng:20260916-07: 1
+    synthetic:eng:20260916-13: 1
+    synthetic:eng:20260917-04: 2
+    synthetic:eng:20260917-07: 1
+    synthetic:eng:20260917-09: 1
+    synthetic:eng:20260918-01: 1
+    synthetic:eng:20260918-07: 2
+    synthetic:ops:20260916-08: 2
+    synthetic:ops:20260916-09: 2
+    synthetic:ops:20260917-04: 1
+    synthetic:ops:20260918-05: 2
+    synthetic:product:20260915-03: 1
+    synthetic:product:20260916-08: 2
+    synthetic:product:20260917-01: 1
+    synthetic:product:20260917-02: 3
+    synthetic:product:20260917-07: 1
+    synthetic:product:20260918-03: 1
+    synthetic:product:20260918-04: 2
+    synthetic:product:20260918-08: 1
+    synthetic:random:20260917-08: 1
+    synthetic:random:20260917-09: 2
+    synthetic:random:20260918-04: 1
+    synthetic:random:20260918-06: 2
+    synthetic:random:20260918-10: 1
+    synthetic:random:20260918-15: 1
+  lexical_overlap: 0.071
+  fact_ids:
+  - F17
+  - F18
+  - F20
+- id: Q02
+  type: catch_up
+  split: test
+  tags:
+  - F22
+  - F23
+  - F24
+  - easy
+  query: 'Catch me up on Sep 21–25: what was planned for the CSV export, when and where was the volunteer drill,
+    and how were volunteers assigned?'
+  answerable: true
+  answer: 'Arjun owned the CSV export due Sep 25 with event_id, attendee_id, checked_in_at. The volunteer drill
+    was at gate 3 at 08:15 on Sep 23; Zoya brought extra lanyards. The six-person roster was completed: Ira and
+    Dev at manual entry, four at QR lanes.'
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:eng:20260921-01
+    - synthetic:eng:20260921-14
+  - part: p2
+    message_ids:
+    - synthetic:random:20260922-03
+    - synthetic:random:20260923-09
+  - part: p3
+    message_ids:
+    - synthetic:ops:20260923-01
+    - synthetic:ops:20260923-12
+  window:
+  - '2026-09-21'
+  - '2026-09-25'
+  parts:
+  - id: p1
+    fact_ids:
+    - F22
+    claim: Arjun owned the CSV export due Sep 25, with event_id, attendee_id, checked_in_at
+  - id: p2
+    fact_ids:
+    - F23
+    claim: The volunteer drill was at gate 3 at 08:15 on Sep 23
+  - id: p3
+    fact_ids:
+    - F24
+    claim: Ira and Dev staffed manual entry, with four others in QR lanes
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: '2026-09-21'
+    before: '2026-09-26'
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260923-03: 1
+    synthetic:build-help:20260923-05: 1
+    synthetic:build-help:20260923-12: 1
+    synthetic:build-help:20260923-14: 1
+    synthetic:build-help:20260924-07: 1
+    synthetic:build-help:20260925-03: 1
+    synthetic:build-help:20260925-04: 1
+    synthetic:build-help:20260925-05: 1
+    synthetic:build-help:20260925-09: 1
+    synthetic:build-help:20260925-10: 1
+    synthetic:build-help:20260925-11: 1
+    synthetic:eng:20260921-01: 3
+    synthetic:eng:20260921-04: 1
+    synthetic:eng:20260921-06: 1
+    synthetic:eng:20260921-10: 1
+    synthetic:eng:20260921-12: 1
+    synthetic:eng:20260921-14: 2
+    synthetic:eng:20260922-02: 1
+    synthetic:eng:20260922-04: 1
+    synthetic:eng:20260922-09: 1
+    synthetic:eng:20260922-10: 1
+    synthetic:eng:20260922-13: 1
+    synthetic:eng:20260922-15: 1
+    synthetic:eng:20260923-02: 1
+    synthetic:eng:20260923-07: 1
+    synthetic:eng:20260923-13: 1
+    synthetic:eng:20260924-04: 1
+    synthetic:eng:20260924-05: 1
+    synthetic:eng:20260924-09: 1
+    synthetic:eng:20260924-10: 1
+    synthetic:eng:20260924-11: 1
+    synthetic:eng:20260924-12: 1
+    synthetic:eng:20260924-15: 1
+    synthetic:eng:20260925-01: 1
+    synthetic:eng:20260925-02: 1
+    synthetic:eng:20260925-03: 1
+    synthetic:eng:20260925-06: 1
+    synthetic:eng:20260925-08: 1
+    synthetic:eng:20260925-10: 1
+    synthetic:eng:20260925-12: 1
+    synthetic:ops:20260922-05: 1
+    synthetic:ops:20260922-10: 1
+    synthetic:ops:20260923-01: 3
+    synthetic:ops:20260923-02: 1
+    synthetic:ops:20260923-03: 1
+    synthetic:ops:20260923-04: 1
+    synthetic:ops:20260923-06: 1
+    synthetic:ops:20260923-07: 1
+    synthetic:ops:20260923-11: 1
+    synthetic:ops:20260923-12: 2
+    synthetic:ops:20260923-14: 1
+    synthetic:ops:20260924-04: 1
+    synthetic:ops:20260924-10: 1
+    synthetic:ops:20260924-14: 1
+    synthetic:ops:20260925-03: 1
+    synthetic:ops:20260925-04: 1
+    synthetic:ops:20260925-06: 1
+    synthetic:ops:20260925-08: 1
+    synthetic:ops:20260925-09: 1
+    synthetic:ops:20260925-10: 1
+    synthetic:ops:20260925-12: 1
+    synthetic:ops:20260925-15: 1
+    synthetic:product:20260922-03: 1
+    synthetic:product:20260922-08: 1
+    synthetic:product:20260922-13: 1
+    synthetic:product:20260923-09: 1
+    synthetic:product:20260923-12: 1
+    synthetic:product:20260924-03: 1
+    synthetic:product:20260924-05: 1
+    synthetic:product:20260924-13: 1
+    synthetic:product:20260925-04: 1
+    synthetic:product:20260925-05: 1
+    synthetic:product:20260925-06: 1
+    synthetic:product:20260925-09: 1
+    synthetic:product:20260925-11: 1
+    synthetic:product:20260925-14: 1
+    synthetic:random:20260922-03: 3
+    synthetic:random:20260923-09: 2
+    synthetic:random:20260923-11: 1
+    synthetic:random:20260923-12: 1
+    synthetic:random:20260924-06: 1
+    synthetic:random:20260924-07: 1
+    synthetic:random:20260925-03: 1
+    synthetic:random:20260925-09: 1
+    synthetic:random:20260925-10: 1
+  lexical_overlap: 0.385
+  fact_ids:
+  - F22
+  - F23
+  - F24
+- id: Q03
+  type: catch_up
+  split: dev
+  tags:
+  - F27
+  - F28
+  - F29
+  - F36
+  - easy
+  query: 'Catch me up on Sep 28–Oct 2: what happened to staging, dashboard refresh, the final rehearsal, and the
+    deploy freeze?'
+  answerable: true
+  answer: Staging dashboard CORS_ORIGIN_DENIED was fixed by setting ALLOWED_ORIGINS=https://demo.beacon.example
+    and redeploying. The dashboard refresh stayed at 30 seconds. Final rehearsal was Oct 1 at 16:00 IST in Seminar
+    Hall B, with Priya on API health and Zoya walking volunteers through lanes. Priya approved freezing deploys
+    after 18:00 IST on Oct 1.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:build-help:20260928-01
+    - synthetic:build-help:20260928-15
+    - synthetic:build-help:20260929-02
+    - synthetic:build-help:20260930-01
+    - synthetic:eng:20261001-09
+    - synthetic:eng:20261002-03
+    - synthetic:ops:20260930-06
+    - synthetic:product:20261001-06
+    - synthetic:random:20261002-05
+  - part: p2
+    message_ids:
+    - synthetic:build-help:20260930-03
+    - synthetic:build-help:20260930-09
+    - synthetic:build-help:20261001-13
+    - synthetic:build-help:20261002-03
+    - synthetic:build-help:20261002-10
+    - synthetic:eng:20260930-11
+    - synthetic:eng:20261001-03
+    - synthetic:eng:20261001-10
+    - synthetic:ops:20261002-03
+    - synthetic:ops:20261002-09
+    - synthetic:ops:20261002-14
+    - synthetic:product:20260929-10
+    - synthetic:product:20260929-14
+    - synthetic:product:20260930-06
+    - synthetic:product:20260930-12
+    - synthetic:product:20261002-06
+    - synthetic:random:20261001-11
+  - part: p3
+    message_ids:
+    - synthetic:ops:20260930-01
+  - part: p4
+    message_ids:
+    - synthetic:eng:20260929-08
+    - synthetic:eng:20260930-09
+    - synthetic:eng:20260930-15
+    - synthetic:ops:20261001-09
+  window:
+  - '2026-09-28'
+  - '2026-10-02'
+  parts:
+  - id: p1
+    fact_ids:
+    - F27
+    claim: The staging CORS_ORIGIN_DENIED problem was fixed by ALLOWED_ORIGINS and redeploy
+  - id: p2
+    fact_ids:
+    - F28
+    claim: The dashboard count refreshes every 30 seconds
+  - id: p3
+    fact_ids:
+    - F29
+    claim: Final rehearsal was Oct 1 at 16:00 IST in Seminar Hall B, with Priya on API health and Zoya on volunteer
+      lanes
+  - id: p4
+    fact_ids:
+    - F36
+    claim: Priya approved freezing deploys after 18:00 IST on Oct 1
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: '2026-09-28'
+    before: '2026-10-03'
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260928-01: 3
+    synthetic:build-help:20260928-06: 1
+    synthetic:build-help:20260928-15: 2
+    synthetic:build-help:20260929-01: 1
+    synthetic:build-help:20260929-02: 2
+    synthetic:build-help:20260930-01: 2
+    synthetic:build-help:20260930-03: 2
+    synthetic:build-help:20260930-09: 2
+    synthetic:build-help:20261001-03: 1
+    synthetic:build-help:20261001-08: 1
+    synthetic:build-help:20261001-09: 1
+    synthetic:build-help:20261001-13: 2
+    synthetic:build-help:20261002-03: 2
+    synthetic:build-help:20261002-10: 2
+    synthetic:eng:20260929-03: 1
+    synthetic:eng:20260929-08: 3
+    synthetic:eng:20260929-09: 1
+    synthetic:eng:20260930-04: 1
+    synthetic:eng:20260930-09: 2
+    synthetic:eng:20260930-11: 2
+    synthetic:eng:20260930-15: 2
+    synthetic:eng:20261001-01: 1
+    synthetic:eng:20261001-03: 2
+    synthetic:eng:20261001-09: 2
+    synthetic:eng:20261001-10: 2
+    synthetic:eng:20261001-16: 1
+    synthetic:eng:20261002-03: 2
+    synthetic:eng:20261002-10: 1
+    synthetic:eng:20261002-13: 1
+    synthetic:eng:20261002-15: 1
+    synthetic:eng:20261002-16: 1
+    synthetic:ops:20260930-01: 3
+    synthetic:ops:20260930-03: 1
+    synthetic:ops:20260930-06: 2
+    synthetic:ops:20260930-07: 1
+    synthetic:ops:20260930-09: 1
+    synthetic:ops:20260930-14: 1
+    synthetic:ops:20261001-01: 1
+    synthetic:ops:20261001-03: 1
+    synthetic:ops:20261001-04: 1
+    synthetic:ops:20261001-06: 1
+    synthetic:ops:20261001-09: 2
+    synthetic:ops:20261001-12: 1
+    synthetic:ops:20261001-16: 1
+    synthetic:ops:20261002-03: 2
+    synthetic:ops:20261002-09: 2
+    synthetic:ops:20261002-14: 2
+    synthetic:product:20260929-10: 3
+    synthetic:product:20260929-14: 2
+    synthetic:product:20260930-05: 1
+    synthetic:product:20260930-06: 2
+    synthetic:product:20260930-07: 1
+    synthetic:product:20260930-08: 1
+    synthetic:product:20260930-12: 2
+    synthetic:product:20261001-05: 1
+    synthetic:product:20261001-06: 2
+    synthetic:product:20261001-15: 1
+    synthetic:product:20261001-16: 1
+    synthetic:product:20261002-06: 2
+    synthetic:product:20261002-12: 1
+    synthetic:random:20261001-08: 1
+    synthetic:random:20261001-09: 1
+    synthetic:random:20261001-11: 2
+    synthetic:random:20261002-04: 1
+    synthetic:random:20261002-05: 2
+    synthetic:random:20261002-07: 1
+    synthetic:random:20261002-13: 1
+  lexical_overlap: 0.4
+  fact_ids:
+  - F27
+  - F28
+  - F29
+  - F36
+- id: Q04
+  type: temporal
+  split: dev
+  tags:
+  - F02
+  - easy
+  - paraphrase
+  query: What database was originally selected for the prototype, and why?
+  answerable: true
+  answer: MongoDB, because event payloads could vary.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:eng:20260824-01
+    - synthetic:eng:20260909-14
+  parts:
+  - id: p1
+    fact_ids:
+    - F02
+    claim: MongoDB was originally chosen for the prototype because event payloads vary
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260825-01: 1
+    synthetic:build-help:20260825-02: 1
+    synthetic:build-help:20260826-02: 1
+    synthetic:build-help:20260826-06: 1
+    synthetic:build-help:20260828-07: 1
+    synthetic:build-help:20260831-02: 1
+    synthetic:build-help:20260831-10: 1
+    synthetic:build-help:20260904-07: 1
+    synthetic:eng:20260824-01: 3
+    synthetic:eng:20260824-13: 1
+    synthetic:eng:20260825-07: 1
+    synthetic:eng:20260826-02: 1
+    synthetic:eng:20260826-03: 1
+    synthetic:eng:20260826-08: 1
+    synthetic:eng:20260828-03: 1
+    synthetic:eng:20260828-08: 1
+    synthetic:eng:20260901-02: 1
+    synthetic:eng:20260903-03: 1
+    synthetic:eng:20260907-08: 1
+    synthetic:eng:20260909-14: 2
+    synthetic:eng:20260914-03: 1
+    synthetic:eng:20260918-07: 1
+    synthetic:ops:20260825-04: 1
+    synthetic:ops:20260826-05: 1
+    synthetic:ops:20260827-05: 1
+    synthetic:ops:20260827-12: 1
+    synthetic:ops:20260907-06: 1
+    synthetic:product:20260825-10: 1
+    synthetic:product:20260901-11: 1
+    synthetic:random:20260826-11: 1
+    synthetic:random:20260831-05: 1
+    synthetic:random:20260901-05: 1
+    synthetic:random:20260902-12: 1
+  lexical_overlap: 0.25
+  fact_ids:
+  - F02
+- id: Q05
+  type: temporal
+  split: dev
+  tags:
+  - F08
+  - F15
+  query: What is the current Wednesday pilot sync time, and what was its earlier slot?
+  answerable: true
+  answer: It moved from 17:00 IST to 18:30 IST starting Sep 16 because Zoya had lab until 18:00.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:ops:20260910-01
+    - synthetic:ops:20260910-02
+    - synthetic:ops:20260911-01
+    - synthetic:random:20260916-16
+    - synthetic:random:20260918-14
+  - part: p2
+    message_ids:
+    - synthetic:ops:20260901-01
+    - synthetic:ops:20260901-06
+    - synthetic:ops:20260901-13
+    - synthetic:random:20260902-11
+  parts:
+  - id: p1
+    fact_ids:
+    - F15
+    claim: Wednesday pilot sync shifts to 18:30 IST starting Sep 16
+  - id: p2
+    fact_ids:
+    - F08
+    claim: Earlier Wednesday pilot sync time was 17:00 IST
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:ops:20260901-01: 3
+    synthetic:ops:20260901-06: 2
+    synthetic:ops:20260901-13: 2
+    synthetic:ops:20260910-01: 3
+    synthetic:ops:20260910-02: 2
+    synthetic:ops:20260911-01: 2
+    synthetic:random:20260902-11: 2
+    synthetic:random:20260916-16: 2
+    synthetic:random:20260918-14: 2
+  lexical_overlap: 0.5
+  fact_ids:
+  - F08
+  - F15
+- id: Q06
+  type: temporal
+  split: test
+  tags:
+  - F16
+  - F25
+  - easy
+  query: Is SMS fallback still in the pilot plan, and what replaced it?
+  answerable: true
+  answer: No. SMS fallback was dropped for the pilot; manual code entry remains the fallback.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:eng:20260915-09
+    - synthetic:product:20260911-01
+    - synthetic:product:20260911-11
+    - synthetic:product:20260911-14
+    - synthetic:product:20260915-15
+    - synthetic:product:20260917-06
+  - part: p2
+    message_ids:
+    - synthetic:build-help:20260930-06
+    - synthetic:ops:20260925-07
+    - synthetic:product:20260924-01
+    - synthetic:product:20260925-07
+    - synthetic:product:20260925-11
+    - synthetic:product:20261001-07
+  parts:
+  - id: p1
+    fact_ids:
+    - F16
+    claim: SMS fallback was once planned for pilot attendees without smartphones
+  - id: p2
+    fact_ids:
+    - F25
+    claim: SMS fallback is not in the pilot; manual code entry remains the fallback
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260917-11: 1
+    synthetic:build-help:20260930-06: 2
+    synthetic:build-help:20261002-03: 1
+    synthetic:build-help:20261002-06: 1
+    synthetic:build-help:20261002-12: 1
+    synthetic:eng:20260915-09: 2
+    synthetic:eng:20260929-04: 1
+    synthetic:ops:20260924-07: 1
+    synthetic:ops:20260925-07: 2
+    synthetic:ops:20260928-03: 1
+    synthetic:ops:20260928-12: 1
+    synthetic:ops:20260928-13: 1
+    synthetic:ops:20261002-03: 1
+    synthetic:product:20260911-01: 3
+    synthetic:product:20260911-06: 1
+    synthetic:product:20260911-11: 2
+    synthetic:product:20260911-14: 2
+    synthetic:product:20260915-15: 2
+    synthetic:product:20260916-01: 1
+    synthetic:product:20260916-09: 1
+    synthetic:product:20260917-06: 2
+    synthetic:product:20260924-01: 3
+    synthetic:product:20260924-07: 1
+    synthetic:product:20260924-08: 1
+    synthetic:product:20260924-13: 1
+    synthetic:product:20260924-14: 1
+    synthetic:product:20260925-06: 1
+    synthetic:product:20260925-07: 2
+    synthetic:product:20260925-11: 2
+    synthetic:product:20261001-07: 2
+    synthetic:product:20261001-12: 1
+    synthetic:product:20261001-14: 1
+    synthetic:product:20261001-16: 1
+    synthetic:random:20260922-13: 1
+    synthetic:random:20261002-04: 1
+    synthetic:random:20261002-13: 1
+  lexical_overlap: 0.667
+  fact_ids:
+  - F16
+  - F25
+- id: Q07
+  type: correction
+  split: test
+  tags:
+  - F33
+  query: 'What is the corrected campus demo date after Leo’s mistaken #random post?'
+  answerable: true
+  answer: 'October 2, 2026; Leo had said October 3 in #random and Meera corrected it in #ops.'
+  evidence_groups:
+  - part: p2
+    message_ids:
+    - synthetic:ops:20260908-09
+  parts:
+  - id: p2
+    fact_ids:
+    - F33
+    claim: Meera corrected campus demo date to October 2
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:ops:20260908-09: 3
+    synthetic:ops:20260908-10: 1
+    synthetic:ops:20260908-12: 1
+    synthetic:random:20260908-11: 1
+    synthetic:random:20260917-06: 1
+    synthetic:random:20260917-10: 1
+  lexical_overlap: 0.375
+  fact_ids:
+  - F33
+- id: Q08
+  type: exact
+  split: dev
+  tags:
+  - F09
+  - easy
+  query: Which command fixed the local 28P01 Postgres failure?
+  answerable: true
+  answer: '`docker compose down -v && docker compose up -d` reset the stale demo volume.'
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:build-help:20260902-01
+    - synthetic:build-help:20260902-13
+    - synthetic:build-help:20260904-03
+    - synthetic:build-help:20260910-02
+    - synthetic:build-help:20260914-05
+    - synthetic:build-help:20260916-01
+    - synthetic:build-help:20260916-04
+    - synthetic:build-help:20260923-01
+    - synthetic:build-help:20260923-02
+    - synthetic:build-help:20260925-06
+    - synthetic:build-help:20261001-06
+    - synthetic:eng:20260904-15
+    - synthetic:eng:20260918-06
+    - synthetic:eng:20260918-13
+    - synthetic:ops:20260903-12
+    - synthetic:ops:20260910-07
+    - synthetic:ops:20260910-13
+    - synthetic:ops:20260915-06
+    - synthetic:ops:20260918-12
+    - synthetic:product:20260909-12
+    - synthetic:random:20260915-14
+  parts:
+  - id: p1
+    fact_ids:
+    - F09
+    claim: docker compose down -v && docker compose up -d fixed local 28P01 from a stale volume
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260902-01: 3
+    synthetic:build-help:20260902-03: 1
+    synthetic:build-help:20260902-09: 1
+    synthetic:build-help:20260902-13: 2
+    synthetic:build-help:20260904-03: 2
+    synthetic:build-help:20260908-14: 1
+    synthetic:build-help:20260910-02: 2
+    synthetic:build-help:20260914-05: 2
+    synthetic:build-help:20260914-09: 1
+    synthetic:build-help:20260916-01: 2
+    synthetic:build-help:20260916-03: 1
+    synthetic:build-help:20260916-04: 2
+    synthetic:build-help:20260923-01: 2
+    synthetic:build-help:20260923-02: 2
+    synthetic:build-help:20260924-01: 1
+    synthetic:build-help:20260925-06: 2
+    synthetic:build-help:20260930-13: 1
+    synthetic:build-help:20260930-14: 1
+    synthetic:build-help:20261001-06: 2
+    synthetic:eng:20260903-09: 1
+    synthetic:eng:20260904-15: 2
+    synthetic:eng:20260918-06: 2
+    synthetic:eng:20260918-13: 2
+    synthetic:eng:20260925-04: 1
+    synthetic:eng:20260925-13: 1
+    synthetic:eng:20260925-14: 1
+    synthetic:ops:20260903-12: 2
+    synthetic:ops:20260907-12: 1
+    synthetic:ops:20260910-07: 2
+    synthetic:ops:20260910-13: 2
+    synthetic:ops:20260915-06: 2
+    synthetic:ops:20260918-12: 2
+    synthetic:ops:20260924-08: 1
+    synthetic:product:20260909-12: 2
+    synthetic:random:20260903-13: 1
+    synthetic:random:20260910-05: 1
+    synthetic:random:20260915-06: 1
+    synthetic:random:20260915-14: 2
+    synthetic:random:20260916-12: 1
+    synthetic:random:20260918-13: 1
+    synthetic:random:20260928-05: 1
+    synthetic:random:20260928-11: 1
+  lexical_overlap: 0.5
+  fact_ids:
+  - F09
+- id: Q09
+  type: exact
+  split: test
+  tags:
+  - F31
+  - easy
+  query: For the 28000 error with missing role beacon, should the team reset the volume?
+  answerable: true
+  answer: No. Correct the username in DATABASE_URL; the wrong username caused the error.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:build-help:20260903-01
+    - synthetic:build-help:20260903-03
+    - synthetic:build-help:20260903-07
+    - synthetic:build-help:20260904-01
+    - synthetic:build-help:20260904-13
+    - synthetic:build-help:20260907-01
+    - synthetic:build-help:20260907-02
+    - synthetic:build-help:20260907-08
+    - synthetic:build-help:20260908-01
+    - synthetic:build-help:20260909-01
+    - synthetic:build-help:20260909-06
+    - synthetic:build-help:20260911-01
+    - synthetic:build-help:20260915-01
+    - synthetic:build-help:20260917-01
+    - synthetic:build-help:20260917-12
+    - synthetic:build-help:20260921-05
+    - synthetic:build-help:20260923-06
+    - synthetic:eng:20260904-08
+    - synthetic:eng:20260910-04
+    - synthetic:eng:20260916-08
+    - synthetic:eng:20260917-15
+    - synthetic:eng:20260925-13
+    - synthetic:eng:20260925-14
+    - synthetic:ops:20260910-13
+    - synthetic:random:20260904-11
+    - synthetic:random:20260907-15
+    - synthetic:random:20260911-12
+    - synthetic:random:20260918-13
+  parts:
+  - id: p1
+    fact_ids:
+    - F31
+    claim: 28000 missing role beacon was caused by a wrong DATABASE_URL username, not a stale volume
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260903-01: 3
+    synthetic:build-help:20260903-02: 1
+    synthetic:build-help:20260903-03: 2
+    synthetic:build-help:20260903-04: 1
+    synthetic:build-help:20260903-07: 2
+    synthetic:build-help:20260903-10: 1
+    synthetic:build-help:20260904-01: 2
+    synthetic:build-help:20260904-13: 2
+    synthetic:build-help:20260907-01: 2
+    synthetic:build-help:20260907-02: 2
+    synthetic:build-help:20260907-03: 1
+    synthetic:build-help:20260907-08: 2
+    synthetic:build-help:20260907-15: 1
+    synthetic:build-help:20260908-01: 2
+    synthetic:build-help:20260908-09: 1
+    synthetic:build-help:20260908-14: 1
+    synthetic:build-help:20260909-01: 2
+    synthetic:build-help:20260909-06: 2
+    synthetic:build-help:20260911-01: 2
+    synthetic:build-help:20260911-02: 1
+    synthetic:build-help:20260915-01: 2
+    synthetic:build-help:20260915-03: 1
+    synthetic:build-help:20260915-04: 1
+    synthetic:build-help:20260915-15: 1
+    synthetic:build-help:20260916-01: 1
+    synthetic:build-help:20260916-02: 1
+    synthetic:build-help:20260916-03: 1
+    synthetic:build-help:20260917-01: 2
+    synthetic:build-help:20260917-02: 1
+    synthetic:build-help:20260917-12: 2
+    synthetic:build-help:20260921-05: 2
+    synthetic:build-help:20260923-06: 2
+    synthetic:build-help:20260925-06: 1
+    synthetic:build-help:20260930-14: 1
+    synthetic:eng:20260904-08: 2
+    synthetic:eng:20260904-12: 1
+    synthetic:eng:20260910-04: 2
+    synthetic:eng:20260910-09: 1
+    synthetic:eng:20260916-08: 2
+    synthetic:eng:20260917-15: 2
+    synthetic:eng:20260918-06: 1
+    synthetic:eng:20260918-13: 1
+    synthetic:eng:20260922-08: 1
+    synthetic:eng:20260925-13: 2
+    synthetic:eng:20260925-14: 2
+    synthetic:ops:20260910-13: 2
+    synthetic:random:20260904-11: 2
+    synthetic:random:20260907-15: 2
+    synthetic:random:20260908-06: 1
+    synthetic:random:20260911-12: 2
+    synthetic:random:20260916-12: 1
+    synthetic:random:20260918-13: 2
+    synthetic:random:20260928-11: 1
+  lexical_overlap: 0.444
+  fact_ids:
+  - F31
+- id: Q10
+  type: exact
+  split: dev
+  tags:
+  - F14
+  - easy
+  query: What does the scanner return for a QR code older than 15 minutes, and what stabilized the test?
+  answerable: true
+  answer: '`QR_EXPIRED`; set the test fixture expires_at timestamp in UTC.'
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:build-help:20260909-02
+    - synthetic:build-help:20260914-08
+    - synthetic:build-help:20260915-07
+    - synthetic:build-help:20260918-07
+    - synthetic:build-help:20260918-09
+    - synthetic:ops:20260916-11
+    - synthetic:ops:20260916-12
+    - synthetic:product:20260910-12
+  - part: p2
+    message_ids:
+    - synthetic:build-help:20260909-02
+    - synthetic:build-help:20260910-07
+    - synthetic:build-help:20260915-07
+    - synthetic:build-help:20260918-07
+    - synthetic:build-help:20260918-08
+    - synthetic:product:20260910-12
+    - synthetic:random:20260910-08
+  parts:
+  - id: p1
+    fact_ids:
+    - F14
+    claim: Codes older than 15 minutes return QR_EXPIRED
+  - id: p2
+    fact_ids:
+    - F14
+    claim: Setting expires_at in UTC stabilized the expired-code test
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260909-02: 3
+    synthetic:build-help:20260909-03: 1
+    synthetic:build-help:20260909-06: 1
+    synthetic:build-help:20260909-13: 1
+    synthetic:build-help:20260910-07: 2
+    synthetic:build-help:20260910-10: 1
+    synthetic:build-help:20260910-12: 1
+    synthetic:build-help:20260910-13: 1
+    synthetic:build-help:20260911-08: 1
+    synthetic:build-help:20260911-09: 1
+    synthetic:build-help:20260914-08: 2
+    synthetic:build-help:20260914-09: 1
+    synthetic:build-help:20260914-10: 1
+    synthetic:build-help:20260915-07: 2
+    synthetic:build-help:20260915-09: 1
+    synthetic:build-help:20260916-05: 1
+    synthetic:build-help:20260917-03: 1
+    synthetic:build-help:20260917-04: 1
+    synthetic:build-help:20260918-07: 2
+    synthetic:build-help:20260918-08: 2
+    synthetic:build-help:20260918-09: 2
+    synthetic:build-help:20260918-10: 1
+    synthetic:build-help:20260918-13: 1
+    synthetic:build-help:20260918-14: 1
+    synthetic:build-help:20260924-03: 1
+    synthetic:build-help:20260924-04: 1
+    synthetic:build-help:20261002-09: 1
+    synthetic:eng:20260917-13: 1
+    synthetic:eng:20260917-14: 1
+    synthetic:eng:20260918-12: 1
+    synthetic:ops:20260910-14: 1
+    synthetic:ops:20260916-11: 2
+    synthetic:ops:20260916-12: 2
+    synthetic:product:20260910-12: 2
+    synthetic:random:20260910-08: 2
+  lexical_overlap: 0.4
+  fact_ids:
+  - F14
+- id: Q11
+  type: cross_channel
+  split: test
+  tags:
+  - F21
+  - F37
+  - easy
+  query: What caused staging error 23505 on scan retry, and what exact SQL clause fixed the duplicate write?
+  answerable: true
+  answer: A retry attempted a duplicate attendance write. `ON CONFLICT (event_id, attendee_id) DO NOTHING` made
+    it idempotent.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:build-help:20260918-03
+    - synthetic:eng:20260921-05
+  - part: p2
+    message_ids:
+    - synthetic:build-help:20260918-03
+    - synthetic:eng:20260921-05
+  parts:
+  - id: p1
+    fact_ids:
+    - F21
+    - F37
+    claim: A scan retry caused a duplicate attendance write and 23505
+  - id: p2
+    fact_ids:
+    - F21
+    - F37
+    claim: ON CONFLICT (event_id, attendee_id) DO NOTHING fixed the duplicate write
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260918-04: 1
+    synthetic:build-help:20260918-09: 1
+    synthetic:build-help:20260918-10: 1
+    synthetic:build-help:20260918-14: 1
+    synthetic:build-help:20260921-10: 1
+    synthetic:build-help:20260922-01: 1
+    synthetic:build-help:20260922-02: 1
+    synthetic:build-help:20260922-03: 1
+    synthetic:build-help:20260922-06: 1
+    synthetic:build-help:20260922-07: 1
+    synthetic:build-help:20260922-16: 1
+    synthetic:build-help:20260923-03: 1
+    synthetic:build-help:20260923-04: 1
+    synthetic:build-help:20260923-12: 1
+    synthetic:build-help:20260924-02: 1
+    synthetic:build-help:20260924-13: 1
+    synthetic:build-help:20260925-13: 1
+    synthetic:build-help:20260928-07: 1
+    synthetic:build-help:20260928-08: 1
+    synthetic:build-help:20260928-09: 1
+    synthetic:build-help:20260928-15: 1
+    synthetic:build-help:20260929-06: 1
+    synthetic:build-help:20260929-08: 1
+    synthetic:build-help:20260929-15: 1
+    synthetic:build-help:20260930-03: 1
+    synthetic:build-help:20260930-08: 1
+    synthetic:build-help:20261001-07: 1
+    synthetic:build-help:20261002-02: 1
+    synthetic:build-help:20261002-15: 1
+    synthetic:eng:20260921-04: 1
+    synthetic:eng:20260921-05: 3
+    synthetic:eng:20260921-13: 1
+    synthetic:eng:20260921-14: 1
+    synthetic:eng:20260922-07: 1
+    synthetic:eng:20260922-08: 1
+    synthetic:eng:20260922-10: 1
+    synthetic:eng:20260924-04: 1
+    synthetic:eng:20260924-10: 1
+    synthetic:eng:20260925-03: 1
+    synthetic:eng:20260929-02: 1
+    synthetic:eng:20260929-07: 1
+    synthetic:eng:20260929-14: 1
+    synthetic:eng:20260930-04: 1
+    synthetic:eng:20260930-06: 1
+    synthetic:eng:20261002-02: 1
+    synthetic:eng:20261002-07: 1
+    synthetic:eng:20261002-09: 1
+    synthetic:eng:20261002-14: 1
+    synthetic:ops:20260930-10: 1
+    synthetic:ops:20261001-15: 1
+    synthetic:ops:20261002-10: 1
+    synthetic:product:20260922-07: 1
+    synthetic:product:20260922-08: 1
+    synthetic:product:20260922-13: 1
+    synthetic:random:20260921-12: 1
+    synthetic:random:20261002-05: 1
+    synthetic:random:20261002-11: 1
+    synthetic:random:20261002-15: 1
+    synthetic:build-help:20260918-03: 3
+  lexical_overlap: 0.417
+  fact_ids:
+  - F21
+  - F37
+- id: Q12
+  type: fact
+  split: test
+  tags:
+  - F04
+  - easy
+  query: What was the pilot success threshold and how was it measured?
+  answerable: true
+  answer: At least 95 successful check-ins among 100 attendees, measured from exported attendance rows.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:build-help:20260831-04
+    - synthetic:build-help:20260831-09
+    - synthetic:build-help:20260831-15
+    - synthetic:build-help:20260901-14
+    - synthetic:build-help:20260904-04
+    - synthetic:build-help:20260916-11
+    - synthetic:eng:20260828-04
+    - synthetic:eng:20260903-04
+    - synthetic:eng:20260903-10
+    - synthetic:eng:20260909-12
+    - synthetic:eng:20260914-05
+    - synthetic:eng:20260924-04
+    - synthetic:ops:20260904-09
+    - synthetic:ops:20260910-10
+    - synthetic:ops:20260916-13
+    - synthetic:ops:20260918-10
+    - synthetic:ops:20260924-02
+    - synthetic:ops:20261002-03
+    - synthetic:product:20260826-01
+    - synthetic:product:20260828-01
+    - synthetic:product:20260831-01
+    - synthetic:product:20260904-01
+    - synthetic:product:20260908-01
+    - synthetic:product:20260909-01
+    - synthetic:product:20260914-01
+    - synthetic:product:20260922-01
+    - synthetic:product:20260925-01
+    - synthetic:product:20260928-01
+    - synthetic:product:20261002-01
+    - synthetic:random:20260904-08
+  - part: p2
+    message_ids:
+    - synthetic:build-help:20260827-03
+    - synthetic:build-help:20260828-04
+    - synthetic:build-help:20260831-04
+    - synthetic:build-help:20260831-09
+    - synthetic:build-help:20260831-15
+    - synthetic:build-help:20260904-04
+    - synthetic:build-help:20260907-10
+    - synthetic:build-help:20260911-12
+    - synthetic:build-help:20260916-11
+    - synthetic:build-help:20260917-11
+    - synthetic:build-help:20260918-04
+    - synthetic:build-help:20260922-03
+    - synthetic:eng:20260827-04
+    - synthetic:eng:20260827-10
+    - synthetic:eng:20260828-04
+    - synthetic:eng:20260828-10
+    - synthetic:eng:20260831-04
+    - synthetic:eng:20260831-10
+    - synthetic:eng:20260901-04
+    - synthetic:eng:20260901-10
+    - synthetic:eng:20260902-04
+    - synthetic:eng:20260903-10
+    - synthetic:eng:20260904-09
+    - synthetic:eng:20260907-03
+    - synthetic:eng:20260907-10
+    - synthetic:eng:20260908-03
+    - synthetic:eng:20260908-09
+    - synthetic:eng:20260908-15
+    - synthetic:eng:20260909-04
+    - synthetic:eng:20260909-12
+    - synthetic:eng:20260910-10
+    - synthetic:eng:20260911-10
+    - synthetic:eng:20260914-05
+    - synthetic:eng:20260914-10
+    - synthetic:eng:20260916-04
+    - synthetic:eng:20260917-03
+    - synthetic:eng:20260917-10
+    - synthetic:eng:20260918-04
+    - synthetic:eng:20260918-15
+    - synthetic:eng:20260924-04
+    - synthetic:eng:20260924-10
+    - synthetic:eng:20260929-04
+    - synthetic:ops:20260902-03
+    - synthetic:ops:20260902-08
+    - synthetic:ops:20260902-13
+    - synthetic:ops:20260904-09
+    - synthetic:ops:20260909-03
+    - synthetic:ops:20260910-10
+    - synthetic:ops:20260916-13
+    - synthetic:ops:20260918-03
+    - synthetic:ops:20260918-10
+    - synthetic:ops:20260925-08
+    - synthetic:ops:20260930-08
+    - synthetic:ops:20261002-03
+    - synthetic:product:20260826-01
+    - synthetic:product:20260826-06
+    - synthetic:product:20260826-12
+    - synthetic:product:20260827-01
+    - synthetic:product:20260828-01
+    - synthetic:product:20260831-01
+    - synthetic:product:20260904-01
+    - synthetic:product:20260904-05
+    - synthetic:product:20260908-01
+    - synthetic:product:20260908-07
+    - synthetic:product:20260908-13
+    - synthetic:product:20260909-01
+    - synthetic:product:20260914-01
+    - synthetic:product:20260914-07
+    - synthetic:product:20260914-13
+    - synthetic:product:20260915-06
+    - synthetic:product:20260915-07
+    - synthetic:product:20260915-11
+    - synthetic:product:20260917-06
+    - synthetic:product:20260918-06
+    - synthetic:product:20260922-01
+    - synthetic:product:20260925-01
+    - synthetic:product:20260928-01
+    - synthetic:product:20260928-06
+    - synthetic:product:20261002-01
+    - synthetic:random:20260828-08
+    - synthetic:random:20260831-06
+    - synthetic:random:20260831-11
+    - synthetic:random:20260904-08
+    - synthetic:random:20260925-10
+  parts:
+  - id: p1
+    fact_ids:
+    - F04
+    claim: Pilot success threshold was 95 successful check-ins of 100
+  - id: p2
+    fact_ids:
+    - F04
+    claim: Success was measured using exported attendance rows
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260827-03: 2
+    synthetic:build-help:20260827-10: 1
+    synthetic:build-help:20260827-16: 1
+    synthetic:build-help:20260828-04: 2
+    synthetic:build-help:20260828-10: 1
+    synthetic:build-help:20260831-04: 2
+    synthetic:build-help:20260831-09: 2
+    synthetic:build-help:20260831-15: 2
+    synthetic:build-help:20260901-02: 1
+    synthetic:build-help:20260901-03: 1
+    synthetic:build-help:20260901-14: 2
+    synthetic:build-help:20260902-04: 1
+    synthetic:build-help:20260902-10: 1
+    synthetic:build-help:20260902-14: 1
+    synthetic:build-help:20260904-04: 2
+    synthetic:build-help:20260907-03: 1
+    synthetic:build-help:20260907-10: 2
+    synthetic:build-help:20260908-03: 1
+    synthetic:build-help:20260910-03: 1
+    synthetic:build-help:20260911-12: 2
+    synthetic:build-help:20260914-04: 1
+    synthetic:build-help:20260914-10: 1
+    synthetic:build-help:20260916-11: 2
+    synthetic:build-help:20260917-11: 2
+    synthetic:build-help:20260917-12: 1
+    synthetic:build-help:20260918-04: 2
+    synthetic:build-help:20260922-03: 2
+    synthetic:build-help:20260923-03: 1
+    synthetic:build-help:20260923-14: 1
+    synthetic:build-help:20260925-03: 1
+    synthetic:build-help:20260925-08: 1
+    synthetic:eng:20260827-04: 2
+    synthetic:eng:20260827-10: 2
+    synthetic:eng:20260827-14: 1
+    synthetic:eng:20260828-04: 2
+    synthetic:eng:20260828-10: 2
+    synthetic:eng:20260831-04: 2
+    synthetic:eng:20260831-10: 2
+    synthetic:eng:20260831-14: 1
+    synthetic:eng:20260901-04: 2
+    synthetic:eng:20260901-10: 2
+    synthetic:eng:20260902-01: 1
+    synthetic:eng:20260902-04: 2
+    synthetic:eng:20260902-11: 1
+    synthetic:eng:20260903-04: 2
+    synthetic:eng:20260903-10: 2
+    synthetic:eng:20260904-09: 2
+    synthetic:eng:20260904-10: 1
+    synthetic:eng:20260904-12: 1
+    synthetic:eng:20260907-03: 2
+    synthetic:eng:20260907-10: 2
+    synthetic:eng:20260908-03: 2
+    synthetic:eng:20260908-09: 2
+    synthetic:eng:20260908-15: 2
+    synthetic:eng:20260909-04: 2
+    synthetic:eng:20260909-12: 2
+    synthetic:eng:20260910-03: 1
+    synthetic:eng:20260910-10: 2
+    synthetic:eng:20260910-15: 1
+    synthetic:eng:20260911-10: 2
+    synthetic:eng:20260914-03: 1
+    synthetic:eng:20260914-05: 2
+    synthetic:eng:20260914-10: 2
+    synthetic:eng:20260916-04: 2
+    synthetic:eng:20260917-03: 2
+    synthetic:eng:20260917-10: 2
+    synthetic:eng:20260918-04: 2
+    synthetic:eng:20260918-14: 1
+    synthetic:eng:20260918-15: 2
+    synthetic:eng:20260924-04: 2
+    synthetic:eng:20260924-10: 2
+    synthetic:eng:20260929-04: 2
+    synthetic:eng:20261002-04: 1
+    synthetic:ops:20260827-07: 1
+    synthetic:ops:20260827-08: 1
+    synthetic:ops:20260827-13: 1
+    synthetic:ops:20260902-03: 2
+    synthetic:ops:20260902-07: 1
+    synthetic:ops:20260902-08: 2
+    synthetic:ops:20260902-13: 2
+    synthetic:ops:20260904-09: 2
+    synthetic:ops:20260908-03: 1
+    synthetic:ops:20260909-03: 2
+    synthetic:ops:20260910-10: 2
+    synthetic:ops:20260916-13: 2
+    synthetic:ops:20260917-10: 1
+    synthetic:ops:20260917-11: 1
+    synthetic:ops:20260918-03: 2
+    synthetic:ops:20260918-10: 2
+    synthetic:ops:20260924-02: 2
+    synthetic:ops:20260924-07: 1
+    synthetic:ops:20260924-13: 1
+    synthetic:ops:20260925-08: 2
+    synthetic:ops:20260930-08: 2
+    synthetic:ops:20261002-03: 2
+    synthetic:product:20260826-01: 3
+    synthetic:product:20260826-03: 1
+    synthetic:product:20260826-06: 2
+    synthetic:product:20260826-08: 1
+    synthetic:product:20260826-09: 1
+    synthetic:product:20260826-11: 1
+    synthetic:product:20260826-12: 2
+    synthetic:product:20260826-14: 1
+    synthetic:product:20260827-01: 2
+    synthetic:product:20260827-02: 1
+    synthetic:product:20260827-03: 1
+    synthetic:product:20260827-06: 1
+    synthetic:product:20260827-07: 1
+    synthetic:product:20260827-11: 1
+    synthetic:product:20260827-12: 1
+    synthetic:product:20260827-13: 1
+    synthetic:product:20260828-01: 2
+    synthetic:product:20260828-05: 1
+    synthetic:product:20260831-01: 2
+    synthetic:product:20260831-07: 1
+    synthetic:product:20260901-01: 1
+    synthetic:product:20260901-07: 1
+    synthetic:product:20260901-13: 1
+    synthetic:product:20260904-01: 2
+    synthetic:product:20260904-05: 2
+    synthetic:product:20260904-07: 1
+    synthetic:product:20260907-13: 1
+    synthetic:product:20260908-01: 2
+    synthetic:product:20260908-07: 2
+    synthetic:product:20260908-13: 2
+    synthetic:product:20260909-01: 2
+    synthetic:product:20260914-01: 2
+    synthetic:product:20260914-07: 2
+    synthetic:product:20260914-13: 2
+    synthetic:product:20260915-06: 2
+    synthetic:product:20260915-07: 2
+    synthetic:product:20260915-11: 2
+    synthetic:product:20260917-06: 2
+    synthetic:product:20260918-06: 2
+    synthetic:product:20260918-08: 1
+    synthetic:product:20260918-09: 1
+    synthetic:product:20260922-01: 2
+    synthetic:product:20260925-01: 2
+    synthetic:product:20260928-01: 2
+    synthetic:product:20260928-06: 2
+    synthetic:product:20261001-02: 1
+    synthetic:product:20261002-01: 2
+    synthetic:product:20261002-02: 1
+    synthetic:random:20260828-08: 2
+    synthetic:random:20260828-11: 1
+    synthetic:random:20260831-06: 2
+    synthetic:random:20260831-11: 2
+    synthetic:random:20260901-08: 1
+    synthetic:random:20260904-08: 2
+    synthetic:random:20260907-12: 1
+    synthetic:random:20260915-09: 1
+    synthetic:random:20260925-10: 2
+    synthetic:random:20260925-15: 1
+  lexical_overlap: 0.5
+  fact_ids:
+  - F04
+- id: Q13
+  type: exact
+  split: dev
+  tags:
+  - F05
+  - easy
+  - paraphrase
+  query: Where is the API repository and what health endpoint is used?
+  answerable: true
+  answer: https://git.example.com/beacon/checkin-api and /healthz.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:build-help:20260828-03
+    - synthetic:build-help:20260902-07
+    - synthetic:eng:20260827-01
+    - synthetic:eng:20260827-09
+    - synthetic:eng:20260903-15
+    - synthetic:eng:20260907-04
+    - synthetic:eng:20260908-04
+    - synthetic:eng:20260909-03
+    - synthetic:eng:20260923-06
+    - synthetic:ops:20260828-09
+    - synthetic:ops:20260908-11
+    - synthetic:ops:20260910-12
+    - synthetic:ops:20260918-05
+    - synthetic:product:20260828-10
+    - synthetic:product:20260831-06
+    - synthetic:product:20260901-06
+    - synthetic:product:20260902-07
+    - synthetic:product:20260904-08
+    - synthetic:product:20260908-12
+    - synthetic:product:20260914-06
+    - synthetic:random:20260901-06
+    - synthetic:random:20260902-06
+    - synthetic:random:20260907-06
+    - synthetic:random:20260911-06
+  - part: p2
+    message_ids:
+    - synthetic:build-help:20260828-02
+    - synthetic:build-help:20260828-03
+    - synthetic:build-help:20260831-06
+    - synthetic:build-help:20260831-12
+    - synthetic:build-help:20260901-01
+    - synthetic:build-help:20260902-02
+    - synthetic:build-help:20260902-07
+    - synthetic:build-help:20260904-08
+    - synthetic:build-help:20260908-08
+    - synthetic:build-help:20260909-07
+    - synthetic:build-help:20260915-13
+    - synthetic:build-help:20260917-13
+    - synthetic:build-help:20261001-02
+    - synthetic:eng:20260827-01
+    - synthetic:eng:20260827-07
+    - synthetic:eng:20260827-09
+    - synthetic:eng:20260827-15
+    - synthetic:eng:20260828-02
+    - synthetic:eng:20260828-07
+    - synthetic:eng:20260831-01
+    - synthetic:eng:20260831-02
+    - synthetic:eng:20260831-03
+    - synthetic:eng:20260831-09
+    - synthetic:eng:20260901-03
+    - synthetic:eng:20260901-09
+    - synthetic:eng:20260901-13
+    - synthetic:eng:20260901-16
+    - synthetic:eng:20260902-03
+    - synthetic:eng:20260902-09
+    - synthetic:eng:20260903-03
+    - synthetic:eng:20260903-09
+    - synthetic:eng:20260903-15
+    - synthetic:eng:20260904-03
+    - synthetic:eng:20260907-04
+    - synthetic:eng:20260907-14
+    - synthetic:eng:20260908-04
+    - synthetic:eng:20260909-03
+    - synthetic:eng:20260909-04
+    - synthetic:eng:20260909-10
+    - synthetic:eng:20260911-04
+    - synthetic:eng:20260911-13
+    - synthetic:eng:20260911-16
+    - synthetic:eng:20260915-10
+    - synthetic:eng:20260916-03
+    - synthetic:eng:20260918-03
+    - synthetic:eng:20260921-07
+    - synthetic:eng:20260923-06
+    - synthetic:eng:20260924-08
+    - synthetic:eng:20260924-14
+    - synthetic:eng:20260928-03
+    - synthetic:eng:20260929-03
+    - synthetic:eng:20260930-03
+    - synthetic:eng:20261001-04
+    - synthetic:ops:20260828-09
+    - synthetic:ops:20260828-10
+    - synthetic:ops:20260831-09
+    - synthetic:ops:20260902-09
+    - synthetic:ops:20260903-06
+    - synthetic:ops:20260907-12
+    - synthetic:ops:20260909-10
+    - synthetic:ops:20260911-08
+    - synthetic:ops:20260917-05
+    - synthetic:ops:20260918-05
+    - synthetic:ops:20260924-08
+    - synthetic:product:20260828-10
+    - synthetic:product:20260831-05
+    - synthetic:product:20260902-07
+    - synthetic:product:20260904-08
+    - synthetic:product:20260907-05
+    - synthetic:product:20260908-06
+    - synthetic:product:20260910-06
+    - synthetic:product:20260914-06
+    - synthetic:random:20260828-02
+    - synthetic:random:20260828-05
+    - synthetic:random:20260828-10
+    - synthetic:random:20260828-12
+    - synthetic:random:20260831-04
+    - synthetic:random:20260901-06
+    - synthetic:random:20260902-06
+    - synthetic:random:20260903-08
+    - synthetic:random:20260904-07
+    - synthetic:random:20260907-06
+    - synthetic:random:20260908-14
+    - synthetic:random:20260910-05
+    - synthetic:random:20260911-06
+    - synthetic:random:20260916-05
+    - synthetic:random:20260921-15
+  parts:
+  - id: p1
+    fact_ids:
+    - F05
+    claim: API repository URL is https://git.example.com/beacon/checkin-api
+  - id: p2
+    fact_ids:
+    - F05
+    claim: Sample deploy uses the /healthz endpoint
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260828-02: 2
+    synthetic:build-help:20260828-03: 2
+    synthetic:build-help:20260828-15: 1
+    synthetic:build-help:20260831-06: 2
+    synthetic:build-help:20260831-12: 2
+    synthetic:build-help:20260831-14: 1
+    synthetic:build-help:20260901-01: 2
+    synthetic:build-help:20260901-12: 1
+    synthetic:build-help:20260902-02: 2
+    synthetic:build-help:20260902-07: 2
+    synthetic:build-help:20260902-09: 1
+    synthetic:build-help:20260904-08: 2
+    synthetic:build-help:20260907-09: 1
+    synthetic:build-help:20260908-08: 2
+    synthetic:build-help:20260908-15: 1
+    synthetic:build-help:20260909-07: 2
+    synthetic:build-help:20260914-12: 1
+    synthetic:build-help:20260915-13: 2
+    synthetic:build-help:20260917-13: 2
+    synthetic:build-help:20260923-01: 1
+    synthetic:build-help:20260923-13: 1
+    synthetic:build-help:20260930-02: 1
+    synthetic:build-help:20261001-02: 2
+    synthetic:build-help:20261001-12: 1
+    synthetic:build-help:20261002-07: 1
+    synthetic:eng:20260827-01: 3
+    synthetic:eng:20260827-02: 1
+    synthetic:eng:20260827-04: 1
+    synthetic:eng:20260827-07: 2
+    synthetic:eng:20260827-08: 1
+    synthetic:eng:20260827-09: 2
+    synthetic:eng:20260827-10: 1
+    synthetic:eng:20260827-15: 2
+    synthetic:eng:20260828-02: 2
+    synthetic:eng:20260828-07: 2
+    synthetic:eng:20260828-13: 1
+    synthetic:eng:20260828-14: 1
+    synthetic:eng:20260831-01: 2
+    synthetic:eng:20260831-02: 2
+    synthetic:eng:20260831-03: 2
+    synthetic:eng:20260831-04: 1
+    synthetic:eng:20260831-09: 2
+    synthetic:eng:20260901-03: 2
+    synthetic:eng:20260901-09: 2
+    synthetic:eng:20260901-13: 2
+    synthetic:eng:20260901-16: 2
+    synthetic:eng:20260902-03: 2
+    synthetic:eng:20260902-09: 2
+    synthetic:eng:20260903-03: 2
+    synthetic:eng:20260903-07: 1
+    synthetic:eng:20260903-09: 2
+    synthetic:eng:20260903-10: 1
+    synthetic:eng:20260903-15: 2
+    synthetic:eng:20260904-03: 2
+    synthetic:eng:20260907-04: 2
+    synthetic:eng:20260907-14: 2
+    synthetic:eng:20260908-04: 2
+    synthetic:eng:20260908-10: 1
+    synthetic:eng:20260909-03: 2
+    synthetic:eng:20260909-04: 2
+    synthetic:eng:20260909-10: 2
+    synthetic:eng:20260911-04: 2
+    synthetic:eng:20260911-10: 1
+    synthetic:eng:20260911-13: 2
+    synthetic:eng:20260911-16: 2
+    synthetic:eng:20260914-07: 1
+    synthetic:eng:20260915-10: 2
+    synthetic:eng:20260916-03: 2
+    synthetic:eng:20260918-03: 2
+    synthetic:eng:20260921-07: 2
+    synthetic:eng:20260923-06: 2
+    synthetic:eng:20260924-03: 1
+    synthetic:eng:20260924-08: 2
+    synthetic:eng:20260924-09: 1
+    synthetic:eng:20260924-14: 2
+    synthetic:eng:20260928-03: 2
+    synthetic:eng:20260929-03: 2
+    synthetic:eng:20260929-15: 1
+    synthetic:eng:20260930-03: 2
+    synthetic:eng:20261001-04: 2
+    synthetic:eng:20261002-01: 1
+    synthetic:eng:20261002-13: 1
+    synthetic:ops:20260828-09: 2
+    synthetic:ops:20260828-10: 2
+    synthetic:ops:20260828-14: 1
+    synthetic:ops:20260831-09: 2
+    synthetic:ops:20260901-05: 1
+    synthetic:ops:20260901-08: 1
+    synthetic:ops:20260902-09: 2
+    synthetic:ops:20260903-06: 2
+    synthetic:ops:20260903-07: 1
+    synthetic:ops:20260903-13: 1
+    synthetic:ops:20260904-14: 1
+    synthetic:ops:20260907-06: 1
+    synthetic:ops:20260907-12: 2
+    synthetic:ops:20260908-11: 2
+    synthetic:ops:20260909-10: 2
+    synthetic:ops:20260910-03: 1
+    synthetic:ops:20260910-12: 2
+    synthetic:ops:20260911-08: 2
+    synthetic:ops:20260915-13: 1
+    synthetic:ops:20260917-05: 2
+    synthetic:ops:20260918-05: 2
+    synthetic:ops:20260921-05: 1
+    synthetic:ops:20260923-08: 1
+    synthetic:ops:20260924-08: 2
+    synthetic:ops:20261001-03: 1
+    synthetic:ops:20261002-04: 1
+    synthetic:product:20260828-10: 2
+    synthetic:product:20260831-05: 2
+    synthetic:product:20260831-06: 2
+    synthetic:product:20260831-12: 1
+    synthetic:product:20260901-06: 2
+    synthetic:product:20260901-12: 1
+    synthetic:product:20260902-07: 2
+    synthetic:product:20260902-10: 1
+    synthetic:product:20260903-13: 1
+    synthetic:product:20260904-08: 2
+    synthetic:product:20260904-15: 1
+    synthetic:product:20260907-05: 2
+    synthetic:product:20260907-11: 1
+    synthetic:product:20260908-06: 2
+    synthetic:product:20260908-12: 2
+    synthetic:product:20260909-06: 1
+    synthetic:product:20260910-06: 2
+    synthetic:product:20260914-06: 2
+    synthetic:product:20260914-11: 1
+    synthetic:product:20260924-12: 1
+    synthetic:product:20261002-07: 1
+    synthetic:random:20260828-02: 2
+    synthetic:random:20260828-05: 2
+    synthetic:random:20260828-10: 2
+    synthetic:random:20260828-12: 2
+    synthetic:random:20260831-04: 2
+    synthetic:random:20260831-09: 1
+    synthetic:random:20260901-06: 2
+    synthetic:random:20260902-06: 2
+    synthetic:random:20260903-08: 2
+    synthetic:random:20260904-07: 2
+    synthetic:random:20260907-06: 2
+    synthetic:random:20260908-14: 2
+    synthetic:random:20260910-05: 2
+    synthetic:random:20260911-06: 2
+    synthetic:random:20260916-05: 2
+    synthetic:random:20260918-06: 1
+    synthetic:random:20260921-15: 2
+    synthetic:random:20260923-10: 1
+  lexical_overlap: 0.2
+  fact_ids:
+  - F05
+- id: Q14
+  type: fact
+  split: test
+  tags:
+  - F07
+  - easy
+  query: Which fields identify a duplicate check-in, and what happens on a second scan?
+  answerable: true
+  answer: event_id plus attendee_id identify it; a second scan returns the existing attendance record.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:build-help:20260901-07
+    - synthetic:build-help:20260902-08
+    - synthetic:build-help:20260914-02
+    - synthetic:build-help:20260917-06
+    - synthetic:eng:20260831-01
+    - synthetic:eng:20260831-13
+    - synthetic:eng:20260901-02
+    - synthetic:eng:20260902-02
+    - synthetic:eng:20260903-02
+    - synthetic:eng:20260904-10
+    - synthetic:eng:20260908-02
+    - synthetic:eng:20260909-02
+    - synthetic:eng:20260915-04
+    - synthetic:eng:20260917-07
+    - synthetic:eng:20260923-05
+    - synthetic:eng:20260928-02
+    - synthetic:ops:20260902-08
+    - synthetic:ops:20260903-05
+    - synthetic:ops:20260908-04
+    - synthetic:ops:20260910-08
+    - synthetic:ops:20260914-10
+    - synthetic:ops:20260918-11
+    - synthetic:product:20260903-05
+    - synthetic:product:20260904-03
+    - synthetic:product:20260910-05
+    - synthetic:product:20260915-08
+    - synthetic:product:20260921-06
+    - synthetic:product:20260923-03
+    - synthetic:random:20260901-09
+    - synthetic:random:20260902-09
+  - part: p2
+    message_ids:
+    - synthetic:build-help:20260901-06
+    - synthetic:build-help:20260901-07
+    - synthetic:build-help:20260901-08
+    - synthetic:build-help:20260902-04
+    - synthetic:build-help:20260902-08
+    - synthetic:build-help:20260902-10
+    - synthetic:build-help:20260904-10
+    - synthetic:build-help:20260907-03
+    - synthetic:build-help:20260907-10
+    - synthetic:build-help:20260907-14
+    - synthetic:build-help:20260908-03
+    - synthetic:build-help:20260908-05
+    - synthetic:build-help:20260908-06
+    - synthetic:build-help:20260908-07
+    - synthetic:build-help:20260908-09
+    - synthetic:build-help:20260908-12
+    - synthetic:build-help:20260908-15
+    - synthetic:build-help:20260910-03
+    - synthetic:build-help:20260910-06
+    - synthetic:build-help:20260911-03
+    - synthetic:build-help:20260911-04
+    - synthetic:build-help:20260914-02
+    - synthetic:build-help:20260914-04
+    - synthetic:build-help:20260914-10
+    - synthetic:build-help:20260915-08
+    - synthetic:build-help:20260916-05
+    - synthetic:build-help:20260916-06
+    - synthetic:build-help:20260917-05
+    - synthetic:build-help:20260917-06
+    - synthetic:build-help:20260917-11
+    - synthetic:build-help:20260921-08
+    - synthetic:build-help:20260921-10
+    - synthetic:build-help:20260923-04
+    - synthetic:build-help:20260928-07
+    - synthetic:build-help:20260928-08
+    - synthetic:build-help:20260928-09
+    - synthetic:build-help:20260928-15
+    - synthetic:build-help:20260930-08
+    - synthetic:build-help:20261001-07
+    - synthetic:build-help:20261002-02
+    - synthetic:build-help:20261002-15
+    - synthetic:eng:20260831-01
+    - synthetic:eng:20260831-02
+    - synthetic:eng:20260831-04
+    - synthetic:eng:20260831-13
+    - synthetic:eng:20260901-02
+    - synthetic:eng:20260901-07
+    - synthetic:eng:20260902-02
+    - synthetic:eng:20260902-04
+    - synthetic:eng:20260903-10
+    - synthetic:eng:20260904-02
+    - synthetic:eng:20260904-10
+    - synthetic:eng:20260907-03
+    - synthetic:eng:20260908-02
+    - synthetic:eng:20260908-14
+    - synthetic:eng:20260909-11
+    - synthetic:eng:20260910-14
+    - synthetic:eng:20260911-03
+    - synthetic:eng:20260911-10
+    - synthetic:eng:20260911-14
+    - synthetic:eng:20260914-01
+    - synthetic:eng:20260915-08
+    - synthetic:eng:20260915-13
+    - synthetic:eng:20260916-09
+    - synthetic:eng:20260917-03
+    - synthetic:eng:20260917-07
+    - synthetic:eng:20260918-05
+    - synthetic:eng:20260923-04
+    - synthetic:eng:20260923-05
+    - synthetic:eng:20260923-09
+    - synthetic:eng:20260928-02
+    - synthetic:eng:20260928-07
+    - synthetic:eng:20260929-07
+    - synthetic:eng:20260930-06
+    - synthetic:eng:20261002-08
+    - synthetic:eng:20261002-10
+    - synthetic:ops:20260902-04
+    - synthetic:ops:20260902-08
+    - synthetic:ops:20260903-05
+    - synthetic:ops:20260904-07
+    - synthetic:ops:20260904-08
+    - synthetic:ops:20260908-04
+    - synthetic:ops:20260910-08
+    - synthetic:ops:20260914-10
+    - synthetic:ops:20260915-05
+    - synthetic:ops:20260916-04
+    - synthetic:ops:20260917-10
+    - synthetic:ops:20260918-11
+    - synthetic:ops:20260921-12
+    - synthetic:ops:20260925-14
+    - synthetic:ops:20261001-14
+    - synthetic:ops:20261001-15
+    - synthetic:product:20260901-05
+    - synthetic:product:20260902-06
+    - synthetic:product:20260903-05
+    - synthetic:product:20260904-03
+    - synthetic:product:20260904-05
+    - synthetic:product:20260904-11
+    - synthetic:product:20260904-12
+    - synthetic:product:20260907-06
+    - synthetic:product:20260907-07
+    - synthetic:product:20260909-05
+    - synthetic:product:20260914-05
+    - synthetic:product:20260915-08
+    - synthetic:product:20260916-06
+    - synthetic:product:20260916-12
+    - synthetic:product:20260917-05
+    - synthetic:product:20260917-06
+    - synthetic:product:20260921-06
+    - synthetic:product:20260921-11
+    - synthetic:product:20260922-08
+    - synthetic:product:20260923-03
+    - synthetic:product:20260928-10
+    - synthetic:product:20261001-03
+    - synthetic:product:20261002-06
+    - synthetic:product:20261002-09
+    - synthetic:random:20260901-09
+    - synthetic:random:20260902-09
+    - synthetic:random:20260907-07
+    - synthetic:random:20260915-10
+    - synthetic:random:20260916-11
+    - synthetic:random:20260918-09
+  parts:
+  - id: p1
+    fact_ids:
+    - F07
+    claim: Duplicate check-in identity uses attendee_id plus event_id
+  - id: p2
+    fact_ids:
+    - F07
+    claim: Scanning the same ticket twice returns the existing attendance record
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260901-06: 2
+    synthetic:build-help:20260901-07: 2
+    synthetic:build-help:20260901-08: 2
+    synthetic:build-help:20260902-04: 2
+    synthetic:build-help:20260902-08: 2
+    synthetic:build-help:20260902-10: 2
+    synthetic:build-help:20260904-10: 2
+    synthetic:build-help:20260907-03: 2
+    synthetic:build-help:20260907-10: 2
+    synthetic:build-help:20260907-14: 2
+    synthetic:build-help:20260908-03: 2
+    synthetic:build-help:20260908-05: 2
+    synthetic:build-help:20260908-06: 2
+    synthetic:build-help:20260908-07: 2
+    synthetic:build-help:20260908-09: 2
+    synthetic:build-help:20260908-12: 2
+    synthetic:build-help:20260908-15: 2
+    synthetic:build-help:20260910-03: 2
+    synthetic:build-help:20260910-06: 2
+    synthetic:build-help:20260911-03: 2
+    synthetic:build-help:20260911-04: 2
+    synthetic:build-help:20260914-02: 2
+    synthetic:build-help:20260914-04: 2
+    synthetic:build-help:20260914-10: 2
+    synthetic:build-help:20260915-08: 2
+    synthetic:build-help:20260916-05: 2
+    synthetic:build-help:20260916-06: 2
+    synthetic:build-help:20260917-05: 2
+    synthetic:build-help:20260917-06: 2
+    synthetic:build-help:20260917-11: 2
+    synthetic:build-help:20260921-08: 2
+    synthetic:build-help:20260921-10: 2
+    synthetic:build-help:20260923-04: 2
+    synthetic:build-help:20260928-07: 2
+    synthetic:build-help:20260928-08: 2
+    synthetic:build-help:20260928-09: 2
+    synthetic:build-help:20260928-15: 2
+    synthetic:build-help:20260930-08: 2
+    synthetic:build-help:20261001-07: 2
+    synthetic:build-help:20261002-02: 2
+    synthetic:build-help:20261002-06: 1
+    synthetic:build-help:20261002-15: 2
+    synthetic:eng:20260831-01: 3
+    synthetic:eng:20260831-02: 2
+    synthetic:eng:20260831-04: 2
+    synthetic:eng:20260831-06: 1
+    synthetic:eng:20260831-08: 1
+    synthetic:eng:20260831-10: 1
+    synthetic:eng:20260831-13: 2
+    synthetic:eng:20260901-02: 2
+    synthetic:eng:20260901-04: 1
+    synthetic:eng:20260901-07: 2
+    synthetic:eng:20260901-10: 1
+    synthetic:eng:20260902-02: 2
+    synthetic:eng:20260902-04: 2
+    synthetic:eng:20260903-02: 2
+    synthetic:eng:20260903-04: 1
+    synthetic:eng:20260903-10: 2
+    synthetic:eng:20260904-02: 2
+    synthetic:eng:20260904-04: 1
+    synthetic:eng:20260904-09: 1
+    synthetic:eng:20260904-10: 2
+    synthetic:eng:20260904-12: 1
+    synthetic:eng:20260907-03: 2
+    synthetic:eng:20260907-07: 1
+    synthetic:eng:20260907-15: 1
+    synthetic:eng:20260908-02: 2
+    synthetic:eng:20260908-07: 1
+    synthetic:eng:20260908-13: 1
+    synthetic:eng:20260908-14: 2
+    synthetic:eng:20260908-15: 1
+    synthetic:eng:20260909-02: 2
+    synthetic:eng:20260909-11: 2
+    synthetic:eng:20260910-10: 1
+    synthetic:eng:20260910-14: 2
+    synthetic:eng:20260911-03: 2
+    synthetic:eng:20260911-08: 1
+    synthetic:eng:20260911-10: 2
+    synthetic:eng:20260911-14: 2
+    synthetic:eng:20260911-16: 1
+    synthetic:eng:20260914-01: 2
+    synthetic:eng:20260914-10: 1
+    synthetic:eng:20260915-04: 2
+    synthetic:eng:20260915-08: 2
+    synthetic:eng:20260915-13: 2
+    synthetic:eng:20260916-04: 1
+    synthetic:eng:20260916-09: 2
+    synthetic:eng:20260917-03: 2
+    synthetic:eng:20260917-07: 2
+    synthetic:eng:20260918-04: 1
+    synthetic:eng:20260918-05: 2
+    synthetic:eng:20260918-07: 1
+    synthetic:eng:20260922-04: 1
+    synthetic:eng:20260922-07: 1
+    synthetic:eng:20260923-04: 2
+    synthetic:eng:20260923-05: 2
+    synthetic:eng:20260923-09: 2
+    synthetic:eng:20260925-03: 1
+    synthetic:eng:20260928-02: 2
+    synthetic:eng:20260928-07: 2
+    synthetic:eng:20260929-02: 1
+    synthetic:eng:20260929-07: 2
+    synthetic:eng:20260930-06: 2
+    synthetic:eng:20261002-07: 1
+    synthetic:eng:20261002-08: 2
+    synthetic:eng:20261002-10: 2
+    synthetic:ops:20260902-04: 2
+    synthetic:ops:20260902-07: 1
+    synthetic:ops:20260902-08: 2
+    synthetic:ops:20260903-05: 2
+    synthetic:ops:20260903-07: 1
+    synthetic:ops:20260903-13: 1
+    synthetic:ops:20260904-06: 1
+    synthetic:ops:20260904-07: 2
+    synthetic:ops:20260904-08: 2
+    synthetic:ops:20260907-04: 1
+    synthetic:ops:20260907-10: 1
+    synthetic:ops:20260908-04: 2
+    synthetic:ops:20260910-08: 2
+    synthetic:ops:20260914-10: 2
+    synthetic:ops:20260915-05: 2
+    synthetic:ops:20260916-04: 2
+    synthetic:ops:20260917-10: 2
+    synthetic:ops:20260918-11: 2
+    synthetic:ops:20260921-12: 2
+    synthetic:ops:20260925-08: 1
+    synthetic:ops:20260925-14: 2
+    synthetic:ops:20260929-10: 1
+    synthetic:ops:20261001-14: 2
+    synthetic:ops:20261001-15: 2
+    synthetic:product:20260901-05: 2
+    synthetic:product:20260902-06: 2
+    synthetic:product:20260903-05: 2
+    synthetic:product:20260904-03: 2
+    synthetic:product:20260904-05: 2
+    synthetic:product:20260904-11: 2
+    synthetic:product:20260904-12: 2
+    synthetic:product:20260907-06: 2
+    synthetic:product:20260907-07: 2
+    synthetic:product:20260909-05: 2
+    synthetic:product:20260909-11: 1
+    synthetic:product:20260910-05: 2
+    synthetic:product:20260914-05: 2
+    synthetic:product:20260915-03: 1
+    synthetic:product:20260915-08: 2
+    synthetic:product:20260916-06: 2
+    synthetic:product:20260916-07: 1
+    synthetic:product:20260916-12: 2
+    synthetic:product:20260916-15: 1
+    synthetic:product:20260917-05: 2
+    synthetic:product:20260917-06: 2
+    synthetic:product:20260921-06: 2
+    synthetic:product:20260921-10: 1
+    synthetic:product:20260921-11: 2
+    synthetic:product:20260921-16: 1
+    synthetic:product:20260922-08: 2
+    synthetic:product:20260923-03: 2
+    synthetic:product:20260928-10: 2
+    synthetic:product:20261001-03: 2
+    synthetic:product:20261001-09: 1
+    synthetic:product:20261002-03: 1
+    synthetic:product:20261002-06: 2
+    synthetic:product:20261002-08: 1
+    synthetic:product:20261002-09: 2
+    synthetic:random:20260901-08: 1
+    synthetic:random:20260901-09: 2
+    synthetic:random:20260902-09: 2
+    synthetic:random:20260904-08: 1
+    synthetic:random:20260907-07: 2
+    synthetic:random:20260910-11: 1
+    synthetic:random:20260915-10: 2
+    synthetic:random:20260916-11: 2
+    synthetic:random:20260918-09: 2
+    synthetic:random:20260918-15: 1
+    synthetic:random:20260921-12: 1
+  lexical_overlap: 0.571
+  fact_ids:
+  - F07
+- id: Q15
+  type: fact
+  split: dev
+  tags:
+  - F10
+  - easy
+  query: What scanner-screen fallback helps attendees with broken cameras?
+  answerable: true
+  answer: Manual code entry, alongside the large camera target.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:build-help:20260907-13
+    - synthetic:build-help:20260908-09
+    - synthetic:build-help:20260908-11
+    - synthetic:build-help:20260908-15
+    - synthetic:build-help:20260909-12
+    - synthetic:build-help:20260910-05
+    - synthetic:build-help:20260910-14
+    - synthetic:build-help:20260911-07
+    - synthetic:build-help:20260914-11
+    - synthetic:build-help:20260916-07
+    - synthetic:build-help:20260917-08
+    - synthetic:build-help:20260917-10
+    - synthetic:build-help:20260923-08
+    - synthetic:build-help:20260923-09
+    - synthetic:build-help:20260924-05
+    - synthetic:build-help:20260924-10
+    - synthetic:build-help:20260930-06
+    - synthetic:build-help:20260930-15
+    - synthetic:build-help:20261002-05
+    - synthetic:build-help:20261002-10
+    - synthetic:eng:20260907-06
+    - synthetic:eng:20260907-12
+    - synthetic:eng:20260908-05
+    - synthetic:eng:20260908-11
+    - synthetic:eng:20260909-07
+    - synthetic:eng:20260909-08
+    - synthetic:eng:20260911-12
+    - synthetic:eng:20260915-09
+    - synthetic:eng:20260918-10
+    - synthetic:eng:20260918-16
+    - synthetic:eng:20260929-04
+    - synthetic:eng:20260929-11
+    - synthetic:eng:20261001-06
+    - synthetic:eng:20261002-06
+    - synthetic:ops:20260907-05
+    - synthetic:ops:20260908-05
+    - synthetic:ops:20260909-05
+    - synthetic:ops:20260909-06
+    - synthetic:ops:20260909-08
+    - synthetic:ops:20260909-09
+    - synthetic:ops:20260909-12
+    - synthetic:ops:20260910-05
+    - synthetic:ops:20260910-11
+    - synthetic:ops:20260914-06
+    - synthetic:ops:20260914-08
+    - synthetic:ops:20260914-12
+    - synthetic:ops:20260915-08
+    - synthetic:ops:20260916-07
+    - synthetic:ops:20260918-06
+    - synthetic:ops:20260918-10
+    - synthetic:ops:20260918-13
+    - synthetic:product:20260903-02
+    - synthetic:product:20260903-07
+    - synthetic:product:20260903-10
+    - synthetic:product:20260903-11
+    - synthetic:product:20260903-12
+    - synthetic:product:20260904-05
+    - synthetic:product:20260904-12
+    - synthetic:product:20260907-08
+    - synthetic:product:20260908-05
+    - synthetic:product:20260909-07
+    - synthetic:product:20260909-09
+    - synthetic:product:20260909-13
+    - synthetic:product:20260910-07
+    - synthetic:product:20260910-08
+    - synthetic:product:20260910-09
+    - synthetic:product:20260910-15
+    - synthetic:product:20260914-03
+    - synthetic:product:20260914-07
+    - synthetic:product:20260914-10
+    - synthetic:product:20260914-13
+    - synthetic:product:20260915-04
+    - synthetic:product:20260916-04
+    - synthetic:product:20260917-06
+    - synthetic:product:20260917-12
+    - synthetic:product:20260918-06
+    - synthetic:product:20260918-08
+    - synthetic:product:20260921-04
+    - synthetic:product:20260921-08
+    - synthetic:product:20260921-10
+    - synthetic:product:20260922-11
+    - synthetic:product:20260925-06
+    - synthetic:product:20260925-07
+    - synthetic:product:20260925-11
+    - synthetic:product:20261001-07
+    - synthetic:product:20261001-12
+    - synthetic:product:20261002-06
+    - synthetic:random:20260908-10
+    - synthetic:random:20260910-13
+    - synthetic:random:20260910-14
+    - synthetic:random:20260915-12
+    - synthetic:random:20260916-04
+    - synthetic:random:20260916-10
+    - synthetic:random:20260916-16
+    - synthetic:random:20260918-05
+    - synthetic:random:20260921-09
+  parts:
+  - id: p1
+    fact_ids:
+    - F10
+    claim: Scanner screen has manual code entry fallback for broken cameras
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260904-06: 1
+    synthetic:build-help:20260904-12: 1
+    synthetic:build-help:20260907-06: 1
+    synthetic:build-help:20260907-13: 2
+    synthetic:build-help:20260908-04: 1
+    synthetic:build-help:20260908-05: 1
+    synthetic:build-help:20260908-09: 2
+    synthetic:build-help:20260908-10: 1
+    synthetic:build-help:20260908-11: 2
+    synthetic:build-help:20260908-15: 2
+    synthetic:build-help:20260909-04: 1
+    synthetic:build-help:20260909-10: 1
+    synthetic:build-help:20260909-11: 1
+    synthetic:build-help:20260909-12: 2
+    synthetic:build-help:20260910-05: 2
+    synthetic:build-help:20260910-11: 1
+    synthetic:build-help:20260910-14: 2
+    synthetic:build-help:20260911-06: 1
+    synthetic:build-help:20260911-07: 2
+    synthetic:build-help:20260911-16: 1
+    synthetic:build-help:20260914-06: 1
+    synthetic:build-help:20260914-11: 2
+    synthetic:build-help:20260916-07: 2
+    synthetic:build-help:20260917-08: 2
+    synthetic:build-help:20260917-10: 2
+    synthetic:build-help:20260918-06: 1
+    synthetic:build-help:20260923-08: 2
+    synthetic:build-help:20260923-09: 2
+    synthetic:build-help:20260924-05: 2
+    synthetic:build-help:20260924-10: 2
+    synthetic:build-help:20260924-12: 1
+    synthetic:build-help:20260930-05: 1
+    synthetic:build-help:20260930-06: 2
+    synthetic:build-help:20260930-15: 2
+    synthetic:build-help:20261001-05: 1
+    synthetic:build-help:20261002-05: 2
+    synthetic:build-help:20261002-10: 2
+    synthetic:eng:20260904-06: 1
+    synthetic:eng:20260904-13: 1
+    synthetic:eng:20260907-06: 2
+    synthetic:eng:20260907-12: 2
+    synthetic:eng:20260908-05: 2
+    synthetic:eng:20260908-11: 2
+    synthetic:eng:20260908-12: 1
+    synthetic:eng:20260909-05: 1
+    synthetic:eng:20260909-07: 2
+    synthetic:eng:20260909-08: 2
+    synthetic:eng:20260910-11: 1
+    synthetic:eng:20260910-12: 1
+    synthetic:eng:20260911-05: 1
+    synthetic:eng:20260911-12: 2
+    synthetic:eng:20260914-08: 1
+    synthetic:eng:20260915-06: 1
+    synthetic:eng:20260915-07: 1
+    synthetic:eng:20260915-09: 2
+    synthetic:eng:20260916-05: 1
+    synthetic:eng:20260918-09: 1
+    synthetic:eng:20260918-10: 2
+    synthetic:eng:20260918-16: 2
+    synthetic:eng:20260929-04: 2
+    synthetic:eng:20260929-06: 1
+    synthetic:eng:20260929-11: 2
+    synthetic:eng:20261001-06: 2
+    synthetic:eng:20261002-06: 2
+    synthetic:ops:20260907-05: 2
+    synthetic:ops:20260908-05: 2
+    synthetic:ops:20260909-05: 2
+    synthetic:ops:20260909-06: 2
+    synthetic:ops:20260909-08: 2
+    synthetic:ops:20260909-09: 2
+    synthetic:ops:20260909-12: 2
+    synthetic:ops:20260910-05: 2
+    synthetic:ops:20260910-09: 1
+    synthetic:ops:20260910-11: 2
+    synthetic:ops:20260914-05: 1
+    synthetic:ops:20260914-06: 2
+    synthetic:ops:20260914-07: 1
+    synthetic:ops:20260914-08: 2
+    synthetic:ops:20260914-12: 2
+    synthetic:ops:20260915-04: 1
+    synthetic:ops:20260915-08: 2
+    synthetic:ops:20260915-11: 1
+    synthetic:ops:20260916-07: 2
+    synthetic:ops:20260918-06: 2
+    synthetic:ops:20260918-10: 2
+    synthetic:ops:20260918-13: 2
+    synthetic:ops:20260925-05: 1
+    synthetic:ops:20261001-05: 1
+    synthetic:ops:20261002-05: 1
+    synthetic:product:20260903-02: 3
+    synthetic:product:20260903-04: 1
+    synthetic:product:20260903-07: 2
+    synthetic:product:20260903-10: 2
+    synthetic:product:20260903-11: 2
+    synthetic:product:20260903-12: 2
+    synthetic:product:20260903-15: 1
+    synthetic:product:20260904-04: 1
+    synthetic:product:20260904-05: 2
+    synthetic:product:20260904-10: 1
+    synthetic:product:20260904-12: 2
+    synthetic:product:20260907-04: 1
+    synthetic:product:20260907-08: 2
+    synthetic:product:20260907-10: 1
+    synthetic:product:20260907-13: 1
+    synthetic:product:20260908-05: 2
+    synthetic:product:20260909-03: 1
+    synthetic:product:20260909-07: 2
+    synthetic:product:20260909-08: 1
+    synthetic:product:20260909-09: 2
+    synthetic:product:20260909-10: 1
+    synthetic:product:20260909-13: 2
+    synthetic:product:20260910-07: 2
+    synthetic:product:20260910-08: 2
+    synthetic:product:20260910-09: 2
+    synthetic:product:20260910-15: 2
+    synthetic:product:20260914-03: 2
+    synthetic:product:20260914-04: 1
+    synthetic:product:20260914-07: 2
+    synthetic:product:20260914-10: 2
+    synthetic:product:20260914-13: 2
+    synthetic:product:20260915-04: 2
+    synthetic:product:20260915-09: 1
+    synthetic:product:20260915-10: 1
+    synthetic:product:20260916-03: 1
+    synthetic:product:20260916-04: 2
+    synthetic:product:20260916-10: 1
+    synthetic:product:20260917-03: 1
+    synthetic:product:20260917-06: 2
+    synthetic:product:20260917-09: 1
+    synthetic:product:20260917-12: 2
+    synthetic:product:20260917-13: 1
+    synthetic:product:20260918-06: 2
+    synthetic:product:20260918-07: 1
+    synthetic:product:20260918-08: 2
+    synthetic:product:20260918-11: 1
+    synthetic:product:20260918-12: 1
+    synthetic:product:20260921-04: 2
+    synthetic:product:20260921-08: 2
+    synthetic:product:20260921-10: 2
+    synthetic:product:20260921-11: 1
+    synthetic:product:20260921-15: 1
+    synthetic:product:20260922-11: 2
+    synthetic:product:20260922-12: 1
+    synthetic:product:20260922-13: 1
+    synthetic:product:20260923-04: 1
+    synthetic:product:20260924-04: 1
+    synthetic:product:20260925-06: 2
+    synthetic:product:20260925-07: 2
+    synthetic:product:20260925-11: 2
+    synthetic:product:20260925-13: 1
+    synthetic:product:20261001-04: 1
+    synthetic:product:20261001-07: 2
+    synthetic:product:20261001-10: 1
+    synthetic:product:20261001-12: 2
+    synthetic:product:20261002-05: 1
+    synthetic:product:20261002-06: 2
+    synthetic:random:20260907-04: 1
+    synthetic:random:20260907-08: 1
+    synthetic:random:20260907-09: 1
+    synthetic:random:20260908-10: 2
+    synthetic:random:20260908-16: 1
+    synthetic:random:20260910-06: 1
+    synthetic:random:20260910-09: 1
+    synthetic:random:20260910-13: 2
+    synthetic:random:20260910-14: 2
+    synthetic:random:20260915-11: 1
+    synthetic:random:20260915-12: 2
+    synthetic:random:20260915-15: 1
+    synthetic:random:20260916-04: 2
+    synthetic:random:20260916-10: 2
+    synthetic:random:20260916-13: 1
+    synthetic:random:20260916-16: 2
+    synthetic:random:20260918-04: 1
+    synthetic:random:20260918-05: 2
+    synthetic:random:20260921-09: 2
+  lexical_overlap: 0.429
+  fact_ids:
+  - F10
+- id: Q16
+  type: fact
+  split: test
+  tags:
+  - F11
+  - easy
+  - paraphrase
+  query: Which venue was confirmed for the pilot, and what is its capacity?
+  answerable: true
+  answer: Seminar Hall B, capacity 120.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:build-help:20260909-09
+    - synthetic:build-help:20260910-04
+    - synthetic:build-help:20260911-05
+    - synthetic:build-help:20260914-03
+    - synthetic:build-help:20260916-08
+    - synthetic:build-help:20260930-04
+    - synthetic:build-help:20260930-15
+    - synthetic:eng:20260911-06
+    - synthetic:eng:20260916-06
+    - synthetic:ops:20260904-01
+    - synthetic:ops:20260904-04
+    - synthetic:ops:20260907-02
+    - synthetic:ops:20260908-02
+    - synthetic:ops:20260911-01
+    - synthetic:ops:20260914-02
+    - synthetic:ops:20260916-10
+  - part: p2
+    message_ids:
+    - synthetic:ops:20260904-01
+    - synthetic:ops:20260907-02
+    - synthetic:ops:20260916-10
+    - synthetic:ops:20260922-02
+    - synthetic:product:20260915-05
+  parts:
+  - id: p1
+    fact_ids:
+    - F11
+    claim: Seminar Hall B is confirmed as pilot venue
+  - id: p2
+    fact_ids:
+    - F11
+    claim: Seminar Hall B capacity is 120
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260909-09: 2
+    synthetic:build-help:20260909-10: 1
+    synthetic:build-help:20260910-04: 2
+    synthetic:build-help:20260911-05: 2
+    synthetic:build-help:20260914-03: 2
+    synthetic:build-help:20260916-08: 2
+    synthetic:build-help:20260916-09: 1
+    synthetic:build-help:20260930-04: 2
+    synthetic:build-help:20260930-15: 2
+    synthetic:eng:20260907-05: 1
+    synthetic:eng:20260908-06: 1
+    synthetic:eng:20260911-06: 2
+    synthetic:eng:20260911-16: 1
+    synthetic:eng:20260916-06: 2
+    synthetic:eng:20260918-08: 1
+    synthetic:ops:20260904-01: 3
+    synthetic:ops:20260904-04: 2
+    synthetic:ops:20260907-02: 2
+    synthetic:ops:20260907-03: 1
+    synthetic:ops:20260907-07: 1
+    synthetic:ops:20260907-08: 1
+    synthetic:ops:20260908-02: 2
+    synthetic:ops:20260908-14: 1
+    synthetic:ops:20260909-02: 1
+    synthetic:ops:20260910-06: 1
+    synthetic:ops:20260911-01: 2
+    synthetic:ops:20260911-02: 1
+    synthetic:ops:20260911-14: 1
+    synthetic:ops:20260914-02: 2
+    synthetic:ops:20260914-03: 1
+    synthetic:ops:20260915-02: 1
+    synthetic:ops:20260916-10: 2
+    synthetic:ops:20260917-06: 1
+    synthetic:ops:20260917-14: 1
+    synthetic:ops:20260918-08: 1
+    synthetic:ops:20260921-02: 1
+    synthetic:ops:20260921-03: 1
+    synthetic:ops:20260921-15: 1
+    synthetic:ops:20260922-02: 2
+    synthetic:ops:20260922-08: 1
+    synthetic:ops:20260922-13: 1
+    synthetic:ops:20260924-01: 1
+    synthetic:ops:20260928-02: 1
+    synthetic:ops:20260928-07: 1
+    synthetic:ops:20260929-02: 1
+    synthetic:ops:20261002-02: 1
+    synthetic:product:20260907-03: 1
+    synthetic:product:20260909-04: 1
+    synthetic:product:20260910-03: 1
+    synthetic:product:20260915-05: 2
+    synthetic:product:20260916-05: 1
+    synthetic:product:20260917-04: 1
+    synthetic:product:20260917-08: 1
+    synthetic:product:20260918-05: 1
+    synthetic:product:20260922-04: 1
+    synthetic:product:20260925-04: 1
+    synthetic:product:20260930-04: 1
+    synthetic:random:20260908-03: 1
+    synthetic:random:20260911-10: 1
+    synthetic:random:20260917-03: 1
+    synthetic:random:20260917-04: 1
+    synthetic:random:20260917-10: 1
+    synthetic:random:20260917-15: 1
+    synthetic:random:20260921-13: 1
+  lexical_overlap: 0.2
+  fact_ids:
+  - F11
+- id: Q17
+  type: fact
+  split: dev
+  tags:
+  - F12
+  - easy
+  query: Why does the database sketch separate scan events from attendance rows?
+  answerable: true
+  answer: To keep retries auditable.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:build-help:20260908-03
+    - synthetic:build-help:20260908-12
+    - synthetic:build-help:20260908-15
+    - synthetic:build-help:20260909-08
+    - synthetic:build-help:20260910-03
+    - synthetic:build-help:20260911-14
+    - synthetic:build-help:20260914-14
+    - synthetic:build-help:20260916-05
+    - synthetic:build-help:20260917-05
+    - synthetic:eng:20260907-01
+    - synthetic:eng:20260907-03
+    - synthetic:eng:20260907-07
+    - synthetic:eng:20260907-15
+    - synthetic:eng:20260908-03
+    - synthetic:eng:20260910-03
+    - synthetic:eng:20260910-14
+    - synthetic:eng:20260911-03
+    - synthetic:eng:20260911-07
+    - synthetic:eng:20260914-04
+    - synthetic:eng:20260914-10
+    - synthetic:eng:20260914-11
+    - synthetic:eng:20260917-02
+    - synthetic:eng:20260918-02
+    - synthetic:eng:20260923-04
+    - synthetic:ops:20260908-13
+    - synthetic:ops:20260910-12
+    - synthetic:ops:20260915-12
+    - synthetic:ops:20260916-05
+    - synthetic:ops:20260917-11
+    - synthetic:ops:20260921-13
+    - synthetic:product:20260908-03
+    - synthetic:product:20260910-11
+    - synthetic:product:20260915-13
+    - synthetic:product:20260916-06
+    - synthetic:product:20260916-07
+    - synthetic:random:20260918-10
+  parts:
+  - id: p1
+    fact_ids:
+    - F12
+    claim: Separate scan events and attendance rows make retries auditable
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260908-03: 2
+    synthetic:build-help:20260908-12: 2
+    synthetic:build-help:20260908-15: 2
+    synthetic:build-help:20260909-08: 2
+    synthetic:build-help:20260910-03: 2
+    synthetic:build-help:20260911-04: 1
+    synthetic:build-help:20260911-14: 2
+    synthetic:build-help:20260911-15: 1
+    synthetic:build-help:20260914-14: 2
+    synthetic:build-help:20260916-05: 2
+    synthetic:build-help:20260917-05: 2
+    synthetic:eng:20260907-01: 3
+    synthetic:eng:20260907-02: 1
+    synthetic:eng:20260907-03: 2
+    synthetic:eng:20260907-07: 2
+    synthetic:eng:20260907-08: 1
+    synthetic:eng:20260907-13: 1
+    synthetic:eng:20260907-15: 2
+    synthetic:eng:20260908-03: 2
+    synthetic:eng:20260908-15: 1
+    synthetic:eng:20260910-03: 2
+    synthetic:eng:20260910-14: 2
+    synthetic:eng:20260911-03: 2
+    synthetic:eng:20260911-07: 2
+    synthetic:eng:20260914-01: 1
+    synthetic:eng:20260914-04: 2
+    synthetic:eng:20260914-10: 2
+    synthetic:eng:20260914-11: 2
+    synthetic:eng:20260915-04: 1
+    synthetic:eng:20260917-02: 2
+    synthetic:eng:20260918-02: 2
+    synthetic:eng:20260923-04: 2
+    synthetic:eng:20260929-02: 1
+    synthetic:eng:20261002-01: 1
+    synthetic:ops:20260908-13: 2
+    synthetic:ops:20260910-12: 2
+    synthetic:ops:20260915-05: 1
+    synthetic:ops:20260915-12: 2
+    synthetic:ops:20260916-05: 2
+    synthetic:ops:20260917-10: 1
+    synthetic:ops:20260917-11: 2
+    synthetic:ops:20260918-03: 1
+    synthetic:ops:20260918-10: 1
+    synthetic:ops:20260921-06: 1
+    synthetic:ops:20260921-13: 2
+    synthetic:product:20260908-03: 2
+    synthetic:product:20260910-11: 2
+    synthetic:product:20260915-13: 2
+    synthetic:product:20260916-06: 2
+    synthetic:product:20260916-07: 2
+    synthetic:product:20260916-12: 1
+    synthetic:product:20260916-15: 1
+    synthetic:product:20260918-03: 1
+    synthetic:product:20260918-09: 1
+    synthetic:random:20260908-09: 1
+    synthetic:random:20260918-10: 2
+  lexical_overlap: 0.857
+  fact_ids:
+  - F12
+- id: Q18
+  type: fact
+  split: test
+  tags:
+  - F13
+  query: What is the internal demo nickname versus the public product name?
+  answerable: true
+  answer: Firefly is the internal nickname; Beacon is the public name.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:ops:20261002-12
+    - synthetic:random:20260908-01
+    - synthetic:random:20260908-07
+    - synthetic:random:20260918-11
+    - synthetic:random:20260924-05
+  parts:
+  - id: p1
+    fact_ids:
+    - F13
+    claim: Firefly is internal demo nickname and Beacon is public product name
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260911-13: 1
+    synthetic:ops:20260930-05: 1
+    synthetic:ops:20261002-12: 2
+    synthetic:random:20260908-01: 3
+    synthetic:random:20260908-07: 2
+    synthetic:random:20260909-11: 1
+    synthetic:random:20260916-13: 1
+    synthetic:random:20260917-04: 1
+    synthetic:random:20260918-11: 2
+    synthetic:random:20260921-06: 1
+    synthetic:random:20260924-05: 2
+    synthetic:random:20260928-07: 1
+  lexical_overlap: 0.429
+  fact_ids:
+  - F13
+- id: Q19
+  type: fact
+  split: dev
+  tags:
+  - F19
+  - easy
+  query: How many volunteers were needed by Sep 23, and how many were for manual entry?
+  answerable: true
+  answer: Six total, with two at the manual entry desk.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:ops:20260916-01
+    - synthetic:ops:20260918-09
+    - synthetic:ops:20260921-02
+    - synthetic:ops:20260921-03
+    - synthetic:ops:20260922-03
+    - synthetic:ops:20260922-06
+    - synthetic:ops:20260922-07
+    - synthetic:ops:20260922-08
+    - synthetic:ops:20260922-13
+    - synthetic:ops:20260922-15
+    - synthetic:product:20260921-05
+    - synthetic:product:20260921-11
+    - synthetic:product:20260923-05
+    - synthetic:product:20260923-06
+    - synthetic:random:20260917-12
+  - part: p2
+    message_ids:
+    - synthetic:build-help:20260917-11
+    - synthetic:build-help:20260918-11
+    - synthetic:build-help:20260918-14
+    - synthetic:build-help:20260921-09
+    - synthetic:build-help:20260921-15
+    - synthetic:build-help:20260923-07
+    - synthetic:eng:20260917-05
+    - synthetic:eng:20260917-16
+    - synthetic:eng:20260918-08
+    - synthetic:eng:20260918-11
+    - synthetic:eng:20260921-11
+    - synthetic:eng:20260922-11
+    - synthetic:ops:20260916-01
+    - synthetic:ops:20260916-02
+    - synthetic:ops:20260916-03
+    - synthetic:ops:20260916-16
+    - synthetic:ops:20260917-02
+    - synthetic:ops:20260917-03
+    - synthetic:ops:20260917-06
+    - synthetic:ops:20260917-08
+    - synthetic:ops:20260917-09
+    - synthetic:ops:20260918-08
+    - synthetic:ops:20260918-09
+    - synthetic:ops:20260918-15
+    - synthetic:ops:20260921-02
+    - synthetic:ops:20260921-03
+    - synthetic:ops:20260921-07
+    - synthetic:ops:20260921-09
+    - synthetic:ops:20260921-10
+    - synthetic:ops:20260921-14
+    - synthetic:ops:20260922-03
+    - synthetic:ops:20260922-06
+    - synthetic:ops:20260922-08
+    - synthetic:ops:20260922-13
+    - synthetic:ops:20260922-15
+    - synthetic:ops:20260923-01
+    - synthetic:ops:20260925-06
+    - synthetic:ops:20260925-12
+    - synthetic:product:20260917-04
+    - synthetic:product:20260918-10
+    - synthetic:product:20260921-05
+    - synthetic:product:20260921-11
+    - synthetic:product:20260923-06
+    - synthetic:product:20260923-16
+    - synthetic:random:20260917-12
+  parts:
+  - id: p1
+    fact_ids:
+    - F19
+    claim: Six volunteers were needed by Sep 23
+  - id: p2
+    fact_ids:
+    - F19
+    claim: Two volunteers were assigned to manual entry
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260917-11: 2
+    synthetic:build-help:20260918-05: 1
+    synthetic:build-help:20260918-11: 2
+    synthetic:build-help:20260918-14: 2
+    synthetic:build-help:20260921-09: 2
+    synthetic:build-help:20260921-14: 1
+    synthetic:build-help:20260921-15: 2
+    synthetic:build-help:20260923-07: 2
+    synthetic:build-help:20260923-11: 1
+    synthetic:build-help:20260925-09: 1
+    synthetic:eng:20260917-05: 2
+    synthetic:eng:20260917-11: 1
+    synthetic:eng:20260917-16: 2
+    synthetic:eng:20260918-08: 2
+    synthetic:eng:20260918-11: 2
+    synthetic:eng:20260921-11: 2
+    synthetic:eng:20260922-11: 2
+    synthetic:eng:20260929-05: 1
+    synthetic:eng:20260929-12: 1
+    synthetic:ops:20260916-01: 3
+    synthetic:ops:20260916-02: 2
+    synthetic:ops:20260916-03: 2
+    synthetic:ops:20260916-16: 2
+    synthetic:ops:20260917-01: 1
+    synthetic:ops:20260917-02: 2
+    synthetic:ops:20260917-03: 2
+    synthetic:ops:20260917-06: 2
+    synthetic:ops:20260917-08: 2
+    synthetic:ops:20260917-09: 2
+    synthetic:ops:20260917-14: 1
+    synthetic:ops:20260918-02: 1
+    synthetic:ops:20260918-08: 2
+    synthetic:ops:20260918-09: 2
+    synthetic:ops:20260918-15: 2
+    synthetic:ops:20260921-02: 2
+    synthetic:ops:20260921-03: 2
+    synthetic:ops:20260921-07: 2
+    synthetic:ops:20260921-08: 1
+    synthetic:ops:20260921-09: 2
+    synthetic:ops:20260921-10: 2
+    synthetic:ops:20260921-14: 2
+    synthetic:ops:20260921-15: 1
+    synthetic:ops:20260922-02: 1
+    synthetic:ops:20260922-03: 2
+    synthetic:ops:20260922-06: 2
+    synthetic:ops:20260922-07: 2
+    synthetic:ops:20260922-08: 2
+    synthetic:ops:20260922-11: 1
+    synthetic:ops:20260922-13: 2
+    synthetic:ops:20260922-15: 2
+    synthetic:ops:20260923-01: 2
+    synthetic:ops:20260925-06: 2
+    synthetic:ops:20260925-12: 2
+    synthetic:product:20260917-04: 2
+    synthetic:product:20260917-08: 1
+    synthetic:product:20260917-12: 1
+    synthetic:product:20260917-13: 1
+    synthetic:product:20260918-10: 2
+    synthetic:product:20260918-15: 1
+    synthetic:product:20260921-05: 2
+    synthetic:product:20260921-09: 1
+    synthetic:product:20260921-10: 1
+    synthetic:product:20260921-11: 2
+    synthetic:product:20260922-04: 1
+    synthetic:product:20260922-06: 1
+    synthetic:product:20260922-13: 1
+    synthetic:product:20260923-05: 2
+    synthetic:product:20260923-06: 2
+    synthetic:product:20260923-07: 1
+    synthetic:product:20260923-12: 1
+    synthetic:product:20260923-15: 1
+    synthetic:product:20260923-16: 2
+    synthetic:random:20260917-03: 1
+    synthetic:random:20260917-12: 2
+    synthetic:random:20260918-08: 1
+    synthetic:random:20260921-07: 1
+  lexical_overlap: 0.429
+  fact_ids:
+  - F19
+- id: Q20
+  type: fact
+  split: test
+  tags:
+  - F26
+  - easy
+  - paraphrase
+  query: Did the CSV export ship on its Sep 25 deadline, and which columns did it contain?
+  answerable: true
+  answer: Yes. It shipped Sep 25 with event_id, attendee_id, checked_in_at.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:eng:20260925-02
+    - synthetic:eng:20260925-07
+  - part: p2
+    message_ids:
+    - synthetic:build-help:20260929-03
+    - synthetic:build-help:20260930-09
+    - synthetic:build-help:20261001-08
+    - synthetic:build-help:20261001-13
+    - synthetic:build-help:20261002-03
+    - synthetic:eng:20260925-02
+    - synthetic:eng:20260928-13
+    - synthetic:eng:20260929-10
+    - synthetic:eng:20260930-04
+    - synthetic:eng:20261002-04
+    - synthetic:ops:20260928-04
+    - synthetic:ops:20261002-08
+    - synthetic:product:20260928-05
+    - synthetic:random:20261002-10
+  parts:
+  - id: p1
+    fact_ids:
+    - F26
+    claim: CSV attendance export shipped on Sep 25
+  - id: p2
+    fact_ids:
+    - F26
+    claim: CSV columns were event_id, attendee_id, checked_in_at
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260929-03: 2
+    synthetic:build-help:20260929-12: 1
+    synthetic:build-help:20260929-15: 1
+    synthetic:build-help:20260930-03: 1
+    synthetic:build-help:20260930-09: 2
+    synthetic:build-help:20260930-15: 1
+    synthetic:build-help:20261001-08: 2
+    synthetic:build-help:20261001-12: 1
+    synthetic:build-help:20261001-13: 2
+    synthetic:build-help:20261002-03: 2
+    synthetic:build-help:20261002-10: 1
+    synthetic:eng:20260925-02: 3
+    synthetic:eng:20260925-03: 1
+    synthetic:eng:20260925-07: 2
+    synthetic:eng:20260925-08: 1
+    synthetic:eng:20260925-12: 1
+    synthetic:eng:20260925-15: 1
+    synthetic:eng:20260928-04: 1
+    synthetic:eng:20260928-13: 2
+    synthetic:eng:20260929-04: 1
+    synthetic:eng:20260929-10: 2
+    synthetic:eng:20260930-04: 2
+    synthetic:eng:20260930-05: 1
+    synthetic:eng:20261001-02: 1
+    synthetic:eng:20261001-08: 1
+    synthetic:eng:20261001-10: 1
+    synthetic:eng:20261001-16: 1
+    synthetic:eng:20261002-04: 2
+    synthetic:eng:20261002-10: 1
+    synthetic:eng:20261002-13: 1
+    synthetic:ops:20260928-04: 2
+    synthetic:ops:20260929-10: 1
+    synthetic:ops:20260930-04: 1
+    synthetic:ops:20260930-14: 1
+    synthetic:ops:20261001-08: 1
+    synthetic:ops:20261002-03: 1
+    synthetic:ops:20261002-08: 2
+    synthetic:ops:20261002-14: 1
+    synthetic:product:20260928-05: 2
+    synthetic:product:20260928-06: 1
+    synthetic:product:20260928-11: 1
+    synthetic:product:20261001-02: 1
+    synthetic:product:20261002-03: 1
+    synthetic:product:20261002-12: 1
+    synthetic:random:20261001-04: 1
+    synthetic:random:20261001-12: 1
+    synthetic:random:20261002-07: 1
+    synthetic:random:20261002-10: 2
+    synthetic:random:20261002-15: 1
+  lexical_overlap: 0.222
+  fact_ids:
+  - F26
+- id: Q21
+  type: outcome
+  split: dev
+  tags:
+  - F30
+  query: How many of the 100 attendees checked in successfully, and how many used manual entry?
+  answerable: true
+  answer: 98 checked in successfully; two used manual code entry.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:ops:20261002-06
+    - synthetic:ops:20261002-08
+  - part: p2
+    message_ids:
+    - synthetic:ops:20261002-06
+    - synthetic:ops:20261002-08
+  parts:
+  - id: p1
+    fact_ids:
+    - F30
+    claim: 98 of 100 attendees checked in successfully
+  - id: p2
+    fact_ids:
+    - F30
+    claim: Two attendees used manual code entry
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:ops:20261002-06: 3
+    synthetic:ops:20261002-07: 1
+    synthetic:ops:20261002-08: 2
+    synthetic:ops:20261002-14: 1
+  lexical_overlap: 0.375
+  fact_ids:
+  - F30
+- id: Q22
+  type: fact
+  split: dev
+  tags:
+  - F06
+  - easy
+  - paraphrase
+  query: Who owned the QR scanner mockup and when was its first review due?
+  answerable: true
+  answer: Leo owned it; first review was due Sep 3.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:build-help:20260831-07
+    - synthetic:ops:20260901-08
+    - synthetic:ops:20260903-01
+    - synthetic:product:20260828-07
+    - synthetic:random:20260831-10
+  - part: p2
+    message_ids:
+    - synthetic:eng:20260903-05
+    - synthetic:ops:20260903-01
+    - synthetic:product:20260828-07
+  parts:
+  - id: p1
+    fact_ids:
+    - F06
+    claim: Leo owned the QR scanner mockup
+  - id: p2
+    fact_ids:
+    - F06
+    claim: First scanner mockup review was due Sep 3
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260831-07: 2
+    synthetic:build-help:20260831-11: 1
+    synthetic:build-help:20260903-05: 1
+    synthetic:build-help:20260903-10: 1
+    synthetic:eng:20260903-05: 2
+    synthetic:eng:20260903-11: 1
+    synthetic:ops:20260901-08: 2
+    synthetic:ops:20260903-01: 2
+    synthetic:ops:20260903-07: 1
+    synthetic:ops:20260903-13: 1
+    synthetic:product:20260828-06: 1
+    synthetic:product:20260828-07: 3
+    synthetic:product:20260828-12: 1
+    synthetic:product:20260831-02: 1
+    synthetic:product:20260831-07: 1
+    synthetic:product:20260831-08: 1
+    synthetic:product:20260903-02: 1
+    synthetic:random:20260831-06: 1
+    synthetic:random:20260831-10: 2
+    synthetic:random:20260831-11: 1
+    synthetic:random:20260831-14: 1
+    synthetic:random:20260901-07: 1
+    synthetic:random:20260901-13: 1
+  lexical_overlap: 0.25
+  fact_ids:
+  - F06
+- id: Q23
+  type: fact
+  split: test
+  tags:
+  - F32
+  query: When is the separate design review meeting?
+  answerable: true
+  answer: Thursdays at 15:00 IST.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:product:20260915-16
+  parts:
+  - id: p1
+    fact_ids:
+    - F32
+    claim: Design review is Thursdays at 15:00 IST
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:product:20260915-16: 3
+    synthetic:random:20260924-04: 1
+  lexical_overlap: 0.5
+  fact_ids:
+  - F32
+- id: Q24
+  type: fact
+  split: dev
+  tags:
+  - F01
+  - easy
+  query: What is the first Beacon release for the campus demo?
+  answerable: true
+  answer: QR check-in and an attendance dashboard for the Oct 2, 2026 campus demo.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:build-help:20260825-04
+    - synthetic:build-help:20260826-01
+    - synthetic:build-help:20260826-03
+    - synthetic:build-help:20260826-13
+    - synthetic:build-help:20260828-01
+    - synthetic:build-help:20260831-01
+    - synthetic:build-help:20260831-14
+    - synthetic:build-help:20260901-02
+    - synthetic:build-help:20260901-14
+    - synthetic:build-help:20260902-10
+    - synthetic:build-help:20260904-04
+    - synthetic:build-help:20260911-11
+    - synthetic:build-help:20260914-01
+    - synthetic:build-help:20260914-10
+    - synthetic:build-help:20260915-10
+    - synthetic:build-help:20260922-10
+    - synthetic:build-help:20260929-09
+    - synthetic:build-help:20260930-12
+    - synthetic:build-help:20261001-09
+    - synthetic:eng:20260825-03
+    - synthetic:eng:20260826-01
+    - synthetic:eng:20260826-04
+    - synthetic:eng:20260827-04
+    - synthetic:eng:20260828-10
+    - synthetic:eng:20260901-01
+    - synthetic:eng:20260901-10
+    - synthetic:eng:20260915-11
+    - synthetic:eng:20260923-08
+    - synthetic:ops:20260929-08
+    - synthetic:product:20260824-01
+    - synthetic:product:20260825-01
+    - synthetic:product:20260825-06
+    - synthetic:product:20260825-12
+    - synthetic:product:20260826-01
+    - synthetic:product:20260827-02
+    - synthetic:product:20260828-01
+    - synthetic:product:20260831-01
+    - synthetic:product:20260831-14
+    - synthetic:product:20260901-01
+    - synthetic:product:20260902-01
+    - synthetic:product:20260904-01
+    - synthetic:product:20260907-01
+    - synthetic:product:20260908-01
+    - synthetic:product:20260909-01
+    - synthetic:product:20260914-01
+    - synthetic:product:20260915-01
+    - synthetic:product:20260916-01
+    - synthetic:product:20260918-11
+    - synthetic:product:20260924-01
+    - synthetic:product:20260925-01
+    - synthetic:product:20260929-01
+    - synthetic:product:20260929-14
+    - synthetic:product:20260930-02
+    - synthetic:random:20260828-03
+    - synthetic:random:20260831-03
+    - synthetic:random:20260901-03
+    - synthetic:random:20260902-05
+    - synthetic:random:20260903-05
+    - synthetic:random:20260904-05
+    - synthetic:random:20260911-07
+    - synthetic:random:20260918-15
+    - synthetic:random:20260922-05
+    - synthetic:random:20260928-06
+  parts:
+  - id: p1
+    fact_ids:
+    - F01
+    claim: First Beacon release covers QR check-in and attendance dashboard for the Oct 2 campus demo
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260825-04: 2
+    synthetic:build-help:20260826-01: 2
+    synthetic:build-help:20260826-03: 2
+    synthetic:build-help:20260826-09: 1
+    synthetic:build-help:20260826-13: 2
+    synthetic:build-help:20260828-01: 2
+    synthetic:build-help:20260828-04: 1
+    synthetic:build-help:20260831-01: 2
+    synthetic:build-help:20260831-14: 2
+    synthetic:build-help:20260901-02: 2
+    synthetic:build-help:20260901-14: 2
+    synthetic:build-help:20260902-10: 2
+    synthetic:build-help:20260904-04: 2
+    synthetic:build-help:20260908-13: 1
+    synthetic:build-help:20260911-11: 2
+    synthetic:build-help:20260914-01: 2
+    synthetic:build-help:20260914-10: 2
+    synthetic:build-help:20260915-10: 2
+    synthetic:build-help:20260917-11: 1
+    synthetic:build-help:20260922-10: 2
+    synthetic:build-help:20260929-09: 2
+    synthetic:build-help:20260930-12: 2
+    synthetic:build-help:20261001-09: 2
+    synthetic:eng:20260825-03: 2
+    synthetic:eng:20260826-01: 2
+    synthetic:eng:20260826-04: 2
+    synthetic:eng:20260827-04: 2
+    synthetic:eng:20260827-14: 1
+    synthetic:eng:20260828-04: 1
+    synthetic:eng:20260828-10: 2
+    synthetic:eng:20260901-01: 2
+    synthetic:eng:20260901-04: 1
+    synthetic:eng:20260901-10: 2
+    synthetic:eng:20260903-01: 1
+    synthetic:eng:20260904-04: 1
+    synthetic:eng:20260907-03: 1
+    synthetic:eng:20260907-10: 1
+    synthetic:eng:20260909-01: 1
+    synthetic:eng:20260910-01: 1
+    synthetic:eng:20260911-01: 1
+    synthetic:eng:20260911-16: 1
+    synthetic:eng:20260914-05: 1
+    synthetic:eng:20260914-06: 1
+    synthetic:eng:20260914-16: 1
+    synthetic:eng:20260915-11: 2
+    synthetic:eng:20260917-01: 1
+    synthetic:eng:20260918-04: 1
+    synthetic:eng:20260918-14: 1
+    synthetic:eng:20260918-15: 1
+    synthetic:eng:20260922-04: 1
+    synthetic:eng:20260923-01: 1
+    synthetic:eng:20260923-08: 2
+    synthetic:eng:20260928-01: 1
+    synthetic:eng:20260930-01: 1
+    synthetic:eng:20261001-16: 1
+    synthetic:eng:20261002-04: 1
+    synthetic:ops:20260825-03: 1
+    synthetic:ops:20260826-01: 1
+    synthetic:ops:20260827-01: 1
+    synthetic:ops:20260827-13: 1
+    synthetic:ops:20260828-01: 1
+    synthetic:ops:20260828-03: 1
+    synthetic:ops:20260828-13: 1
+    synthetic:ops:20260831-01: 1
+    synthetic:ops:20260831-12: 1
+    synthetic:ops:20260902-01: 1
+    synthetic:ops:20260902-07: 1
+    synthetic:ops:20260902-08: 1
+    synthetic:ops:20260902-12: 1
+    synthetic:ops:20260903-01: 1
+    synthetic:ops:20260903-04: 1
+    synthetic:ops:20260903-13: 1
+    synthetic:ops:20260904-09: 1
+    synthetic:ops:20260907-01: 1
+    synthetic:ops:20260909-01: 1
+    synthetic:ops:20260909-03: 1
+    synthetic:ops:20260911-01: 1
+    synthetic:ops:20260911-03: 1
+    synthetic:ops:20260911-13: 1
+    synthetic:ops:20260915-01: 1
+    synthetic:ops:20260915-02: 1
+    synthetic:ops:20260917-01: 1
+    synthetic:ops:20260917-12: 1
+    synthetic:ops:20260918-03: 1
+    synthetic:ops:20260921-01: 1
+    synthetic:ops:20260921-03: 1
+    synthetic:ops:20260921-15: 1
+    synthetic:ops:20260922-01: 1
+    synthetic:ops:20260922-03: 1
+    synthetic:ops:20260922-08: 1
+    synthetic:ops:20260922-13: 1
+    synthetic:ops:20260924-03: 1
+    synthetic:ops:20260925-01: 1
+    synthetic:ops:20260925-07: 1
+    synthetic:ops:20260929-01: 1
+    synthetic:ops:20260929-03: 1
+    synthetic:ops:20260929-08: 2
+    synthetic:product:20260824-01: 3
+    synthetic:product:20260824-10: 1
+    synthetic:product:20260825-01: 2
+    synthetic:product:20260825-06: 2
+    synthetic:product:20260825-12: 2
+    synthetic:product:20260826-01: 2
+    synthetic:product:20260826-06: 1
+    synthetic:product:20260826-12: 1
+    synthetic:product:20260827-01: 1
+    synthetic:product:20260827-02: 2
+    synthetic:product:20260828-01: 2
+    synthetic:product:20260831-01: 2
+    synthetic:product:20260831-13: 1
+    synthetic:product:20260831-14: 2
+    synthetic:product:20260901-01: 2
+    synthetic:product:20260902-01: 2
+    synthetic:product:20260904-01: 2
+    synthetic:product:20260907-01: 2
+    synthetic:product:20260908-01: 2
+    synthetic:product:20260909-01: 2
+    synthetic:product:20260909-07: 1
+    synthetic:product:20260909-13: 1
+    synthetic:product:20260910-01: 1
+    synthetic:product:20260911-01: 1
+    synthetic:product:20260911-10: 1
+    synthetic:product:20260911-11: 1
+    synthetic:product:20260911-14: 1
+    synthetic:product:20260914-01: 2
+    synthetic:product:20260914-02: 1
+    synthetic:product:20260914-07: 1
+    synthetic:product:20260914-13: 1
+    synthetic:product:20260915-01: 2
+    synthetic:product:20260915-06: 1
+    synthetic:product:20260916-01: 2
+    synthetic:product:20260916-13: 1
+    synthetic:product:20260918-01: 1
+    synthetic:product:20260918-08: 1
+    synthetic:product:20260918-11: 2
+    synthetic:product:20260921-01: 1
+    synthetic:product:20260921-02: 1
+    synthetic:product:20260922-01: 1
+    synthetic:product:20260923-01: 1
+    synthetic:product:20260923-02: 1
+    synthetic:product:20260924-01: 2
+    synthetic:product:20260925-01: 2
+    synthetic:product:20260928-01: 1
+    synthetic:product:20260928-15: 1
+    synthetic:product:20260929-01: 2
+    synthetic:product:20260929-14: 2
+    synthetic:product:20260930-01: 1
+    synthetic:product:20260930-02: 2
+    synthetic:product:20260930-12: 1
+    synthetic:product:20261001-01: 1
+    synthetic:product:20261001-02: 1
+    synthetic:product:20261002-01: 1
+    synthetic:random:20260826-09: 1
+    synthetic:random:20260827-05: 1
+    synthetic:random:20260827-11: 1
+    synthetic:random:20260828-03: 2
+    synthetic:random:20260831-03: 2
+    synthetic:random:20260901-03: 2
+    synthetic:random:20260902-05: 2
+    synthetic:random:20260903-05: 2
+    synthetic:random:20260903-09: 1
+    synthetic:random:20260904-05: 2
+    synthetic:random:20260907-05: 1
+    synthetic:random:20260911-07: 2
+    synthetic:random:20260915-05: 1
+    synthetic:random:20260916-08: 1
+    synthetic:random:20260917-05: 1
+    synthetic:random:20260917-15: 1
+    synthetic:random:20260918-07: 1
+    synthetic:random:20260918-15: 2
+    synthetic:random:20260922-05: 2
+    synthetic:random:20260922-13: 1
+    synthetic:random:20260923-07: 1
+    synthetic:random:20260925-08: 1
+    synthetic:random:20260928-06: 2
+  lexical_overlap: 0.8
+  fact_ids:
+  - F01
+- id: Q25
+  type: fact
+  split: test
+  tags:
+  - F03
+  - easy
+  query: Who owns the venue booking, and when was Seminar Hall B to be confirmed?
+  answerable: true
+  answer: Zoya owns the venue booking; confirmation was due Sep 4.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:build-help:20260831-07
+    - synthetic:build-help:20260903-10
+    - synthetic:eng:20260826-10
+    - synthetic:ops:20260825-02
+    - synthetic:ops:20260828-07
+    - synthetic:ops:20260828-08
+  - part: p2
+    message_ids:
+    - synthetic:build-help:20260828-05
+    - synthetic:ops:20260826-03
+  parts:
+  - id: p1
+    fact_ids:
+    - F03
+    claim: Zoya owned venue booking
+  - id: p2
+    fact_ids:
+    - F03
+    claim: Seminar Hall B confirmation was due Sep 4
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260826-04: 1
+    synthetic:build-help:20260827-06: 1
+    synthetic:build-help:20260828-05: 2
+    synthetic:build-help:20260831-03: 1
+    synthetic:build-help:20260831-07: 2
+    synthetic:build-help:20260901-04: 1
+    synthetic:build-help:20260901-13: 1
+    synthetic:build-help:20260902-06: 1
+    synthetic:build-help:20260903-06: 1
+    synthetic:build-help:20260903-10: 2
+    synthetic:build-help:20260903-12: 1
+    synthetic:build-help:20260904-05: 1
+    synthetic:build-help:20260904-09: 1
+    synthetic:build-help:20260904-14: 1
+    synthetic:eng:20260826-06: 1
+    synthetic:eng:20260826-10: 2
+    synthetic:eng:20260826-12: 1
+    synthetic:eng:20260827-06: 1
+    synthetic:eng:20260827-11: 1
+    synthetic:eng:20260828-05: 1
+    synthetic:eng:20260902-06: 1
+    synthetic:eng:20260902-07: 1
+    synthetic:eng:20260902-08: 1
+    synthetic:eng:20260902-15: 1
+    synthetic:eng:20260903-06: 1
+    synthetic:eng:20260903-07: 1
+    synthetic:eng:20260903-12: 1
+    synthetic:eng:20260903-13: 1
+    synthetic:eng:20260904-05: 1
+    synthetic:eng:20260904-11: 1
+    synthetic:ops:20260825-02: 3
+    synthetic:ops:20260825-03: 1
+    synthetic:ops:20260825-06: 1
+    synthetic:ops:20260825-09: 1
+    synthetic:ops:20260825-10: 1
+    synthetic:ops:20260825-11: 1
+    synthetic:ops:20260825-14: 1
+    synthetic:ops:20260826-03: 2
+    synthetic:ops:20260826-09: 1
+    synthetic:ops:20260826-13: 1
+    synthetic:ops:20260826-14: 1
+    synthetic:ops:20260826-15: 1
+    synthetic:ops:20260827-03: 1
+    synthetic:ops:20260827-07: 1
+    synthetic:ops:20260827-10: 1
+    synthetic:ops:20260827-13: 1
+    synthetic:ops:20260827-14: 1
+    synthetic:ops:20260828-02: 1
+    synthetic:ops:20260828-03: 1
+    synthetic:ops:20260828-05: 1
+    synthetic:ops:20260828-06: 1
+    synthetic:ops:20260828-07: 2
+    synthetic:ops:20260828-08: 2
+    synthetic:ops:20260828-14: 1
+    synthetic:ops:20260831-02: 1
+    synthetic:ops:20260831-03: 1
+    synthetic:ops:20260831-04: 1
+    synthetic:ops:20260831-08: 1
+    synthetic:ops:20260831-12: 1
+    synthetic:ops:20260901-02: 1
+    synthetic:ops:20260901-06: 1
+    synthetic:ops:20260901-07: 1
+    synthetic:ops:20260901-08: 1
+    synthetic:ops:20260901-14: 1
+    synthetic:ops:20260902-02: 1
+    synthetic:ops:20260902-06: 1
+    synthetic:ops:20260902-07: 1
+    synthetic:ops:20260902-08: 1
+    synthetic:ops:20260902-11: 1
+    synthetic:ops:20260902-12: 1
+    synthetic:ops:20260902-16: 1
+    synthetic:ops:20260903-01: 1
+    synthetic:ops:20260903-02: 1
+    synthetic:ops:20260903-07: 1
+    synthetic:ops:20260903-08: 1
+    synthetic:ops:20260903-13: 1
+    synthetic:ops:20260903-15: 1
+    synthetic:ops:20260915-02: 1
+    synthetic:ops:20260915-08: 1
+    synthetic:ops:20260915-10: 1
+    synthetic:product:20260831-04: 1
+    synthetic:product:20260831-10: 1
+    synthetic:product:20260903-06: 1
+    synthetic:product:20260904-06: 1
+    synthetic:product:20260904-12: 1
+    synthetic:random:20260828-04: 1
+    synthetic:random:20260828-09: 1
+    synthetic:random:20260828-14: 1
+    synthetic:random:20260901-04: 1
+    synthetic:random:20260901-10: 1
+    synthetic:random:20260901-14: 1
+    synthetic:random:20260902-04: 1
+    synthetic:random:20260903-07: 1
+    synthetic:random:20260907-11: 1
+  lexical_overlap: 0.571
+  fact_ids:
+  - F03
+- id: Q26
+  type: noise
+  split: dev
+  tags:
+  - F17
+  - F34
+  - paraphrase
+  query: Did Arjun’s later MongoDB joke reverse the Postgres decision?
+  answerable: true
+  answer: No. It was a joke about skipping migrations; Postgres remained the prototype database.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:random:20260924-12
+  - part: p2
+    message_ids:
+    - synthetic:eng:20260914-02
+    - synthetic:eng:20260914-06
+    - synthetic:eng:20260915-01
+    - synthetic:eng:20260918-07
+    - synthetic:ops:20260916-08
+    - synthetic:random:20260921-10
+  parts:
+  - id: p1
+    fact_ids:
+    - F34
+    claim: Arjun joked Mongo would let him skip migrations
+  - id: p2
+    fact_ids:
+    - F17
+    claim: Postgres remained the chosen prototype database
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  answer_type: fact
+  relevant:
+    synthetic:build-help:20260918-01: 1
+    synthetic:eng:20260914-02: 3
+    synthetic:eng:20260914-03: 1
+    synthetic:eng:20260914-04: 1
+    synthetic:eng:20260914-05: 1
+    synthetic:eng:20260914-06: 2
+    synthetic:eng:20260914-10: 1
+    synthetic:eng:20260914-16: 1
+    synthetic:eng:20260915-01: 2
+    synthetic:eng:20260918-07: 2
+    synthetic:ops:20260916-08: 2
+    synthetic:product:20260915-03: 1
+    synthetic:random:20260921-10: 2
+    synthetic:random:20260924-12: 3
+  lexical_overlap: 0.286
+  fact_ids:
+  - F17
+  - F34
+- id: Q27
+  type: no_decision
+  split: test
+  tags:
+  - F35
+  query: Who owns paid ticketing after the pilot?
+  answerable: true
+  answer: Paid ticketing was discussed for after the pilot, but no decision or owner was assigned.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:product:20260922-09
+  answer_type: no_decision
+  parts:
+  - id: p1
+    fact_ids:
+    - F35
+    claim: Paid ticketing was discussed for after the pilot, with no decision and no owner
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  relevant:
+    synthetic:product:20260922-09: 3
+  lexical_overlap: 0.75
+  fact_ids:
+  - F35
+- id: Q28
+  type: no_decision
+  split: test
+  tags:
+  - F35
+  query: What decision did the team make on paid ticketing after the pilot?
+  answerable: true
+  answer: Paid ticketing was discussed for after the pilot, but no decision or owner was assigned.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:product:20260922-09
+  answer_type: no_decision
+  parts:
+  - id: p1
+    fact_ids:
+    - F35
+    claim: Paid ticketing was discussed for after the pilot, with no decision and no owner
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  relevant:
+    synthetic:product:20260922-09: 3
+  lexical_overlap: 0.667
+  fact_ids:
+  - F35
+- id: Q29
+  type: unanswerable
+  split: dev
+  tags: []
+  query: What refund policy did Beacon choose for ticket buyers?
+  answerable: false
+  answer: null
+  evidence_groups: []
+  absence_check:
+    terms:
+      refund: 0
+    conclusion: No refund policy or ticket-buyer terms occur in the corpus.
+  answer_type: unanswerable
+  parts: []
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  relevant: {}
+  lexical_overlap: null
+  fact_ids: []
+- id: Q30
+  type: unanswerable
+  split: test
+  tags: []
+  query: Which payment gateway was selected for Beacon?
+  answerable: false
+  answer: null
+  evidence_groups: []
+  absence_check:
+    terms:
+      payment gateway: 0
+      Stripe: 0
+      Razorpay: 0
+    conclusion: No gateway or named payment provider is discussed.
+  answer_type: unanswerable
+  parts: []
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  relevant: {}
+  lexical_overlap: null
+  fact_ids: []
+- id: Q31
+  type: unanswerable
+  split: dev
+  tags: []
+  query: Which single sign-on provider will Beacon use?
+  answerable: false
+  answer: null
+  evidence_groups: []
+  absence_check:
+    terms:
+      single sign-on: 0
+    conclusion: No identity provider decision is discussed.
+  answer_type: unanswerable
+  parts: []
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  relevant: {}
+  lexical_overlap: null
+  fact_ids: []
+- id: Q32
+  type: unanswerable
+  split: test
+  tags: []
+  query: What is the release date of the native Android app?
+  answerable: false
+  answer: null
+  evidence_groups: []
+  absence_check:
+    terms:
+      Android app: 0
+      native app: 0
+    conclusion: No native Android app or release date is discussed.
+  answer_type: unanswerable
+  parts: []
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  relevant: {}
+  lexical_overlap: null
+  fact_ids: []
+- id: Q33
+  type: unanswerable
+  split: dev
+  tags: []
+  query: Which sponsor is funding the campus pilot?
+  answerable: false
+  answer: null
+  evidence_groups: []
+  absence_check:
+    terms:
+      sponsor: 0
+    conclusion: No sponsor or funding arrangement is discussed.
+  answer_type: unanswerable
+  parts: []
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  relevant: {}
+  lexical_overlap: null
+  fact_ids: []
+- id: Q34
+  type: unanswerable
+  split: test
+  tags: []
+  query: How long will Beacon retain attendee data after the pilot?
+  answerable: false
+  answer: null
+  evidence_groups: []
+  absence_check:
+    terms:
+      retention period: 0
+      data retention: 0
+    conclusion: No data-retention duration is discussed.
+  answer_type: unanswerable
+  parts: []
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  relevant: {}
+  lexical_overlap: null
+  fact_ids: []
+- id: Q35
+  type: why
+  split: dev
+  tags:
+  - F17
+  - paraphrase
+  query: Why did we ditch Mongo?
+  answerable: true
+  answer_type: fact
+  answer: Postgres made export reporting joins and scan deduplication constraints cleaner, with no slip to the Oct
+    2 pilot.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:eng:20260914-02
+  - part: p2
+    message_ids:
+    - synthetic:eng:20260914-04
+    - synthetic:eng:20260918-07
+    - synthetic:ops:20260916-08
+  - part: p3
+    message_ids:
+    - synthetic:eng:20260914-06
+  relevant:
+    synthetic:build-help:20260918-01: 1
+    synthetic:eng:20260914-02: 3
+    synthetic:eng:20260914-03: 1
+    synthetic:eng:20260914-04: 2
+    synthetic:eng:20260914-05: 1
+    synthetic:eng:20260914-06: 2
+    synthetic:eng:20260914-10: 1
+    synthetic:eng:20260914-16: 1
+    synthetic:eng:20260915-01: 1
+    synthetic:eng:20260918-07: 2
+    synthetic:ops:20260916-08: 2
+    synthetic:product:20260915-03: 1
+    synthetic:random:20260921-10: 1
+  parts:
+  - id: p1
+    fact_ids:
+    - F17
+    claim: The prototype DB switch to Postgres was proposed because exports made reporting messy
+  - id: p2
+    fact_ids:
+    - F17
+    claim: Postgres allowed cleaner deduplication constraints
+  - id: p3
+    fact_ids:
+    - F17
+    claim: The database switch did not delay the Oct 2 pilot
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  lexical_overlap: 0.0
+  fact_ids:
+  - F17
+- id: Q36
+  type: paraphrase
+  split: dev
+  tags:
+  - F36
+  - paraphrase
+  query: Can anyone ship code the evening before the demo?
+  answerable: true
+  answer_type: fact
+  answer: Deploys freeze after 18:00 IST on Oct 1; only blocker fixes may be patched.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:eng:20260929-09
+    - synthetic:eng:20260930-09
+    - synthetic:eng:20260930-15
+  - part: p2
+    message_ids:
+    - synthetic:eng:20260930-09
+    - synthetic:ops:20261001-09
+  - part: p3
+    message_ids:
+    - synthetic:eng:20260929-08
+    - synthetic:eng:20260930-09
+    - synthetic:eng:20260930-15
+    - synthetic:ops:20261001-09
+  relevant:
+    synthetic:eng:20260929-03: 1
+    synthetic:eng:20260929-08: 3
+    synthetic:eng:20260929-09: 2
+    synthetic:eng:20260930-09: 2
+    synthetic:eng:20260930-15: 2
+    synthetic:eng:20261001-01: 1
+    synthetic:ops:20261001-09: 2
+    synthetic:random:20261001-08: 1
+  parts:
+  - id: p1
+    fact_ids:
+    - F36
+    claim: Deploys freeze after 18:00 IST on Oct 1
+  - id: p2
+    fact_ids:
+    - F36
+    claim: After the freeze only blockers may be patched
+  - id: p3
+    fact_ids:
+    - F36
+    claim: Priya approved freezing deploys after 18:00 IST on Oct 1
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  lexical_overlap: 0.0
+  fact_ids:
+  - F36
+- id: Q37
+  type: paraphrase
+  split: dev
+  tags:
+  - F28
+  - easy
+  - paraphrase
+  query: Does the attendance number update in real time?
+  answerable: true
+  answer_type: fact
+  answer: No. It refreshes every 30 seconds rather than streaming live.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:build-help:20260930-09
+    - synthetic:build-help:20261001-13
+    - synthetic:build-help:20261002-03
+    - synthetic:build-help:20261002-10
+    - synthetic:eng:20260930-11
+    - synthetic:eng:20261001-03
+    - synthetic:eng:20261001-10
+    - synthetic:ops:20261002-03
+    - synthetic:ops:20261002-09
+    - synthetic:ops:20261002-14
+    - synthetic:product:20260929-10
+    - synthetic:product:20260929-14
+    - synthetic:product:20260930-05
+    - synthetic:product:20260930-06
+    - synthetic:product:20260930-12
+    - synthetic:product:20261002-06
+    - synthetic:random:20261001-11
+    - synthetic:random:20261002-04
+    - synthetic:random:20261002-13
+  relevant:
+    synthetic:build-help:20260930-03: 1
+    synthetic:build-help:20260930-09: 2
+    synthetic:build-help:20261001-03: 1
+    synthetic:build-help:20261001-08: 1
+    synthetic:build-help:20261001-13: 2
+    synthetic:build-help:20261002-03: 2
+    synthetic:build-help:20261002-10: 2
+    synthetic:eng:20260930-04: 1
+    synthetic:eng:20260930-11: 2
+    synthetic:eng:20260930-15: 1
+    synthetic:eng:20261001-03: 2
+    synthetic:eng:20261001-10: 2
+    synthetic:eng:20261001-16: 1
+    synthetic:eng:20261002-10: 1
+    synthetic:eng:20261002-13: 1
+    synthetic:eng:20261002-16: 1
+    synthetic:ops:20261002-03: 2
+    synthetic:ops:20261002-09: 2
+    synthetic:ops:20261002-14: 2
+    synthetic:product:20260929-10: 3
+    synthetic:product:20260929-14: 2
+    synthetic:product:20260930-05: 2
+    synthetic:product:20260930-06: 2
+    synthetic:product:20260930-07: 1
+    synthetic:product:20260930-12: 2
+    synthetic:product:20261001-16: 1
+    synthetic:product:20261002-06: 2
+    synthetic:product:20261002-12: 1
+    synthetic:random:20261001-11: 2
+    synthetic:random:20261002-04: 2
+    synthetic:random:20261002-07: 1
+    synthetic:random:20261002-13: 2
+  parts:
+  - id: p1
+    fact_ids:
+    - F28
+    claim: Dashboard attendance count refreshes every 30 seconds rather than live streaming
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  lexical_overlap: 0.0
+  fact_ids:
+  - F28
+- id: Q38
+  type: paraphrase
+  split: dev
+  tags:
+  - F29
+  - paraphrase
+  query: When's the dress rehearsal and who's checking the backend?
+  answerable: true
+  answer_type: fact
+  answer: Oct 1 at 16:00 IST in Seminar Hall B; Priya checks API health.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:ops:20260930-01
+    - synthetic:ops:20261001-01
+  - part: p2
+    message_ids:
+    - synthetic:ops:20260930-01
+    - synthetic:ops:20260930-03
+    - synthetic:ops:20261001-01
+    - synthetic:ops:20261001-03
+    - synthetic:ops:20261001-12
+  relevant:
+    synthetic:build-help:20261001-09: 1
+    synthetic:eng:20261001-03: 1
+    synthetic:ops:20260930-01: 3
+    synthetic:ops:20260930-03: 2
+    synthetic:ops:20260930-07: 1
+    synthetic:ops:20260930-09: 1
+    synthetic:ops:20260930-14: 1
+    synthetic:ops:20261001-01: 2
+    synthetic:ops:20261001-03: 2
+    synthetic:ops:20261001-06: 1
+    synthetic:ops:20261001-12: 2
+    synthetic:ops:20261001-16: 1
+    synthetic:product:20261001-05: 1
+    synthetic:random:20261001-09: 1
+  parts:
+  - id: p1
+    fact_ids:
+    - F29
+    claim: Final rehearsal is Oct 1 at 16:00 IST in Seminar Hall B
+  - id: p2
+    fact_ids:
+    - F29
+    claim: Priya checks API health for rehearsal
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  lexical_overlap: 0.25
+  fact_ids:
+  - F29
+- id: Q39
+  type: paraphrase
+  split: test
+  tags:
+  - F13
+  query: What's Firefly?
+  answerable: true
+  answer_type: fact
+  answer: Firefly is the internal demo nickname; Beacon is the public product name.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:ops:20261002-12
+    - synthetic:random:20260908-01
+    - synthetic:random:20260908-07
+    - synthetic:random:20260918-11
+    - synthetic:random:20260924-05
+  relevant:
+    synthetic:build-help:20260911-13: 1
+    synthetic:ops:20260930-05: 1
+    synthetic:ops:20261002-12: 2
+    synthetic:random:20260908-01: 3
+    synthetic:random:20260908-07: 2
+    synthetic:random:20260909-11: 1
+    synthetic:random:20260916-13: 1
+    synthetic:random:20260917-04: 1
+    synthetic:random:20260918-11: 2
+    synthetic:random:20260921-06: 1
+    synthetic:random:20260924-05: 2
+    synthetic:random:20260928-07: 1
+  parts:
+  - id: p1
+    fact_ids:
+    - F13
+    claim: Firefly is the internal demo nickname; Beacon is the public product name
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  lexical_overlap: 1.0
+  fact_ids:
+  - F13
+- id: Q40
+  type: cross_language
+  split: test
+  tags:
+  - F23
+  - paraphrase
+  query: Where and when should volunteers meet for the drill?
+  answerable: true
+  answer_type: fact
+  answer: Gate 3 at 08:15 on Sep 23.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:random:20260922-03
+  relevant:
+    synthetic:eng:20260930-07: 1
+    synthetic:random:20260922-03: 3
+    synthetic:random:20260923-09: 1
+    synthetic:random:20260924-06: 1
+    synthetic:random:20260925-03: 1
+  parts:
+  - id: p1
+    fact_ids:
+    - F23
+    claim: The volunteer drill meets at gate 3 at 08:15 on Sep 23
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  lexical_overlap: 0.25
+  fact_ids:
+  - F23
+- id: Q41
+  type: search
+  split: dev
+  tags:
+  - F20
+  - paraphrase
+  query: Find the message where Meera approved freezing QR v2
+  answerable: true
+  answer_type: fact
+  answer: Meera replied “yes, do that” to Priya’s proposal.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:product:20260917-01
+  - part: p2
+    message_ids:
+    - synthetic:product:20260917-02
+  relevant:
+    synthetic:product:20260917-01: 1
+    synthetic:product:20260917-02: 3
+  parts:
+  - id: p1
+    fact_ids:
+    - F20
+    claim: Priya asked whether to freeze QR format v2 for the pilot
+  - id: p2
+    fact_ids:
+    - F20
+    claim: Meera approved freezing QR format v2 for the pilot
+  exact_target: synthetic:product:20260917-02
+  request_time: '2026-10-05T10:00:00+05:30'
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: null
+  lexical_overlap: 0.0
+  fact_ids:
+  - F20
+- id: Q42
+  type: filtered
+  split: dev
+  tags:
+  - F27
+  - paraphrase
+  query: 'What did Nikhil say about the dashboard error in #build-help on Sep 28?'
+  answerable: true
+  answer_type: fact
+  answer: He reported that staging recovered from CORS_ORIGIN_DENIED after setting ALLOWED_ORIGINS=https://demo.beacon.example
+    and redeploying.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:build-help:20260928-01
+  relevant:
+    synthetic:build-help:20260928-01: 3
+  parts:
+  - id: p1
+    fact_ids:
+    - F27
+    claim: Nikhil reported the staging CORS_ORIGIN_DENIED fix with ALLOWED_ORIGINS and redeploy
+  filters:
+    channel: build-help
+    author: nikhil
+    after: '2026-09-28'
+    before: '2026-09-29'
+  request_time: '2026-10-05T10:00:00+05:30'
+  lexical_overlap: 0.25
+  fact_ids:
+  - F27
+- id: Q43
+  type: filtered
+  split: test
+  tags:
+  - F24
+  - easy
+  - paraphrase
+  query: 'What did Zoya say in #ops about volunteers Sep 21–25?'
+  answerable: true
+  answer_type: fact
+  answer: 'The six-person roster was complete: Ira and Dev covered manual entry, and four others covered QR lanes.'
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:ops:20260923-01
+  relevant:
+    synthetic:ops:20260923-01: 3
+    synthetic:ops:20260923-06: 1
+    synthetic:ops:20260923-11: 1
+    synthetic:ops:20260925-06: 1
+    synthetic:ops:20260925-09: 1
+    synthetic:ops:20260925-15: 1
+  parts:
+  - id: p1
+    fact_ids:
+    - F24
+    claim: Zoya said the roster was complete, with Ira and Dev at manual entry and four volunteers at QR lanes
+  filters:
+    channel: ops
+    author: zoya
+    after: '2026-09-21'
+    before: '2026-09-26'
+  request_time: '2026-10-05T10:00:00+05:30'
+  lexical_overlap: 0.0
+  fact_ids:
+  - F24
+- id: Q44
+  type: as_of
+  split: test
+  tags:
+  - F16
+  query: As of Sep 20, was SMS fallback planned?
+  answerable: true
+  answer_type: fact
+  answer: Yes. On Sep 20 the team still planned SMS fallback for attendees without smartphones.
+  evidence_groups:
+  - part: p1
+    message_ids:
+    - synthetic:eng:20260915-09
+    - synthetic:product:20260911-01
+    - synthetic:product:20260911-11
+    - synthetic:product:20260911-14
+    - synthetic:product:20260915-15
+    - synthetic:product:20260917-06
+  relevant:
+    synthetic:build-help:20260917-11: 1
+    synthetic:eng:20260915-09: 2
+    synthetic:product:20260911-01: 3
+    synthetic:product:20260911-06: 1
+    synthetic:product:20260911-11: 2
+    synthetic:product:20260911-14: 2
+    synthetic:product:20260915-15: 2
+    synthetic:product:20260916-01: 1
+    synthetic:product:20260916-09: 1
+    synthetic:product:20260917-06: 2
+  parts:
+  - id: p1
+    fact_ids:
+    - F16
+    claim: SMS fallback was planned for pilot attendees without smartphones
+  filters:
+    channel: null
+    author: null
+    after: null
+    before: '2026-09-20'
+  request_time: '2026-09-20T10:00:00+05:30'
+  lexical_overlap: 0.4
+  fact_ids:
+  - F16

@@ -1,0 +1,15 @@
+{
+  "corpus_sha256": "d9c6b02135744c0e13bd00333877676c6b388f99952c4ccb37046dc6794fc4e8",
+  "chunker_version": "v1",
+  "thread_token_limit": 600,
+  "thread_splits": 0,
+  "messages": 2233,
+  "message_chunks": 2233,
+  "thread_chunks": 158,
+  "embedded_chunks": 2391,
+  "embedding_model": "text-embedding-3-small",
+  "embedding_dimensions": 1536,
+  "new_embeddings": 2,
+  "new_embedding_tokens": 135,
+  "embedding_tokens_total": 135
+}
