@@ -35,7 +35,7 @@ P1–P3 feature ideas from the main plan.
 | Store | PostgreSQL 16 + pgvector (Docker Compose), native FTS with the `simple` config |
 | Embeddings | OpenAI `text-embedding-3-small` (1536 d) — not in the free tier, but the whole corpus costs cents |
 | Generation | `gpt-5.4-mini` (free 2.5M-token/day tier) for corpus generation, answers and catch-up summaries; `gpt-5.4` (free 250k/day tier) only for the story bible and spot-check judging. Pin ids in config |
-| Reranker | `BAAI/bge-reranker-v2-m3` via `sentence-transformers` CrossEncoder (local); OpenAI Decisions API (`POST /v1/decisions`, `client.decisions.create`, model `gpt-6-luna`, public beta, input-only billing ≈ $0.10/1M tokens) as experiment |
+| Reranker | `BAAI/bge-reranker-v2-m3` via `sentence-transformers` CrossEncoder (local, E3); LLM-judge rerankers through **one OpenRouter Decisions adapter** (`POST https://openrouter.ai/api/alpha/decisions`, key `OPEN_ROUTER` in `.env`) with the model as config: `typesafe/jev-1.13-20260917` (E3c) and `openai/gpt-6-luna-decisions-20261006` (E3b). Both verified working on 2026-10-09. Primitive names there: `score` (criteria = ordered list), `choice`, `noul` |
 | Bots | `discord.py` (slash commands, `defer()`), Slack Bolt for Python in Socket Mode (`ack()` then `respond()`) |
 | Demo UI | Streamlit |
 | Orchestration | LangGraph `StateGraph` for the query pipeline and catch-up map-reduce; LangChain (`langchain-openai`) for chat-model and embedding calls — see "Framework usage" |
@@ -177,7 +177,8 @@ Experiment ladder (identical corpus/queries; record git sha, corpus hash, models
 | E1 | Dense (cosine, exact search) |
 | E2 | Hybrid RRF, `1/(60+rank)`, top 50 per branch |
 | E3 | E2 + cross-encoder rerank of top 30 |
-| E3b | E2 + OpenAI Decisions (`gpt-6-luna`) rerank of the same top 30 (fallback to RRF order on any error) |
+| E3b | E2 + GPT-6 Luna Decisions (via OpenRouter) rerank of the same top 30 (fallback to RRF order on any error) |
+| E3c | E2 + Jev 1.13 (via OpenRouter) rerank of the same top 30, same rubric/state/fallback |
 | E4 | Message-only chunks vs. thread-aware chunks (on the best of E2/E3) |
 
 ## Day-by-day
@@ -214,7 +215,7 @@ Experiment ladder (identical corpus/queries; record git sha, corpus hash, models
 - Exit: E0–E2 table committed in `evals/reports/`.
 
 ### Day 3 — Rerank + grounded answers
-- Cross-encoder reranker (E3) and Decisions adapter (E3b) behind one `rerank(query, candidates)` interface.
+- Cross-encoder reranker (E3) and one OpenRouter Decisions adapter (E3b Luna, E3c Jev; model id from config) behind one `rerank(query, candidates)` interface. Pin dated model ids, log the response `model`, and never reuse a threshold across models (their score scales differ).
   Decisions: one request per candidate (input = query + candidate text + thread context), one `score`
   question with a shared 4-level relevance rubric (`levels` low→high); sort by the returned expected
   `score`, ties by RRF rank then id. Bounded concurrency, timeout/refusal/429 → RRF order for the whole
