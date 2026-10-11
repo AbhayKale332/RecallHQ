@@ -8,11 +8,12 @@
 
 Hybrid retrieval and grounded answers over a synthetic Slack/Discord-style workspace.
 
-[![Live demo](https://img.shields.io/badge/demo-recallhq--black.vercel.app-E6176D?style=for-the-badge&logo=vercel&logoColor=white)](https://recallhq-black.vercel.app)
+[![Live demo](https://img.shields.io/badge/recall.abhaykale.me-E6176D?style=for-the-badge&logo=vercel&logoColor=white)](https://recallhq-black.vercel.app)
 
 ![Python](https://img.shields.io/badge/Python_3.12-3776AB?style=flat-square&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/Postgres_+_pgvector-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![OpenRouter](https://img.shields.io/badge/OpenRouter-6566F1?style=flat-square&logo=openrouter&logoColor=white)
 ![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=flat-square&logo=openai&logoColor=white)
 ![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=flat-square&logo=langchain&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white)
@@ -39,6 +40,7 @@ flowchart LR
     U([User]) --> FE["Next.js frontend<br/>(Vercel)"]
     FE -->|"/ask · /search · /catchup"| API["FastAPI<br/>(Azure VM · Caddy)"]
     API -->|embed + generate| OAI[(OpenAI)]
+    API -->|rerank| ORT[(OpenRouter<br/>Decisions API)]
     API -->|read-only role, TLS| PG[("PostgreSQL 16<br/>pgvector + tsvector")]
 
     subgraph Offline ingest
@@ -55,12 +57,35 @@ flowchart TD
     F --> L["Lexical search<br/>tsvector ts_rank · top 30"]
     S --> R["Reciprocal rank fusion<br/>score += 1 / (rank + 10)"]
     L --> R
-    R --> E[Top-k evidence messages]
+    R --> RR["Rerank top 10 · Jev 1.13<br/>(OpenRouter Decisions API)"]
+    RR -.->|fails| RL["Fallback · GPT-6 Luna Decisions"]
+    RL -.->|fails| E
+    RR --> E[Top 12 evidence messages]
+    RL --> E
     E --> G["LLM answer<br/>cites [message-id]"]
     G --> V{Citations valid?}
     V -->|yes| A[Answer + sources]
     V -->|no| N["I couldn't verify an answer"]
 ```
+
+### Reranking
+
+`/ask` and `/search` rerank the top 10 RRF hits with the OpenRouter **Decisions API**.
+One request scores every candidate against a 4-level relevance rubric (unrelated → directly answers);
+hits are sorted by that score, with ties kept in RRF order. `/catchup` is not reranked.
+
+1. **Jev 1.13** (`typesafe/jev-1.13-20260917`) is tried first.
+2. If it errors or times out, **GPT-6 Luna Decisions** (`openai/gpt-6-luna-decisions-20261006`) scores the same request.
+3. If both fail, or `OPEN_ROUTER` is unset, results keep plain RRF order.
+
+| Setting | Default |
+| --- | --- |
+| `OPEN_ROUTER` | OpenRouter API key (reranking is off when empty) |
+| `RERANK_MODEL` | `typesafe/jev-1.13-20260917` |
+| `RERANK_FALLBACK_MODEL` | `openai/gpt-6-luna-decisions-20261006` |
+| `RERANK_TOP_K` | `10` |
+
+Still planned for evaluation: a local cross-encoder (`BAAI/bge-reranker-v2-m3`) on the same candidates.
 
 ## `/ask` request flow
 
@@ -70,11 +95,17 @@ sequenceDiagram
     participant API as FastAPI
     participant DB as Postgres
     participant AI as OpenAI
+    participant ORT as OpenRouter
     FE->>API: POST /commands "/ask ..."
     API->>API: Rate-limit check (per IP + site-wide)
     API->>AI: Embed query
     API->>DB: Hybrid search (vector + full-text)
     DB-->>API: Ranked message IDs
+    API->>ORT: Rerank top 10 with Jev
+    alt Jev fails
+        API->>ORT: Retry with GPT-6 Luna Decisions
+    end
+    ORT-->>API: Relevance scores
     API->>AI: Generate answer from evidence
     AI-->>API: Answer with [source IDs]
     API-->>FE: Answer + verified sources
@@ -91,7 +122,7 @@ uv run uvicorn recallhq.api:app --reload
 uv run pytest -q
 ```
 
-Set `OPENAI_API_KEY` and `DATABASE_URL` in `.env` (local defaults match `compose.yaml`).
+Set `OPENAI_API_KEY`, `DATABASE_URL` and optionally `OPEN_ROUTER` in `.env` (local defaults match `compose.yaml`).
 Ingest is re-runnable: unchanged chunks keep their embeddings.
 Anonymous commands are limited to 3/min and 20/day per IP, plus 200/day site-wide.
 
