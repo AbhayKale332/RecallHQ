@@ -28,6 +28,8 @@ The [frontend](frontend/README.md) adapts the MIT-licensed
 workspace. It opens with the synthetic archive, supports threads and paging,
 and preloads an example command. Visitor messages and command results exist only
 in the current tab. The archive remains read-only.
+Each channel's unchanged example question uses a prepared answer in the frontend;
+edited questions are sent to the API.
 
 Live site: https://recallhq-black.vercel.app
 

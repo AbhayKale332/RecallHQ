@@ -10,16 +10,10 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useChatSession } from '@/components/chat-session-provider';
 import { ThreadBar } from '@/components/thread-bar';
+import { DEMO_COMMANDS } from '@/lib/demo-answers';
 
 const Editor = dynamic(() => import('@/components/editor'), { ssr: false });
 const API = process.env.NEXT_PUBLIC_API_URL || 'https://recova.indiasouthcentral.cloudapp.azure.com/recallhq/api';
-const EXAMPLES: Record<string, string> = {
-  eng: '/ask Why did the team switch from MongoDB to Postgres for the pilot?',
-  product: '/ask What is included in the pilot, and how will success be measured?',
-  ops: '/ask Where is the pilot being held, and who owns the venue booking?',
-  'build-help': '/ask How did the team fix the Postgres 28P01 authentication error?',
-  random: '/ask What is the team’s internal demo nickname, and what is the public product name?',
-};
 
 type Channel = { id: string; name: string; messages: number };
 type ChatMessage = {
@@ -34,7 +28,7 @@ type ChatMessage = {
   last_reply_at?: string | null;
 };
 type CommandResult =
-  | { kind: 'answer'; answer: string; sources: ChatMessage[] }
+  | { kind: 'answer'; answer: string; sources: readonly ChatMessage[] }
   | { kind: 'search'; hits: ChatMessage[] };
 
 function sourceUrl(message: Pick<ChatMessage, 'id' | 'channel'>) {
@@ -74,6 +68,7 @@ export function PublicChat() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const channelId = params.channelId;
+  const demoCommand = DEMO_COMMANDS[channelId as keyof typeof DEMO_COMMANDS];
   const sourceId = searchParams.get('message');
   const [channels, setChannels] = useState<Channel[]>([]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -81,7 +76,7 @@ export function PublicChat() {
   const { entries, setEntries } = useChatSession();
   const [source, setSource] = useState<ChatMessage | null>(null);
   const [thread, setThread] = useState<ChatMessage[] | null>(null);
-  const [draft, setDraft] = useState(EXAMPLES[channelId] || '/ask What has the team discussed in this channel?');
+  const [draft, setDraft] = useState<string>(demoCommand?.input || '/ask What has the team discussed in this channel?');
   const [editorKey, setEditorKey] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -103,7 +98,7 @@ export function PublicChat() {
     historyRequest.current = false;
     scrollSnapshot.current = null;
     setLoadingMore(false);
-    setDraft(EXAMPLES[channelId] || '/ask What has the team discussed in this channel?');
+    setDraft(demoCommand?.input || '/ask What has the team discussed in this channel?');
     setEditorKey((key) => key + 1);
     setLoading(true);
     setMessages([]);
@@ -118,7 +113,7 @@ export function PublicChat() {
       .catch((err) => active && setError(err.message))
       .finally(() => active && setLoading(false));
     return () => { active = false; };
-  }, [channelId]);
+  }, [channelId, demoCommand]);
 
   useEffect(() => {
     if (!sourceId) {
@@ -177,7 +172,9 @@ export function PublicChat() {
   };
 
   const send = async ({ body }: { body: string; image: File | null }) => {
-    const value = (JSON.parse(body).ops as { insert?: string }[]).map((op) => op.insert || '').join('').trim();
+    // Quill adds one required final newline. Preserve all user edits for the exact match.
+    const rawValue = (JSON.parse(body).ops as { insert?: string }[]).map((op) => op.insert || '').join('').replace(/\n$/, '');
+    const value = rawValue.trim();
     if (!value) return;
     const stamp = new Date().toISOString();
     setEntries((previous) => [...previous, { id: crypto.randomUUID(), channel: channelId, kind: 'visitor', text: value, created_at: stamp }]);
@@ -186,19 +183,24 @@ export function PublicChat() {
     if (!value.startsWith('/')) return;
     setSending(true);
     try {
-      const response = await fetch(`${API}/commands`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ input: value }),
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(typeof result.detail === 'string' ? result.detail : 'Command failed');
-      const command = result as CommandResult;
+      let command: CommandResult;
+      if (rawValue === demoCommand?.input) {
+        command = demoCommand.result;
+      } else {
+        const response = await fetch(`${API}/commands`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ input: value }),
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(typeof result.detail === 'string' ? result.detail : 'Command failed');
+        command = result as CommandResult;
+      }
       setEntries((previous) => [...previous, {
         id: crypto.randomUUID(), channel: channelId, kind: 'assistant',
         text: command.kind === 'answer' ? command.answer : `${command.hits.length} matching messages`,
         created_at: new Date().toISOString(),
-        ...(command.kind === 'answer' ? { sources: command.sources } : { hits: command.hits }),
+        ...(command.kind === 'answer' ? { sources: [...command.sources] } : { hits: command.hits }),
       }]);
     } catch (err) {
       setEntries((previous) => [...previous, {
