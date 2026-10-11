@@ -1,0 +1,12 @@
+.git
+.venv
+.env*
+frontend
+data/synthetic/raw
+**/__pycache__
+**/*.pyc
+.pytest_cache
+evals
+tests
+scripts
+docs

@@ -9,7 +9,7 @@
   "embedded_chunks": 2391,
   "embedding_model": "text-embedding-3-small",
   "embedding_dimensions": 1536,
-  "new_embeddings": 2,
-  "new_embedding_tokens": 135,
-  "embedding_tokens_total": 135
+  "new_embeddings": 2391,
+  "new_embedding_tokens": 182445,
+  "embedding_tokens_total": 182580
 }
