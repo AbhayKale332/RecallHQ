@@ -5,7 +5,7 @@ import { Hash, Loader, MessageSquareText, X } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useChatSession } from '@/components/chat-session-provider';
@@ -13,7 +13,13 @@ import { ThreadBar } from '@/components/thread-bar';
 
 const Editor = dynamic(() => import('@/components/editor'), { ssr: false });
 const API = process.env.NEXT_PUBLIC_API_URL || 'https://recova.indiasouthcentral.cloudapp.azure.com/recallhq/api';
-const EXAMPLE = '/ask What changed from MongoDB to Postgres for the pilot?';
+const EXAMPLES: Record<string, string> = {
+  eng: '/ask Why did the team switch from MongoDB to Postgres for the pilot?',
+  product: '/ask What is included in the pilot, and how will success be measured?',
+  ops: '/ask Where is the pilot being held, and who owns the venue booking?',
+  'build-help': '/ask How did the team fix the Postgres 28P01 authentication error?',
+  random: '/ask What is the team’s internal demo nickname, and what is the public product name?',
+};
 
 type Channel = { id: string; name: string; messages: number };
 type ChatMessage = {
@@ -75,13 +81,17 @@ export function PublicChat() {
   const { entries, setEntries } = useChatSession();
   const [source, setSource] = useState<ChatMessage | null>(null);
   const [thread, setThread] = useState<ChatMessage[] | null>(null);
-  const [draft, setDraft] = useState(EXAMPLE);
+  const [draft, setDraft] = useState(EXAMPLES[channelId] || '/ask What has the team discussed in this channel?');
   const [editorKey, setEditorKey] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollSnapshot = useRef<{ height: number; top: number } | null>(null);
+  const historyRequest = useRef(false);
+  const channelGeneration = useRef(0);
 
   useEffect(() => {
     apiGet<Channel[]>('/channels').then(setChannels).catch((err) => setError(err.message));
@@ -89,6 +99,12 @@ export function PublicChat() {
 
   useEffect(() => {
     let active = true;
+    channelGeneration.current += 1;
+    historyRequest.current = false;
+    scrollSnapshot.current = null;
+    setLoadingMore(false);
+    setDraft(EXAMPLES[channelId] || '/ask What has the team discussed in this channel?');
+    setEditorKey((key) => key + 1);
     setLoading(true);
     setMessages([]);
     setNextCursor(null);
@@ -120,19 +136,36 @@ export function PublicChat() {
     if (!loading && !sourceId) bottomRef.current?.scrollIntoView({ behavior: 'instant' });
   }, [loading, channelId, sourceId]);
 
+  useLayoutEffect(() => {
+    const container = scrollRef.current;
+    const snapshot = scrollSnapshot.current;
+    if (container && snapshot) {
+      container.scrollTop = snapshot.top + container.scrollHeight - snapshot.height;
+      scrollSnapshot.current = null;
+    }
+  }, [messages]);
+
   const loadMore = useCallback(async () => {
-    if (!nextCursor || loadingMore) return;
+    if (!nextCursor || loading || historyRequest.current) return;
+    const generation = channelGeneration.current;
+    historyRequest.current = true;
     setLoadingMore(true);
     try {
       const page = await apiGet<{ items: ChatMessage[]; next_cursor: string | null }>(`/messages?channel=${encodeURIComponent(channelId)}&before=${encodeURIComponent(nextCursor)}`);
+      if (generation !== channelGeneration.current) return;
+      const container = scrollRef.current;
+      if (container) scrollSnapshot.current = { height: container.scrollHeight, top: container.scrollTop };
       setMessages((previous) => [...page.items.reverse(), ...previous]);
       setNextCursor(page.next_cursor);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to load messages');
+      if (generation === channelGeneration.current) setError(err instanceof Error ? err.message : 'Unable to load messages');
     } finally {
-      setLoadingMore(false);
+      if (generation === channelGeneration.current) {
+        historyRequest.current = false;
+        setLoadingMore(false);
+      }
     }
-  }, [channelId, nextCursor, loadingMore]);
+  }, [channelId, nextCursor, loading]);
 
   const openThread = async (rootId: string) => {
     try {
@@ -196,7 +229,6 @@ export function PublicChat() {
               <Hash className="size-4" /> <span>{item.name}</span><span className="ml-auto text-xs opacity-60">{item.messages}</span>
             </Link>
           ))}
-          <div className="mt-auto border-t border-white/20 p-4 text-xs leading-5 text-white/75">2,233 archived messages. Your own messages stay in this tab until refresh.</div>
         </aside>
 
         <main className="flex min-w-0 flex-1 flex-col">
@@ -208,14 +240,14 @@ export function PublicChat() {
             <span className="ml-auto hidden text-xs font-normal text-muted-foreground md:inline">Read-only archive</span>
           </header>
           {error && <p role="alert" className="border-b bg-rose-50 px-5 py-2 text-sm text-rose-700">{error}</p>}
-          <div className="messages-scrollbar min-h-0 flex-1 overflow-y-auto" aria-label={`Messages in ${channelId}`}>
+          <div ref={scrollRef} onScroll={(event) => { if (event.currentTarget.scrollTop < 120) void loadMore(); }} style={{ overflowAnchor: 'none' }} className="messages-scrollbar min-h-0 flex-1 overflow-y-auto" aria-label={`Messages in ${channelId}`}>
             {loading ? <div className="flex h-full items-center justify-center"><Loader className="size-5 animate-spin" /></div> : (
               <>
                 <div className="px-5 py-5">
                   <h1 className="text-2xl font-bold"># {channel?.name || channelId}</h1>
                   <p className="mt-1 text-sm text-muted-foreground">Browse the team’s archived conversation and open threads for replies.</p>
                 </div>
-                {nextCursor && <div className="py-2 text-center"><button onClick={loadMore} disabled={loadingMore} className="text-sm font-medium text-sky-700 hover:underline">{loadingMore ? 'Loading…' : 'Load older messages'}</button></div>}
+                {nextCursor && <div className="flex h-8 items-center justify-center" role="status">{loadingMore && <><Loader className="mr-2 size-4 animate-spin" /><span className="text-xs text-muted-foreground">Loading older messages…</span></>}</div>}
                 {messages.map((message) => <MessageCard key={message.id} message={message} onThread={openThread} />)}
                 {visibleEntries.map((entry) => (
                   <article key={entry.id} className={`flex gap-3 px-5 py-2 ${entry.kind === 'assistant' ? 'bg-violet-50/60' : ''}`}>
