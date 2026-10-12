@@ -23,7 +23,7 @@ from recallhq.config import Settings
 app = FastAPI(title="RecallHQ", docs_url=None, redoc_url=None)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://localhost:3000", "https://recall.abhaykale.me"],
     allow_origin_regex=r"https://[a-z0-9-]+\.vercel\.app",
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type"],

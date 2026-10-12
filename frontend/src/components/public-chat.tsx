@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useChatSession } from '@/components/chat-session-provider';
 import { ThreadBar } from '@/components/thread-bar';
 import { DEMO_COMMANDS } from '@/lib/demo-answers';
@@ -253,7 +253,10 @@ export function PublicChat() {
                 {messages.map((message) => <MessageCard key={message.id} message={message} onThread={openThread} />)}
                 {visibleEntries.map((entry) => (
                   <article key={entry.id} className={`flex gap-3 px-5 py-2 ${entry.kind === 'assistant' ? 'bg-violet-50/60' : ''}`}>
-                    <Avatar className="mt-0.5 size-9 shrink-0"><AvatarFallback>{entry.kind === 'assistant' ? 'R' : 'Y'}</AvatarFallback></Avatar>
+                    <Avatar className="mt-0.5 size-9 shrink-0">
+                      {entry.kind === 'assistant' && <AvatarImage src="/recallhq-bot.png" alt="RecallHQ bot" />}
+                      <AvatarFallback>{entry.kind === 'assistant' ? 'R' : 'Y'}</AvatarFallback>
+                    </Avatar>
                     <div className="min-w-0 flex-1 text-sm">
                       <div className="flex gap-2"><strong>{entry.kind === 'assistant' ? 'RecallHQ' : 'You'}</strong><span className="text-xs text-muted-foreground">{format(new Date(entry.created_at), 'h:mm a')}</span></div>
                       <p className="whitespace-pre-wrap break-words leading-[22px]">{entry.text}</p>
