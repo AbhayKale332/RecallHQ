@@ -14,6 +14,8 @@ import { DEMO_COMMANDS } from '@/lib/demo-answers';
 
 const Editor = dynamic(() => import('@/components/editor'), { ssr: false });
 const API = process.env.NEXT_PUBLIC_API_URL || 'https://recova.indiasouthcentral.cloudapp.azure.com/recallhq/api';
+const BOT_DM = 'dm:recallhq';
+const BOT_DM_URL = '/workspace/beacon/member/recallhq';
 
 type Channel = { id: string; name: string; messages: number };
 type ChatMessage = {
@@ -63,24 +65,24 @@ async function apiGet<T>(path: string): Promise<T> {
   return response.json();
 }
 
-export function PublicChat() {
+export function PublicChat({ directMessage = false }: { directMessage?: boolean }) {
   const params = useParams<{ channelId: string }>();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const channelId = params.channelId;
+  const channelId = directMessage ? BOT_DM : params.channelId;
   const demoCommand = DEMO_COMMANDS[channelId as keyof typeof DEMO_COMMANDS];
   const sourceId = searchParams.get('message');
   const [channels, setChannels] = useState<Channel[]>([]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
-  const { entries, setEntries } = useChatSession();
+  const { entries, setEntries, sendingChannel, setSendingChannel } = useChatSession();
   const [source, setSource] = useState<ChatMessage | null>(null);
   const [thread, setThread] = useState<ChatMessage[] | null>(null);
-  const [draft, setDraft] = useState<string>(demoCommand?.input || '/ask What has the team discussed in this channel?');
+  const [draft, setDraft] = useState<string>(directMessage ? '' : demoCommand?.input || '/ask What has the team discussed in this channel?');
   const [editorKey, setEditorKey] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [sending, setSending] = useState(false);
+  const sending = sendingChannel !== null;
   const [error, setError] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -98,12 +100,16 @@ export function PublicChat() {
     historyRequest.current = false;
     scrollSnapshot.current = null;
     setLoadingMore(false);
-    setDraft(demoCommand?.input || '/ask What has the team discussed in this channel?');
+    setDraft(directMessage ? '' : demoCommand?.input || '/ask What has the team discussed in this channel?');
     setEditorKey((key) => key + 1);
     setLoading(true);
     setMessages([]);
     setNextCursor(null);
     setThread(null);
+    if (directMessage) {
+      setLoading(false);
+      return;
+    }
     apiGet<{ items: ChatMessage[]; next_cursor: string | null }>(`/messages?channel=${encodeURIComponent(channelId)}`)
       .then((page) => {
         if (!active) return;
@@ -113,7 +119,7 @@ export function PublicChat() {
       .catch((err) => active && setError(err.message))
       .finally(() => active && setLoading(false));
     return () => { active = false; };
-  }, [channelId, demoCommand]);
+  }, [channelId, demoCommand, directMessage]);
 
   useEffect(() => {
     if (!sourceId) {
@@ -130,6 +136,10 @@ export function PublicChat() {
   useEffect(() => {
     if (!loading && !sourceId) bottomRef.current?.scrollIntoView({ behavior: 'instant' });
   }, [loading, channelId, sourceId]);
+
+  useEffect(() => {
+    if (!loading && sendingChannel === channelId) bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [loading, sendingChannel, channelId]);
 
   useLayoutEffect(() => {
     const container = scrollRef.current;
@@ -172,16 +182,19 @@ export function PublicChat() {
   };
 
   const send = async ({ body }: { body: string; image: File | null }) => {
+    if (sending) return;
     // Quill adds one required final newline. Preserve all user edits for the exact match.
     const rawValue = (JSON.parse(body).ops as { insert?: string }[]).map((op) => op.insert || '').join('').replace(/\n$/, '');
     const value = rawValue.trim();
     if (!value) return;
+    const replyChannel = value.split(/\s+/, 1)[0].toLowerCase() === '/catchup' ? BOT_DM : channelId;
     const stamp = new Date().toISOString();
-    setEntries((previous) => [...previous, { id: crypto.randomUUID(), channel: channelId, kind: 'visitor', text: value, created_at: stamp }]);
+    setEntries((previous) => [...previous, { id: crypto.randomUUID(), channel: replyChannel, kind: 'visitor', text: value, created_at: stamp }]);
     setDraft('');
     setEditorKey((key) => key + 1);
     if (!value.startsWith('/')) return;
-    setSending(true);
+    setSendingChannel(replyChannel);
+    if (replyChannel === BOT_DM && !directMessage) router.push(BOT_DM_URL);
     try {
       let command: CommandResult;
       if (rawValue === demoCommand?.input) {
@@ -197,24 +210,28 @@ export function PublicChat() {
         command = result as CommandResult;
       }
       setEntries((previous) => [...previous, {
-        id: crypto.randomUUID(), channel: channelId, kind: 'assistant',
+        id: crypto.randomUUID(), channel: replyChannel, kind: 'assistant',
         text: command.kind === 'answer' ? command.answer : `${command.hits.length} matching messages`,
         created_at: new Date().toISOString(),
         ...(command.kind === 'answer' ? { sources: [...command.sources] } : { hits: command.hits }),
       }]);
     } catch (err) {
       setEntries((previous) => [...previous, {
-        id: crypto.randomUUID(), channel: channelId, kind: 'assistant',
+        id: crypto.randomUUID(), channel: replyChannel, kind: 'assistant',
         text: err instanceof Error ? err.message : 'Command failed', created_at: new Date().toISOString(),
       }]);
     } finally {
-      setSending(false);
+      setSendingChannel(null);
       requestAnimationFrame(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }));
     }
   };
 
   const visibleEntries = entries.filter((entry) => entry.channel === channelId);
   const channel = channels.find((item) => item.id === channelId);
+
+  useEffect(() => {
+    if (!loading && !sourceId) bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [visibleEntries.length, loading, sourceId]);
 
   return (
     <div className="flex h-dvh flex-col bg-white text-[#1d1c1d]">
@@ -231,23 +248,28 @@ export function PublicChat() {
               <Hash className="size-4" /> <span>{item.name}</span><span className="ml-auto text-xs opacity-60">{item.messages}</span>
             </Link>
           ))}
+          <p className="px-4 pb-2 pt-5 text-xs font-semibold uppercase tracking-wide text-white/65">Direct messages</p>
+          <Link href={BOT_DM_URL} className={`mx-2 flex items-center gap-2 rounded px-3 py-1.5 text-sm hover:bg-white/15 ${directMessage ? 'bg-white text-[#481349] hover:bg-white' : 'text-[#f9EDFFCC]'}`}>
+            <MessageSquareText className="size-4" /> RecallHQ
+          </Link>
         </aside>
 
         <main className="flex min-w-0 flex-1 flex-col">
           <header className="flex h-[49px] shrink-0 items-center gap-2 border-b px-5 text-lg font-semibold">
-            <Hash className="size-5" /> <span>{channel?.name || channelId}</span>
-            <select aria-label="Change channel" value={channelId} onChange={(event) => router.push(`/workspace/beacon/channel/${event.target.value}`)} className="ml-auto max-w-32 rounded border p-1 text-sm md:hidden">
+            {directMessage ? <MessageSquareText className="size-5" /> : <Hash className="size-5" />} <span>{directMessage ? 'RecallHQ' : channel?.name || channelId}</span>
+            <select aria-label="Change conversation" value={channelId} onChange={(event) => router.push(event.target.value === BOT_DM ? BOT_DM_URL : `/workspace/beacon/channel/${event.target.value}`)} className="ml-auto max-w-32 rounded border p-1 text-sm md:hidden">
               {channels.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
+              <option value={BOT_DM}>DM · RecallHQ</option>
             </select>
-            <span className="ml-auto hidden text-xs font-normal text-muted-foreground md:inline">Read-only archive</span>
+            <span className="ml-auto hidden text-xs font-normal text-muted-foreground md:inline">{directMessage ? 'Direct message' : 'Read-only archive'}</span>
           </header>
           {error && <p role="alert" className="border-b bg-rose-50 px-5 py-2 text-sm text-rose-700">{error}</p>}
-          <div ref={scrollRef} onScroll={(event) => { if (event.currentTarget.scrollTop < 120) void loadMore(); }} style={{ overflowAnchor: 'none' }} className="messages-scrollbar min-h-0 flex-1 overflow-y-auto" aria-label={`Messages in ${channelId}`}>
+          <div ref={scrollRef} onScroll={(event) => { if (event.currentTarget.scrollTop < 120) void loadMore(); }} style={{ overflowAnchor: 'none' }} className="messages-scrollbar min-h-0 flex-1 overflow-y-auto" aria-label={directMessage ? 'Direct messages with RecallHQ' : `Messages in ${channelId}`}>
             {loading ? <div className="flex h-full items-center justify-center"><Loader className="size-5 animate-spin" /></div> : (
               <>
                 <div className="px-5 py-5">
-                  <h1 className="text-2xl font-bold"># {channel?.name || channelId}</h1>
-                  <p className="mt-1 text-sm text-muted-foreground">Browse the team’s archived conversation and open threads for replies.</p>
+                  <h1 className="text-2xl font-bold">{directMessage ? 'RecallHQ' : `# ${channel?.name || channelId}`}</h1>
+                  <p className="mt-1 text-sm text-muted-foreground">{directMessage ? 'Your private conversation with RecallHQ. Run /catchup to get a recap here.' : 'Browse the team’s archived conversation and open threads for replies.'}</p>
                 </div>
                 {nextCursor && <div className="flex h-8 items-center justify-center" role="status">{loadingMore && <><Loader className="mr-2 size-4 animate-spin" /><span className="text-xs text-muted-foreground">Loading older messages…</span></>}</div>}
                 {messages.map((message) => <MessageCard key={message.id} message={message} onThread={openThread} />)}
@@ -265,6 +287,26 @@ export function PublicChat() {
                     </div>
                   </article>
                 ))}
+                {sendingChannel === channelId && (
+                  <div role="status" className="flex items-center gap-3 bg-violet-50/60 px-5 py-2">
+                    <Avatar className="size-9 shrink-0">
+                      <AvatarImage src="/recallhq-bot.png" alt="" />
+                      <AvatarFallback>R</AvatarFallback>
+                    </Avatar>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <span>RecallHQ is typing</span>
+                      <span aria-hidden="true" className="flex gap-1">
+                        {[0, 150, 300].map((delay) => (
+                          <span
+                            key={delay}
+                            className="size-1.5 rounded-full bg-current motion-safe:animate-bounce"
+                            style={{ animationDelay: `${delay}ms` }}
+                          />
+                        ))}
+                      </span>
+                    </div>
+                  </div>
+                )}
                 <div ref={bottomRef} />
               </>
             )}
@@ -276,7 +318,7 @@ export function PublicChat() {
                 <button key={item} onClick={() => { setDraft(item.replace(' <question>', ' ').replace(' <terms>', ' ')); setEditorKey((key) => key + 1); }} className="rounded border px-2 py-1 text-sky-700 hover:bg-sky-50">{item}</button>
               ))}
             </div>
-            <Editor key={editorKey} defaultValue={draft ? [{ insert: `${draft}\n` }] : []} placeholder={`Message #${channelId} or enter a command`} onSubmit={send} disabled={sending} allowImage={false} />
+            <Editor key={editorKey} defaultValue={draft ? [{ insert: `${draft}\n` }] : []} placeholder={directMessage ? 'Message RecallHQ or enter a command' : `Message #${channelId} or enter a command`} onSubmit={send} disabled={sending} allowImage={false} />
           </div>
         </main>
 

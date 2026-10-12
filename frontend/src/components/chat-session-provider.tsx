@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, type Dispatch, type PropsWithChildren, type SetStateAction } from 'react';
+import { type Dispatch, type PropsWithChildren, type SetStateAction, createContext, useContext, useState } from 'react';
 
 export type SessionEntry = {
   id: string;
@@ -12,11 +12,17 @@ export type SessionEntry = {
   hits?: Array<{ id: string; channel: string; author_name: string; created_at: string; text: string }>;
 };
 
-const ChatSession = createContext<{ entries: SessionEntry[]; setEntries: Dispatch<SetStateAction<SessionEntry[]>> } | null>(null);
+const ChatSession = createContext<{
+  entries: SessionEntry[];
+  setEntries: Dispatch<SetStateAction<SessionEntry[]>>;
+  sendingChannel: string | null;
+  setSendingChannel: Dispatch<SetStateAction<string | null>>;
+} | null>(null);
 
 export function ChatSessionProvider({ children }: PropsWithChildren) {
   const [entries, setEntries] = useState<SessionEntry[]>([]);
-  return <ChatSession.Provider value={{ entries, setEntries }}>{children}</ChatSession.Provider>;
+  const [sendingChannel, setSendingChannel] = useState<string | null>(null);
+  return <ChatSession.Provider value={{ entries, setEntries, sendingChannel, setSendingChannel }}>{children}</ChatSession.Provider>;
 }
 
 export function useChatSession() {
