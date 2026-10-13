@@ -1,11 +1,13 @@
 [project]
 name = "recallhq"
 version = "0.1.0"
-description = "Search and answer over synthetic team chat"
+description = "Search and answer over team chat, including Slack workspaces"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "cryptography>=45",
     "fastapi>=0.119",
+    "httpx>=0.28,<1",
     "langchain>=1.4.4",
     "langchain-core>=1.6.9",
     "langchain-openai>=1.7.0",
@@ -14,6 +16,7 @@ dependencies = [
     "psycopg[binary]>=3.3.6",
     "pydantic-settings>=2.15.0",
     "pyyaml>=6.0.3",
+    "slack-bolt>=1.23,<2",
     "tiktoken>=0.14.0",
     "uvicorn>=0.37",
 ]

@@ -1,0 +1,64 @@
+{
+  "display_information": {
+    "name": "RecallHQ",
+    "description": "Ask your team chat. Get cited answers.",
+    "background_color": "#E6176D"
+  },
+  "features": {
+    "bot_user": {
+      "display_name": "RecallHQ",
+      "always_online": false
+    },
+    "slash_commands": [
+      {
+        "command": "/recall",
+        "url": "https://arise-bigger-coordinate-garmin.trycloudflare.com/slack/events",
+        "description": "Ask, search, summarize, and catch up on team conversations",
+        "usage_hint": "help | ask <question> | search <terms> | status",
+        "should_escape": true
+      }
+    ]
+  },
+  "oauth_config": {
+    "redirect_urls": [
+      "https://arise-bigger-coordinate-garmin.trycloudflare.com/slack/oauth_redirect"
+    ],
+    "scopes": {
+      "bot": [
+        "commands",
+        "chat:write",
+        "channels:read",
+        "channels:history",
+        "groups:read",
+        "groups:history",
+        "users:read"
+      ]
+    }
+  },
+  "settings": {
+    "event_subscriptions": {
+      "request_url": "https://arise-bigger-coordinate-garmin.trycloudflare.com/slack/events",
+      "bot_events": [
+        "message.channels",
+        "message.groups",
+        "member_joined_channel",
+        "member_left_channel",
+        "channel_rename",
+        "group_rename",
+        "channel_archive",
+        "group_archive",
+        "channel_deleted",
+        "group_deleted",
+        "app_uninstalled",
+        "tokens_revoked"
+      ]
+    },
+    "interactivity": {
+      "is_enabled": true,
+      "request_url": "https://arise-bigger-coordinate-garmin.trycloudflare.com/slack/events"
+    },
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": false,
+    "token_rotation_enabled": false
+  }
+}

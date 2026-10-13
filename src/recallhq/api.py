@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field
 
 from recallhq.db import DEMO_CONTEXT, connect
 from recallhq.retrieval.service import SETTINGS, answer, rerank, retrieve
+from recallhq.slack.app import router as slack_router
 
 app = FastAPI(title="RecallHQ", docs_url=None, redoc_url=None)
 app.add_middleware(
@@ -156,3 +157,7 @@ def command(payload: CommandInput, request: Request):
     if name == "/search":
         return {"kind": "search", "hits": evidence}
     return {"kind": "answer", **answer(content, evidence)}
+
+
+# OAuth and signed ingress are mounted lazily; the public demo needs no Slack secrets.
+app.include_router(slack_router)
