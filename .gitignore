@@ -13,3 +13,4 @@ __pycache__/
 data/synthetic/raw/
 .ruff_cache/
 .coverage
+slack/manifest.local.json

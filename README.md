@@ -8,6 +8,14 @@
 
 Hybrid retrieval and grounded answers over a synthetic Slack/Discord-style workspace.
 
+RecallHQ also runs as a multi-workspace **Slack bot**. Invite it into a channel to
+import available history and capture new messages, then use `/recall ask`,
+`/recall search`, or `/recall catchup` for private, cited results. Workspace and
+channel access are enforced independently of the public demo.
+
+See [Slack setup, commands, testing, and deployment](docs/slack-bot.md). Generate
+an app manifest with `uv run python -m recallhq.cli slack-manifest --base-url <HTTPS-API-URL>`.
+
 [![Live demo](https://img.shields.io/badge/recall.abhaykale.me-E6176D?style=for-the-badge&logo=vercel&logoColor=white)](https://recallhq-black.vercel.app)
 
 ![Python](https://img.shields.io/badge/Python_3.12-3776AB?style=flat-square&logo=python&logoColor=white)
@@ -142,6 +150,7 @@ For the frontend, see [frontend/README.md](frontend/README.md). It adapts the MI
 
 ```
 src/recallhq/   API, CLI, ingestion, retrieval
+src/recallhq/slack/ OAuth, signed ingress, incremental ingestion, commands, worker
 migrations/     Postgres schema (pgvector, full-text index)
 scripts/        Corpus generation & validation
 evals/          Evaluation queries and reference checks
