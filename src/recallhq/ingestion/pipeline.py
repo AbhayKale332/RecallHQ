@@ -13,6 +13,7 @@ from openai import OpenAI
 from psycopg.types.json import Jsonb
 
 from recallhq.config import Settings
+from recallhq.db import DEMO_CONTEXT, connect
 from recallhq.ingestion.validate import validate_corpus
 
 
@@ -27,7 +28,7 @@ ENCODER = tiktoken.get_encoding("o200k_base")
 
 
 def message_id(row: dict) -> str:
-    return f"synthetic:{row['channel']}:{row['local_id']}"
+    return row.get("id") or f"synthetic:{row['channel']}:{row['local_id']}"
 
 
 def render(row: dict) -> str:
@@ -56,8 +57,12 @@ def split_thread(root: dict, replies: list[dict], limit: int = THREAD_TOKEN_LIMI
 def chunk(kind: str, rows: list[dict]) -> dict:
     ids = [message_id(row) for row in rows]
     digest = hashlib.sha256(json.dumps([CHUNKER_VERSION, kind, ids]).encode()).hexdigest()[:24]
+    source = rows[0].get("source", "synthetic")
+    workspace = rows[0].get("workspace_id", "beacon")
+    prefix = "synthetic" if source == "synthetic" else f"{source}:{workspace}"
     return {
-        "id": f"synthetic:{kind}:{digest}", "kind": kind, "chunker_version": CHUNKER_VERSION,
+        "id": f"{prefix}:{kind}:{digest}", "kind": kind, "chunker_version": CHUNKER_VERSION,
+        "source": source, "workspace_id": workspace,
         "channel_id": rows[0]["channel"], "message_ids": ids,
         "start_at": rows[0]["created_at"], "end_at": rows[-1]["created_at"],
         "text": "\n\n".join(render(row) for row in rows),
@@ -73,6 +78,8 @@ def build_chunks(rows: list[dict]) -> tuple[list[dict], int]:
     chunks = [chunk("message", [row]) for row in rows]
     splits = 0
     for key in sorted(replies):
+        if key not in by_key:  # Deleted or not-yet-imported thread roots leave searchable replies.
+            continue
         ordered = sorted(replies[key], key=lambda row: (row["created_at"], row["local_id"]))
         parts = split_thread(by_key[key], ordered)
         splits += len(parts) - 1
@@ -109,9 +116,9 @@ def import_rows(conn: psycopg.Connection, rows: list[dict], chunks: list[dict], 
                 metadata = EXCLUDED.metadata
         """, message_values)
         cur.executemany("""
-            INSERT INTO chunks (id, kind, chunker_version, channel_id, message_ids,
+            INSERT INTO chunks (source, workspace_id, id, kind, chunker_version, channel_id, message_ids,
                 start_at, end_at, text)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES ('synthetic', 'beacon', %s, %s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (id) DO UPDATE SET
                 text = EXCLUDED.text, start_at = EXCLUDED.start_at, end_at = EXCLUDED.end_at,
                 embedding = CASE WHEN chunks.text IS DISTINCT FROM EXCLUDED.text
@@ -182,7 +189,8 @@ def ingest(path: Path, settings: Settings | None = None) -> dict:
         raise ValueError("Invalid corpus:\n" + "\n".join(errors[:20]))
     chunks, splits = build_chunks(rows)
     corpus_hash = hashlib.sha256(path.read_bytes()).hexdigest()
-    with psycopg.connect(settings.database_url) as conn:
+    with connect(settings, DEMO_CONTEXT, write=True) as conn:
+        conn.row_factory = psycopg.rows.tuple_row
         import_rows(conn, rows, chunks, story)
         embedded_new, tokens_new = embed_missing(conn, settings, corpus_hash)
         counts = conn.execute("""
