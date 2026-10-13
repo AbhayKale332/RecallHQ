@@ -52,49 +52,11 @@ Use `/recall help` for syntax. The anonymous Beacon demo supports `/ask`,
 ## Architecture
 
 ```mermaid
-flowchart TB
-    MEMBERS([Workspace members]) --> SLACK["Slack workspaces<br/>Invited public/private channels"]
-    VISITORS([Public visitors])
-    VERCEL["Next.js docs, demo and playground<br/>Vercel mirror: recall.abhaykale.me"]
-
-    subgraph VM["Existing Azure VM: recova-vm"]
-        CADDY["Caddy HTTPS proxy"]
-        SITE["Next.js docs, demo and playground<br/>/recallhq"]
-        API["FastAPI + Slack Bolt<br/>OAuth, signature checks, durable ingress<br/>Synthetic demo API"]
-        WORKER["Slack worker<br/>Ingestion, commands and embedding lanes<br/>Retries, leases and reconciliation"]
-        RAG["Shared retrieval service<br/>Hybrid search, reranking, cited answers"]
-    end
-
-    subgraph PG["Existing Azure PostgreSQL 16: recallhq-pg-abhay — verified TLS"]
-        INSTALLS[("Encrypted OAuth installations<br/>Channel settings and quotas")]
-        QUEUE[("Durable Slack job queue")]
-        CONTENT[("Messages and chunks<br/>pgvector + tsvector<br/>Source/workspace/channel RLS")]
-    end
-
-    OAI["OpenAI<br/>Embeddings and answer generation"]
-    ORT["OpenRouter Decisions API<br/>Reranking"]
-
-    VISITORS --> CADDY
-    VISITORS --> VERCEL
-    VERCEL -->|Public demo requests| CADDY
-    CADDY -->|/recallhq| SITE
-    SITE -->|Install and demo API requests| CADDY
-    SLACK -->|OAuth, signed events and /recall| CADDY
-    CADDY -->|/recallhq/api| API
-    API -->|Store installation| INSTALLS
-    API -->|Persist before acknowledgement| QUEUE
-    QUEUE -->|Claim leased jobs| WORKER
-    WORKER -->|Read installation and channel settings| INSTALLS
-    WORKER <-->|History and live membership checks| SLACK
-    WORKER -->|Scoped writes: messages, edits and deletes| CONTENT
-    WORKER -->|Embed chunks| OAI
-    WORKER -->|Authorized workspace and channels| RAG
-    API -->|Synthetic Beacon scope only| RAG
-    RAG <-->|Scoped read-only queries| CONTENT
-    RAG <-->|Embed query and generate answer| OAI
-    RAG <-->|Score relevance| ORT
-    RAG -->|Answer and evidence| WORKER
-    WORKER -->|Revalidate sources and membership; private reply| SLACK
+flowchart LR
+    SLACK["Slack workspaces"] <-->|Messages and /recall| BOT["API + Slack worker<br/>Azure VM"]
+    SITE["Docs, demo and playground<br/>Azure / Vercel"] <-->|Install and demo queries| BOT
+    BOT <-->|Store and search| PG[("Azure PostgreSQL<br/>Messages + embeddings")]
+    BOT <-->|Embeddings, reranking and answers| AI["OpenAI + OpenRouter"]
 ```
 
 The API acknowledges verified Slack requests after persisting their jobs. The
