@@ -6,7 +6,7 @@
 
 **Ask your team chat. Get grounded, cited answers.**
 
-Hybrid retrieval and grounded answers over a synthetic Slack/Discord-style workspace.
+Hybrid retrieval and grounded answers over Slack conversations, with a public synthetic demo.
 
 RecallHQ also runs as a multi-workspace **Slack bot**. Invite it into a channel to
 import available history and capture new messages, then use `/recall ask`,
@@ -16,7 +16,7 @@ channel access are enforced independently of the public demo.
 See [Slack setup, commands, testing, and deployment](docs/slack-bot.md). Generate
 an app manifest with `uv run python -m recallhq.cli slack-manifest --base-url <HTTPS-API-URL>`.
 
-[![Live demo](https://img.shields.io/badge/recall.abhaykale.me-E6176D?style=for-the-badge&logo=vercel&logoColor=white)](https://recallhq-black.vercel.app)
+[![Docs and demo](https://img.shields.io/badge/recall.abhaykale.me-E6176D?style=for-the-badge&logo=vercel&logoColor=white)](https://recall.abhaykale.me)
 
 ![Python](https://img.shields.io/badge/Python_3.12-3776AB?style=flat-square&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
@@ -37,24 +37,72 @@ an app manifest with `uv run python -m recallhq.cli slack-manifest --base-url <H
 
 | Command | What it does |
 | --- | --- |
-| `/ask <question>` | Grounded answer with links to source messages |
-| `/search <terms>` | Matching messages across channels |
-| `/catchup YYYY-MM-DD YYYY-MM-DD [#channel]` | Date-bounded recap (up to 32 days) |
+| `/recall ask <question> [in:#channel]` | Private, grounded answer with links to Slack messages |
+| `/recall search <terms> [in:#channel]` | Matching messages in channels you belong to |
+| `/recall catchup YYYY-MM-DD YYYY-MM-DD [in:#channel]` | Date-bounded recap (up to 32 days) |
+| `/recall summarize <message-link>` | Indexed thread summary |
+| `/recall decisions [in:#channel]` | Decisions from the last seven days |
+| `/recall status` | Channel imports and embedding backlog |
+| `/recall sync #channel` | Admin: retry history import |
+| `/recall forget #channel` | Admin: confirm disabling ingestion and purging channel data |
+
+Use `/recall help` for syntax. The anonymous Beacon demo supports `/ask`,
+`/search`, and `/catchup` over synthetic messages.
 
 ## Architecture
 
 ```mermaid
-flowchart LR
-    U([User]) --> FE["Next.js frontend<br/>(Vercel)"]
-    FE -->|"/ask · /search · /catchup"| API["FastAPI<br/>(Azure VM · Caddy)"]
-    API -->|embed + generate| OAI[(OpenAI)]
-    API -->|rerank| ORT[(OpenRouter<br/>Decisions API)]
-    API -->|read-only role, TLS| PG[("PostgreSQL 16<br/>pgvector + tsvector")]
+flowchart TB
+    MEMBERS([Workspace members]) --> SLACK["Slack workspaces<br/>Invited public/private channels"]
+    VISITORS([Public visitors])
+    VERCEL["Next.js docs, demo and playground<br/>Vercel mirror: recall.abhaykale.me"]
 
-    subgraph Offline ingest
-        C[corpus.jsonl] --> CH[Message & thread<br/>chunking] --> EM[Embeddings] --> PG
+    subgraph VM["Existing Azure VM: recova-vm"]
+        CADDY["Caddy HTTPS proxy"]
+        SITE["Next.js docs, demo and playground<br/>/recallhq"]
+        API["FastAPI + Slack Bolt<br/>OAuth, signature checks, durable ingress<br/>Synthetic demo API"]
+        WORKER["Slack worker<br/>Ingestion, commands and embedding lanes<br/>Retries, leases and reconciliation"]
+        RAG["Shared retrieval service<br/>Hybrid search, reranking, cited answers"]
     end
+
+    subgraph PG["Existing Azure PostgreSQL 16: recallhq-pg-abhay — verified TLS"]
+        INSTALLS[("Encrypted OAuth installations<br/>Channel settings and quotas")]
+        QUEUE[("Durable Slack job queue")]
+        CONTENT[("Messages and chunks<br/>pgvector + tsvector<br/>Source/workspace/channel RLS")]
+    end
+
+    OAI["OpenAI<br/>Embeddings and answer generation"]
+    ORT["OpenRouter Decisions API<br/>Reranking"]
+
+    VISITORS --> CADDY
+    VISITORS --> VERCEL
+    VERCEL -->|Public demo requests| CADDY
+    CADDY -->|/recallhq| SITE
+    SITE -->|Install and demo API requests| CADDY
+    SLACK -->|OAuth, signed events and /recall| CADDY
+    CADDY -->|/recallhq/api| API
+    API -->|Store installation| INSTALLS
+    API -->|Persist before acknowledgement| QUEUE
+    QUEUE -->|Claim leased jobs| WORKER
+    WORKER -->|Read installation and channel settings| INSTALLS
+    WORKER <-->|History and live membership checks| SLACK
+    WORKER -->|Scoped writes: messages, edits and deletes| CONTENT
+    WORKER -->|Embed chunks| OAI
+    WORKER -->|Authorized workspace and channels| RAG
+    API -->|Synthetic Beacon scope only| RAG
+    RAG <-->|Scoped read-only queries| CONTENT
+    RAG <-->|Embed query and generate answer| OAI
+    RAG <-->|Score relevance| ORT
+    RAG -->|Answer and evidence| WORKER
+    WORKER -->|Revalidate sources and membership; private reply| SLACK
 ```
+
+The API acknowledges verified Slack requests after persisting their jobs. The
+worker imports available channel history, captures live changes, and performs
+model work separately. Slack queries enforce current membership before retrieval
+and delivery; the public site queries only the synthetic Beacon corpus. Runtime
+database logins have separate read/write roles, and installations retain their
+own encrypted bot tokens.
 
 ## Retrieval pipeline
 
@@ -141,10 +189,14 @@ For the frontend, see [frontend/README.md](frontend/README.md). It adapts the MI
 
 | Piece | Where |
 | --- | --- |
-| Frontend | Vercel project `recallhq` |
-| API | `recallhq-api` container on the `recova-vm` Docker network; Caddy routes `/recallhq/api/*` |
+| Frontend and docs | Azure VM at [/recallhq](https://recova.indiasouthcentral.cloudapp.azure.com/recallhq); Vercel project `recallhq` remains available |
+| API and Slack worker | `recallhq-slack-api` and `recallhq-slack-worker` on `recova-vm`; Caddy routes `/recallhq/api/*` |
 | Database | Azure PostgreSQL Flexible Server `recallhq-pg-abhay` (PG 16, B1ms, 32 GB, `vector` allowlisted) in `recallhq-rg` |
-| Security | DB firewall allows only the VM's IP; API uses a read-only role with verified TLS; secrets live in `runtime.env` on the VM, outside the repo |
+| Security | DB firewall allows only the VM's IP; verified TLS, separate read/write logins, and workspace/channel RLS; secrets live in `slack-runtime.env` on the VM, outside the repo |
+
+See the [Azure deployment runbook](deploy/azure/README.md) for releases, checks,
+and Slack endpoint cutover. The docs site includes installation, command
+reference, permissions, a synthetic demo, and an anonymous playground.
 
 ## Layout
 

@@ -1,0 +1,57 @@
+name: recallhq-slack
+services:
+  docs:
+    image: abhayk000/recallhq-docs:azure-20261014
+    container_name: recallhq-docs
+    restart: unless-stopped
+    networks: [recova]
+    mem_limit: 192m
+    cpus: 0.5
+    environment:
+      NODE_OPTIONS: --max-old-space-size=128
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: "3"}
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/recallhq').then(r => {if (!r.ok) process.exit(1)}).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+  api:
+    image: abhayk000/recallhq-api:slack-3dd43c7
+    container_name: recallhq-slack-api
+    restart: unless-stopped
+    env_file: ./slack-runtime.env
+    volumes:
+      - ./data:/data
+    networks: [recova]
+    mem_limit: 256m
+    cpus: 0.5
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: "3"}
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+  worker:
+    image: abhayk000/recallhq-api:slack-3dd43c7
+    container_name: recallhq-slack-worker
+    command: [python, -m, recallhq.cli, slack-worker]
+    restart: unless-stopped
+    env_file: ./slack-runtime.env
+    volumes:
+      - ./data:/data:ro
+    networks: [recova]
+    mem_limit: 256m
+    cpus: 0.5
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: "3"}
+networks:
+  recova:
+    name: recova_default
+    external: true

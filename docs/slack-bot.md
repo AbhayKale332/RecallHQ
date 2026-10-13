@@ -8,6 +8,13 @@ source messages.
 
 The repository's public Beacon demo continues to serve synthetic data only.
 
+The hosted pilot now runs on the existing Azure VM and PostgreSQL service:
+[install RecallHQ](https://recova.indiasouthcentral.cloudapp.azure.com/recallhq/api/slack/install),
+[read the docs](https://recova.indiasouthcentral.cloudapp.azure.com/recallhq/docs),
+or [try the synthetic playground](https://recova.indiasouthcentral.cloudapp.azure.com/recallhq/playground).
+The root `manifest.json` uses the stable Azure callback URLs. See the
+[Azure runbook](../deploy/azure/README.md) for the deployed services and releases.
+
 ## Register and run locally
 
 1. Create a disposable free workspace at <https://slack.com/get-started>.
