@@ -11,9 +11,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useChatSession } from '@/components/chat-session-provider';
 import { ThreadBar } from '@/components/thread-bar';
 import { DEMO_COMMANDS } from '@/lib/demo-answers';
+import { PUBLIC_API_URL, PUBLIC_BASE_PATH } from '@/lib/public-api';
 
 const Editor = dynamic(() => import('@/components/editor'), { ssr: false });
-const API = process.env.NEXT_PUBLIC_API_URL || 'https://recova.indiasouthcentral.cloudapp.azure.com/recallhq/api';
+const API = PUBLIC_API_URL;
 const BOT_DM = 'dm:recallhq';
 const BOT_DM_URL = '/workspace/beacon/member/recallhq';
 
@@ -236,8 +237,9 @@ export function PublicChat({ directMessage = false }: { directMessage?: boolean 
   return (
     <div className="flex h-dvh flex-col bg-white text-[#1d1c1d]">
       <nav className="flex h-10 shrink-0 items-center bg-[#481349] px-4 text-white">
-        <span className="text-sm font-semibold">RecallHQ</span>
+        <Link href="/" className="text-sm font-semibold hover:underline">RecallHQ</Link>
         <span className="mx-auto text-xs text-white/75">Beacon workspace · synthetic team chat</span>
+        <Link href="/docs" className="text-xs text-white/85 hover:underline">Docs</Link>
       </nav>
       <div className="flex min-h-0 flex-1">
         <aside className="hidden w-60 shrink-0 flex-col bg-[#5E2C5F] text-white md:flex">
@@ -276,7 +278,7 @@ export function PublicChat({ directMessage = false }: { directMessage?: boolean 
                 {visibleEntries.map((entry) => (
                   <article key={entry.id} className={`flex gap-3 px-5 py-2 ${entry.kind === 'assistant' ? 'bg-violet-50/60' : ''}`}>
                     <Avatar className="mt-0.5 size-9 shrink-0">
-                      {entry.kind === 'assistant' && <AvatarImage src="/recallhq-bot.png" alt="RecallHQ bot" />}
+                      {entry.kind === 'assistant' && <AvatarImage src={`${PUBLIC_BASE_PATH}/recallhq-bot.png`} alt="RecallHQ bot" />}
                       <AvatarFallback>{entry.kind === 'assistant' ? 'R' : 'Y'}</AvatarFallback>
                     </Avatar>
                     <div className="min-w-0 flex-1 text-sm">
@@ -290,7 +292,7 @@ export function PublicChat({ directMessage = false }: { directMessage?: boolean 
                 {sendingChannel === channelId && (
                   <div role="status" className="flex items-center gap-3 bg-violet-50/60 px-5 py-2">
                     <Avatar className="size-9 shrink-0">
-                      <AvatarImage src="/recallhq-bot.png" alt="" />
+                      <AvatarImage src={`${PUBLIC_BASE_PATH}/recallhq-bot.png`} alt="" />
                       <AvatarFallback>R</AvatarFallback>
                     </Avatar>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">

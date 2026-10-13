@@ -11,14 +11,17 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'RecallHQ | Beacon workspace',
-  description: 'Search and catch up on the Beacon team chat.',
+  title: 'RecallHQ | Your team’s memory in Slack',
+  description:
+    'Ask questions, find decisions, and catch up on Slack conversations with source-linked answers. Explore the docs and public Beacon playground.',
 };
 
 const RootLayout = ({ children }: Readonly<PropsWithChildren>) => {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`}><ChatSessionProvider>{children}</ChatSessionProvider></body>
+      <body className={`${inter.className} antialiased`}>
+        <ChatSessionProvider>{children}</ChatSessionProvider>
+      </body>
     </html>
   );
 };
