@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-14-lexical-only",
+  "queries": 44,
+  "models": {
+    "embedding": "text-embedding-3-small",
+    "generation": "gpt-5.4-mini",
+    "rerank": "typesafe/jev-1.13-20260917",
+    "rerank_fallback": "openai/gpt-6-luna-decisions-20261006",
+    "judge": null
+  },
+  "query_embeddings": {
+    "provider": "openai",
+    "equivalence_check": null
+  },
+  "settings": {
+    "configs": [
+      "lexical"
+    ],
+    "depth": 20,
+    "evidence_k": 12,
+    "rerank_top_k": 10,
+    "filters_applied": false
+  },
+  "retrieval": {
+    "lexical": {
+      "all": {
+        "queries_scored": 38,
+        "queries_timed": 44,
+        "groups": 68,
+        "recall@5": 0.0,
+        "group_recall_micro@5": 0.0,
+        "full_coverage@5": 0,
+        "recall@10": 0.0,
+        "group_recall_micro@10": 0.0,
+        "full_coverage@10": 0,
+        "recall@12": 0.0,
+        "group_recall_micro@12": 0.0,
+        "full_coverage@12": 0,
+        "recall@20": 0.0,
+        "group_recall_micro@20": 0.0,
+        "full_coverage@20": 0,
+        "mrr@20": 0.0,
+        "hit@1": 0,
+        "latency_ms_p50": 12.9,
+        "latency_ms_p95": 16.5,
+        "latency_ms_mean": 13.4
+      },
+      "dev": {
+        "queries_scored": 20,
+        "queries_timed": 23,
+        "groups": 41,
+        "recall@5": 0.0,
+        "group_recall_micro@5": 0.0,
+        "full_coverage@5": 0,
+        "recall@10": 0.0,
+        "group_recall_micro@10": 0.0,
+        "full_coverage@10": 0,
+        "recall@12": 0.0,
+        "group_recall_micro@12": 0.0,
+        "full_coverage@12": 0,
+        "recall@20": 0.0,
+        "group_recall_micro@20": 0.0,
+        "full_coverage@20": 0,
+        "mrr@20": 0.0,
+        "hit@1": 0,
+        "latency_ms_p50": 12.9,
+        "latency_ms_p95": 14.7,
+        "latency_ms_mean": 13.2
+      },
+      "test": {
+        "queries_scored": 18,
+        "queries_timed": 21,
+        "groups": 27,
+        "recall@5": 0.0,
+        "group_recall_micro@5": 0.0,
+        "full_coverage@5": 0,
+        "recall@10": 0.0,
+        "group_recall_micro@10": 0.0,
+        "full_coverage@10": 0,
+        "recall@12": 0.0,
+        "group_recall_micro@12": 0.0,
+        "full_coverage@12": 0,
+        "recall@20": 0.0,
+        "group_recall_micro@20": 0.0,
+        "full_coverage@20": 0,
+        "mrr@20": 0.0,
+        "hit@1": 0,
+        "latency_ms_p50": 13.5,
+        "latency_ms_p95": 16.8,
+        "latency_ms_mean": 13.7
+      }
+    }
+  },
+  "usage": {
+    "embedding_tokens": 0,
+    "embedding_calls": 0,
+    "generation_input_tokens": 0,
+    "generation_output_tokens": 0,
+    "generation_reasoning_tokens": 0,
+    "generation_calls": 0,
+    "judge_input_tokens": 0,
+    "judge_output_tokens": 0,
+    "judge_calls": 0,
+    "decisions_calls": 0,
+    "decisions_usage": []
+  },
+  "wall_clock_s": 0.6
+}
