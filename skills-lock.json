@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "create-slack-app": {
+      "source": "slackapi/slack-skills-plugin",
+      "sourceType": "github",
+      "skillPath": "skills/create-slack-app/SKILL.md",
+      "computedHash": "6ea632f7eb4aed5bcc84a834ab2ffa08a7809842bb8ff9009ac9c81a199a15ac"
+    },
     "rag-implementation": {
       "source": "wshobson/agents",
       "sourceType": "github",

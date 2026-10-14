@@ -1,13 +1,24 @@
 # Evaluation
 
-Status (2026-10-15): **partial run.** Only the lexical-only retrieval configuration
-has been measured (before and after the lexical fix below). Every other configuration, and the end-to-end answer evaluation,
-needs a query embedding from `text-embedding-3-small`. The OpenAI key in `.env`
-currently gets `403 model_not_found` for that model ("Project ... does not have
-access to model `text-embedding-3-small`"). Generation with `gpt-5.4-mini` works with
-the same key. Once embedding access is restored, one command produces every table
-below (see [Reproduce](#reproduce)). No number on this page is estimated. A cell
-marked "not run" has not been measured yet.
+Status (2026-10-15): **full run.** All four retrieval configurations and the
+end-to-end answer evaluation were run with OpenAI `text-embedding-3-small` query
+embeddings, `gpt-5.4-mini` for answers and judging, and Jev 1.13 for reranking. No
+number on this page is estimated. An earlier run the same day, with the same
+embedding model served through OpenRouter, gave near-identical numbers
+(`evals/results/2026-10-15-full-*`).
+
+**Key findings**
+
+- **Reranking is the biggest win.** MRR@20 goes from 0.625 (hybrid) to 0.782, and the
+  top result is relevant for 74% of questions instead of 53%.
+- **Hybrid does not beat dense-only yet.** Dense-only Recall@10 is 0.849, hybrid is
+  0.768. With equal RRF weights, keyword hits push some good vector hits out of the top
+  10. Down-weighting the lexical arm is the next experiment.
+- **Every citation is valid** (100%), and all 38 answerable questions got an answer,
+  29 judged correct and 3 partly correct.
+- **Abstention mostly happens in prose.** 5 of 6 unanswerable questions got an answer
+  saying the chat doesn't contain it, but only 1 took the formal "I couldn't verify"
+  path.
 
 ## What is measured
 
@@ -100,24 +111,32 @@ End-to-end metrics (config d):
 
 ### Retrieval, all 38 answerable queries (latency over 44)
 
-| Config | Recall@10 | Recall@20 | MRR@20 | p50 ms | p95 ms |
-| --- | --- | --- | --- | --- | --- |
-| a) dense-only | not run | not run | not run | not run | not run |
-| b) lexical-only | 0.616 | 0.675 | 0.460 | 39.3 | 42.7 |
-| b) lexical-only, before fix | 0.000 | 0.000 | 0.000 | 12.9 | 16.5 |
-| c) hybrid RRF | not run | not run | not run | not run | not run |
-| d) hybrid + rerank | not run | not run | not run | not run | not run |
+| Config | Recall@10 | Recall@20 | MRR@20 | Hit@1 | p50 ms | p95 ms |
+| --- | --- | --- | --- | --- | --- | --- |
+| a) dense-only | **0.849** | **0.882** | 0.657 | 0.579 | 637 | 1188 |
+| b) lexical-only | 0.616 | 0.675 | 0.460 | 0.342 | 16 | 22 |
+| b) lexical-only, before fix | 0.000 | 0.000 | 0.000 | 0.000 | 13 | 17 |
+| c) hybrid RRF | 0.768 | 0.829 | 0.625 | 0.526 | 617 | 740 |
+| d) hybrid + rerank (production) | 0.768 | 0.829 | **0.782** | **0.737** | 1425 | 2444 |
+
+Latency includes the query-embedding API call (dense, hybrid, rerank) and the
+Decisions API call (rerank).
 
 ### By split
 
-| Config | Split | Queries | Recall@10 | Recall@20 | MRR@20 | p50 ms | p95 ms |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| b) lexical-only | dev | 20 | 0.596 | 0.608 | 0.540 | 39.8 | 42.3 |
-| b) lexical-only | test | 18 | 0.639 | 0.750 | 0.372 | 38.0 | 42.7 |
-| a, c, d | dev / test | | not run | not run | not run | not run | not run |
+| Config | Split | Queries | Recall@10 | Recall@20 | MRR@20 |
+| --- | --- | --- | --- | --- | --- |
+| a) dense-only | dev | 20 | 0.838 | 0.875 | 0.614 |
+| a) dense-only | test | 18 | 0.861 | 0.889 | 0.706 |
+| b) lexical-only | dev | 20 | 0.596 | 0.608 | 0.540 |
+| b) lexical-only | test | 18 | 0.639 | 0.750 | 0.372 |
+| c) hybrid RRF | dev | 20 | 0.733 | 0.775 | 0.681 |
+| c) hybrid RRF | test | 18 | 0.806 | 0.889 | 0.564 |
+| d) hybrid + rerank | dev | 20 | 0.733 | 0.775 | 0.757 |
+| d) hybrid + rerank | test | 18 | 0.806 | 0.889 | 0.809 |
 
-Raw rows: `evals/results/2026-10-15-lexical-fixed-retrieval.jsonl`. Summary:
-`evals/results/2026-10-15-lexical-fixed-summary.json`. The before-fix run is kept in
+Raw rows: `evals/results/2026-10-15-openai-retrieval.jsonl`. Summary:
+`evals/results/2026-10-15-openai-summary.json`. The before-fix lexical run is kept in
 `evals/results/2026-10-14-lexical-only-*`.
 
 ### Fixed: the lexical arm used to return nothing
@@ -135,17 +154,28 @@ words and ORs the remaining terms (`command | fixed | local | 28p01 | postgres |
 
 ### Rerank usage
 
-Not run (needs query embeddings first).
+Jev 1.13 answered all 44 rerank requests. The GPT-6 Luna fallback and the plain RRF
+path were never used. Total Decisions API cost for the run: about $0.004.
 
 ### End-to-end answers (config d)
 
 | Metric | All | Dev | Test |
 | --- | --- | --- | --- |
-| Citation validity rate | not run | not run | not run |
-| Answer rate, answerable | not run | not run | not run |
-| Correct abstention rate, unanswerable | not run | not run | not run |
-| Citation precision, strict (micro) | not run | not run | not run |
-| LLM-judged correctness, answerable | not run | not run | not run |
+| Citation validity rate | 1.000 | 1.000 | 1.000 |
+| Answer rate, answerable | 1.000 | 1.000 | 1.000 |
+| Correct abstention, unanswerable (strict: formal "couldn't verify") | 0.167 | 0.333 | 0.000 |
+| Unanswerable handled correctly (LLM-judged: says it's not in the chat) | 0.833 | 0.667 | 1.000 |
+| Citation precision, strict (micro) | 0.574 | 0.630 | 0.521 |
+| Citation precision, strict (macro) | 0.653 | 0.683 | 0.619 |
+| Citation precision, lenient (micro) | 0.734 | 0.783 | 0.688 |
+| Answers with at least one gold citation | 0.789 | 0.800 | 0.778 |
+| LLM-judged correctness, answerable (mean score) | 0.803 | 0.825 | 0.778 |
+| LLM judge: correct / partial / incorrect | 29 / 3 / 6 | 15 / 3 / 2 | 14 / 0 / 4 |
+| Answer latency p50 / p95 (ms) | 1540 / 2662 | 1581 / 2445 | 1522 / 3034 |
+
+Raw rows: `evals/results/2026-10-15-openai-e2e.jsonl`. The LLM judge is
+`gpt-5.4-mini`, the same model that writes the answers, so treat its scores as a rough
+signal, not ground truth.
 
 ## Limitations
 
@@ -177,7 +207,8 @@ uv run python -m recallhq.cli ingest data/synthetic/corpus.jsonl   # re-uses sto
 uv run python scripts/validate_queries.py
 
 # Full run: 4 retrieval configs, end-to-end answers, LLM judge.
-# Needs OPENAI_API_KEY with access to text-embedding-3-small and gpt-5.4-mini,
+# Needs OPENAI_API_KEY with access to text-embedding-3-small and gpt-5.4-mini
+# (or --embed-provider openrouter for query embeddings),
 # and OPEN_ROUTER for reranking.
 uv run python scripts/run_eval.py
 

@@ -154,25 +154,31 @@ Full method, metric definitions and limitations are in
 
 - **Data:** 2,233 synthetic messages from a fictional student team across 5 channels,
   and 44 hand-written questions (38 answerable, 6 unanswerable).
-- **What has been measured:** lexical-only retrieval (the keyword search alone), on
-  the 38 answerable questions.
 
-| Config | Recall@10 | Recall@20 | MRR@20 |
+Results from 2026-10-15 on the 38 answerable questions:
+
+| Config | Recall@10 | MRR@20 | Top result relevant |
 | --- | --- | --- | --- |
-| Lexical-only (current) | 0.616 | 0.675 | 0.460 |
-| Lexical-only, before the keyword fix | 0.000 | 0.000 | 0.000 |
-| Dense-only, hybrid RRF, hybrid + rerank | not run yet | not run yet | not run yet |
+| Dense-only (vector search) | **0.849** | 0.657 | 58% |
+| Lexical-only (keyword search) | 0.616 | 0.460 | 34% |
+| Hybrid RRF | 0.768 | 0.625 | 53% |
+| **Hybrid + rerank (what the bot runs)** | 0.768 | **0.782** | **74%** |
 
-**What isn't measured yet:** dense-only, hybrid and hybrid + rerank retrieval, and
-the end-to-end answer metrics (citation validity, answer rate, abstention). These
-runs need query embeddings, and the OpenAI key currently in use doesn't have access
-to the embedding model. The script is ready (`scripts/run_eval.py`), and the results
-will be added once it can run.
+End to end (hybrid + rerank, then the answer):
 
-**The keyword fix.** Keyword search used to go through `websearch_to_tsquery`, which
-requires every word in the question, including words like "which" and "the". It
-returned zero results for all 44 questions, so "hybrid" search was really
-vector-only. The current OR-based query fixed this.
+- **100%** of citations point at retrieved messages, and all 38 answerable questions got
+  an answer: an LLM judge rated 29 correct, 3 partly correct and 6 incorrect.
+- 57% of cited messages are in the exact hand-labelled evidence (73% with a looser
+  match).
+- 5 of 6 unanswerable questions got a reply saying the chat doesn't contain the answer,
+  but only 1 used the formal "I couldn't verify" refusal.
+
+**What this shows.** Reranking is the biggest gain: it puts the right message first far
+more often. Hybrid search does *not* beat vector-only yet. With equal RRF weights,
+keyword hits push some good vector hits out of the top 10, so down-weighting the keyword
+arm is the next experiment. Keyword search used to return nothing at all, because
+`websearch_to_tsquery` required every word of the question; the current OR-based query
+fixed that (lexical Recall@10 went from 0.000 to 0.616).
 
 The data is synthetic, and the question set is small and was written within this
 project, so treat these numbers as a sanity check, not a benchmark.

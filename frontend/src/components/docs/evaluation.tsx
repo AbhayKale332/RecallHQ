@@ -154,12 +154,11 @@ export function EvaluationDoc() {
             ms(row.p50ms),
             ms(row.p95ms),
           ]),
-          ['a, c, d', 'dev / test', '', score(null), score(null), score(null), ms(null), ms(null)],
         ]}
       />
       <p>
         The test split is the fairer number: the dev split was available while the pipeline was built. Raw rows are in{' '}
-        <code>evals/results/2026-10-15-lexical-fixed-retrieval.jsonl</code>.
+        <code>evals/results/2026-10-15-openai-retrieval.jsonl</code> and <code>2026-10-15-openai-e2e.jsonl</code>.
       </p>
       <h3>End-to-end answers (config d)</h3>
       <Table
@@ -167,7 +166,29 @@ export function EvaluationDoc() {
         numeric={[1, 2, 3]}
         rows={endToEndResults.map((row) => [row.metric, score(row.all), score(row.dev), score(row.test)])}
       />
-      <p>Rerank usage (how often Jev, the fallback, or plain RRF order was used) has not been measured either.</p>
+      <p>Rerank usage: Jev 1.13 answered all 44 rerank requests, so the GPT-6 Luna fallback and the plain-RRF path were never used.</p>
+
+      <h2 id="findings">What the numbers say</h2>
+      <ul>
+        <li>
+          <strong>Reranking is the biggest win.</strong> It moves the right message to the top: MRR@20 rises from 0.625 to 0.782, and the
+          first result is relevant for 74% of questions instead of 53%. It only reorders the top 10, so recall does not change.
+        </li>
+        <li>
+          <strong>Hybrid does not beat dense-only yet.</strong> Dense-only reaches Recall@10 0.849 against 0.768 for hybrid. With equal RRF
+          weights, keyword hits push some good vector hits out of the top 10. Down-weighting the lexical arm, or using it only for exact
+          tokens such as error codes, is the next thing to test.
+        </li>
+        <li>
+          <strong>Citations are always valid, not always the best ones.</strong> Every citation pointed at retrieved evidence, but only 57%
+          (strict) to 73% (lenient) of cited messages are in the hand-labelled evidence.
+        </li>
+        <li>
+          <strong>Abstention mostly happens in prose.</strong> For 5 of the 6 unanswerable questions the answer says the chat does not
+          contain the information, but only one took the formal “I couldn’t verify an answer” path; the rest still attach citations. One
+          answer added an unsupported detail before saying the information was missing.
+        </li>
+      </ul>
 
       <h2 id="lexical-fix">The lexical fix</h2>
       <p>
