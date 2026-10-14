@@ -1,162 +1,105 @@
+import { BookOpen, FlaskConical, Network, Play, Rocket, ShieldCheck, Terminal, Wrench } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import type { ReactNode } from 'react';
+import { FaGithub } from 'react-icons/fa6';
 
-import { InstallLink, SiteShell, docsLinks } from '@/components/site-shell';
+import { ArchitectureDoc } from '@/components/docs/architecture';
+import { Code, Note } from '@/components/docs/docs-ui';
+import { EvaluationDoc } from '@/components/docs/evaluation';
+import { SelfHostingDoc } from '@/components/docs/self-hosting';
+import { SlackBotDoc } from '@/components/docs/slack-bot';
+import { HowItWorks } from '@/components/pipeline-diagram';
+import { InstallLink, SiteShell } from '@/components/site-shell';
 import styles from '@/components/site.module.css';
+import { commandDocs } from '@/lib/commands';
+import { GITHUB_URL, docsHref, docsPages, docsSections } from '@/lib/docs-nav';
 import { DEMO_URL } from '@/lib/public-api';
 
-const pages = {
-  introduction: [
-    'Introduction',
-    'RecallHQ turns your Slack conversations into a searchable team memory, with answers you can trace back to the original messages.',
-  ],
-  installation: [
-    'Add RecallHQ to Slack',
-    'Install the app, invite it to a channel, and check that your team’s available history is being indexed.',
-  ],
-  quickstart: ['Your first answer', 'Go from a channel conversation to a grounded answer in a few steps.'],
-  commands: ['Command reference', 'Use /recall in Slack. Answers and search results are private to you and include source links.'],
-  permissions: [
-    'Permissions & data',
-    'RecallHQ searches ingested channels you currently belong to. Workspace data stays separate from the public demo.',
-  ],
-  troubleshooting: [
-    'Troubleshooting',
-    'Check channel access and import coverage first. /recall status shows what RecallHQ can currently search.',
-  ],
-} as const;
-
-const commandDocs = [
-  {
-    name: 'ask',
-    syntax: '/recall ask <question> [in:#channel]',
-    description: 'Ask a question in plain English. RecallHQ retrieves relevant messages and produces an answer grounded in that evidence.',
-    example: '/recall ask Why did we switch to Postgres? in:#eng',
-  },
-  {
-    name: 'search',
-    syntax: '/recall search <terms> [in:#channel]',
-    description: 'Return ranked message excerpts with links to the original Slack messages.',
-    example: '/recall search pilot success criteria in:#product',
-  },
-  {
-    name: 'catchup',
-    syntax: '/recall catchup YYYY-MM-DD YYYY-MM-DD [in:#channel]',
-    description:
-      'Recap updates, decisions, blockers, and next steps over an inclusive date range of up to 32 days. Dates use your Slack timezone, with UTC as fallback. Large ranges or incomplete imports carry a partial-coverage notice.',
-    example: '/recall catchup 2026-09-14 2026-09-18 in:#eng',
-  },
-  {
-    name: 'summarize',
-    syntax: '/recall summarize <Slack-message-link>',
-    description:
-      'Summarize an indexed thread. Paste the message link from Slack’s Copy link action; the channel must be indexed and accessible to you.',
-    example: '/recall summarize https://your-workspace.slack.com/archives/C1234567890/p1726300000000000',
-  },
-  {
-    name: 'decisions',
-    syntax: '/recall decisions [in:#channel]',
-    description: 'Find explicit decisions from the last seven days in your accessible, ingested channels.',
-    example: '/recall decisions in:#product',
-  },
-  {
-    name: 'status',
-    syntax: '/recall status',
-    description: 'Inspect accessible channels, message counts, history coverage, embedding backlog, and import errors.',
-    example: '/recall status',
-  },
-  {
-    name: 'sync',
-    syntax: '/recall sync #channel',
-    description: 'Workspace admins and owners can retry a full history import for a channel. Slack’s history limits still apply.',
-    example: '/recall sync #eng',
-    admin: true,
-  },
-  {
-    name: 'forget',
-    syntax: '/recall forget #channel',
-    description:
-      'Workspace admins and owners can disable ingestion and purge a channel’s indexed content. The bot asks for confirmation before removal. Inviting the bot again explicitly re-enables a disabled channel.',
-    example: '/recall forget #eng',
-    admin: true,
-  },
-  { name: 'help', syntax: '/recall help', description: 'Show command usage and access rules.', example: '/recall help' },
-];
-
-function Note({ children }: { children: ReactNode }) {
+function Overview() {
   return (
-    <aside className={styles.note}>
-      <p>{children}</p>
-    </aside>
-  );
-}
-function Code({ children }: { children: string }) {
-  return (
-    <div className={styles.codeBlock}>
-      <code>{children}</code>
-    </div>
+    <>
+      <h2>Start here</h2>
+      <div className={styles.docsCards}>
+        <Link href="/docs/installation">
+          <Rocket size={18} aria-hidden="true" />
+          <strong>Add RecallHQ to Slack →</strong>
+          <span>Authorize the hosted app, invite it to a channel, ask your first question.</span>
+        </Link>
+        <Link href="/docs/self-hosting">
+          <Wrench size={18} aria-hidden="true" />
+          <strong>Run it locally →</strong>
+          <span>Postgres + pgvector in Docker, the synthetic corpus, the API, and tests.</span>
+        </Link>
+        <Link href="/docs/architecture">
+          <Network size={18} aria-hidden="true" />
+          <strong>Model architecture →</strong>
+          <span>Chunking, hybrid retrieval, reranking, cited generation, and isolation.</span>
+        </Link>
+        <Link href="/docs/evaluation">
+          <FlaskConical size={18} aria-hidden="true" />
+          <strong>Evaluations →</strong>
+          <span>44 labeled questions, metric definitions, and what has been measured so far.</span>
+        </Link>
+        <Link href="/docs/commands">
+          <Terminal size={18} aria-hidden="true" />
+          <strong>Command reference →</strong>
+          <span>ask, search, catchup, summarize, decisions, and admin controls.</span>
+        </Link>
+        <Link href="/docs/permissions">
+          <ShieldCheck size={18} aria-hidden="true" />
+          <strong>Permissions & data →</strong>
+          <span>Channel membership, what is processed, and how deletion works.</span>
+        </Link>
+      </div>
+
+      <h2>How an answer is made</h2>
+      <HowItWorks columns={3} columnsMd={2} />
+
+      <h2>Find the context behind the conversation</h2>
+      <p>
+        Your team has already discussed the plan, the tradeoff, and the fix. RecallHQ helps you find that context without remembering the
+        exact wording or who posted it.
+      </p>
+      <ul>
+        <li>
+          <strong>Ask:</strong> get an answer with supporting message links.
+        </li>
+        <li>
+          <strong>Search:</strong> retrieve ranked excerpts from conversations.
+        </li>
+        <li>
+          <strong>Catch up:</strong> recap a date range with decisions and next steps.
+        </li>
+        <li>
+          <strong>Summarize:</strong> turn an indexed Slack thread into a concise summary.
+        </li>
+      </ul>
+      <p>
+        Add RecallHQ to your workspace and invite it into selected public or private channels. It imports the history Slack makes available
+        and indexes new messages and thread replies. Commands search ingested channels you belong to. Your membership is checked before
+        retrieval and again before the answer is delivered. Replies stay private and link back to Slack.
+      </p>
+      <Note>
+        The public Beacon demo and playground use synthetic conversations only. Installing RecallHQ never makes your Slack messages
+        available on this website.
+      </Note>
+    </>
   );
 }
 
-function Documentation({ page }: { page: keyof typeof pages }) {
+function Documentation({ page }: { page: string }) {
   switch (page) {
-    case 'introduction':
-      return (
-        <>
-          <h2>Find the context behind the conversation</h2>
-          <p>
-            Your team has already discussed the plan, the tradeoff, and the fix. RecallHQ helps you find that context without remembering
-            the exact wording or who posted it.
-          </p>
-          <ul>
-            <li>
-              <strong>Ask:</strong> get an answer with supporting message links.
-            </li>
-            <li>
-              <strong>Search:</strong> retrieve ranked excerpts from conversations.
-            </li>
-            <li>
-              <strong>Catch up:</strong> recap a date range with decisions and next steps.
-            </li>
-            <li>
-              <strong>Summarize:</strong> turn an indexed Slack thread into a concise summary.
-            </li>
-          </ul>
-          <h2>How it works</h2>
-          <p>
-            Add RecallHQ to your workspace and invite it into selected public or private channels. It imports the history Slack makes
-            available and indexes new messages and thread replies.
-          </p>
-          <p>
-            Commands search ingested channels you belong to. Your membership is checked before retrieval and again before the answer is
-            delivered. Replies stay private and link back to Slack.
-          </p>
-          <Note>
-            The public Beacon demo and playground use synthetic conversations only. Installing RecallHQ never makes your Slack messages
-            available on this website.
-          </Note>
-          <div className={styles.docsCards}>
-            <Link href="/docs/installation">
-              <strong>Install in your workspace →</strong>
-              <span>Authorize the app and invite it to a channel.</span>
-            </Link>
-            <Link href="/playground">
-              <strong>Try the playground →</strong>
-              <span>Ask questions about the fictional Beacon pilot.</span>
-            </Link>
-            <Link href="/docs/commands">
-              <strong>Explore the commands →</strong>
-              <span>Examples, syntax, and admin controls.</span>
-            </Link>
-            <Link href="/docs/permissions">
-              <strong>Understand data access →</strong>
-              <span>Channel permissions, processing, and deletion.</span>
-            </Link>
-          </div>
-        </>
-      );
+    case '':
+      return <Overview />;
+    case 'architecture':
+      return <ArchitectureDoc />;
+    case 'evaluation':
+      return <EvaluationDoc />;
+    case 'self-hosting':
+      return <SelfHostingDoc />;
+    case 'slack-bot':
+      return <SlackBotDoc />;
     case 'installation':
       return (
         <>
@@ -169,7 +112,7 @@ function Documentation({ page }: { page: keyof typeof pages }) {
           <Note>
             RecallHQ is available as a hosted pilot. If Slack says the app cannot be installed in your workspace, the app owner needs to
             enable distribution or your admin needs to approve it. The installation button starts OAuth; it does not bypass Slack’s approval
-            rules.
+            rules. To run your own copy instead, see <Link href="/docs/slack-bot">Slack bot setup</Link>.
           </Note>
           <h2>2. Invite the bot to a channel</h2>
           <p>
@@ -254,9 +197,8 @@ function Documentation({ page }: { page: keyof typeof pages }) {
                 {command.admin && <span className={styles.adminTag}>ADMIN / OWNER</span>}
               </h2>
               <p>{command.description}</p>
-              <Code>{command.syntax}</Code>
-              <h3>Example</h3>
-              <Code>{command.example}</Code>
+              <Code label="Syntax">{command.syntax}</Code>
+              <Code label="Example">{command.example}</Code>
             </section>
           ))}
         </>
@@ -271,7 +213,8 @@ function Documentation({ page }: { page: keyof typeof pages }) {
           </p>
           <p>
             Membership is checked before retrieval and again before delivery. Changed or deleted evidence suppresses the answer.
-            Cross-channel results are never posted publicly; answers and searches are private to the requester.
+            Cross-channel results are never posted publicly; answers and searches are private to the requester. The database enforces the
+            same boundary with row-level security; see <Link href="/docs/architecture#isolation">tenant isolation</Link>.
           </p>
           <h2>What RecallHQ processes</h2>
           <p>
@@ -337,7 +280,8 @@ function Documentation({ page }: { page: keyof typeof pages }) {
           <h2>The answer says there is not enough evidence</h2>
           <p>
             Try a more specific question or use <code>/recall search</code> to inspect the original messages. Check your channel filter and
-            history coverage. RecallHQ may suppress an answer when its evidence was edited, deleted, or became inaccessible.
+            history coverage. RecallHQ may suppress an answer when its evidence was edited, deleted, or became inaccessible, or when the
+            model cites a message it was not given.
           </p>
           <h2>The recap is partial</h2>
           <p>
@@ -351,63 +295,123 @@ function Documentation({ page }: { page: keyof typeof pages }) {
           </p>
         </>
       );
+    default:
+      return null;
   }
 }
 
 type Props = { params: Promise<{ slug?: string[] }> };
-function pageKey(slug?: string[]): keyof typeof pages {
-  if (!slug?.length) return 'introduction';
-  if (slug.length !== 1 || !Object.hasOwn(pages, slug[0]) || slug[0] === 'introduction') notFound();
-  return slug[0] as keyof typeof pages;
+function pageIndex(slug?: string[]): number {
+  if (!slug?.length) return 0;
+  const index = slug.length === 1 && slug[0] ? docsPages.findIndex((page) => page.slug === slug[0]) : -1;
+  if (index < 0) notFound();
+  return index;
 }
 
 export function generateStaticParams() {
-  return [
-    { slug: [] },
-    ...Object.keys(pages)
-      .filter((key) => key !== 'introduction')
-      .map((key) => ({ slug: [key] })),
-  ];
+  return docsPages.map((page) => ({ slug: page.slug ? [page.slug] : [] }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const key = pageKey((await params).slug);
-  return { title: `${pages[key][0]} | RecallHQ`, description: pages[key][1] };
+  const page = docsPages[pageIndex((await params).slug)];
+  return { title: `${page.slug ? page.title : 'Documentation'} | RecallHQ`, description: page.description };
+}
+
+function SidebarGroups({ current }: { current: string }) {
+  return (
+    <>
+      {docsSections.map((section) => (
+        <div key={section.title} className={styles.sidebarGroup}>
+          <p className={styles.sidebarLabel}>{section.title}</p>
+          <nav className={styles.docsNav} aria-label={section.title}>
+            {section.pages.map((page) => (
+              <Link key={page.slug} href={docsHref(page.slug)} aria-current={page.slug === current ? 'page' : undefined}>
+                {page.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      ))}
+    </>
+  );
 }
 
 export default async function DocsPage({ params }: Props) {
-  const key = pageKey((await params).slug);
-  const index = key === 'introduction' ? 0 : docsLinks.findIndex((link) => link.href === `/docs/${key}`);
+  const index = pageIndex((await params).slug);
+  const page = docsPages[index];
+  const section = docsSections.find((group) => group.pages.includes(page));
+  const previous = docsPages[index - 1];
+  const next = docsPages[index + 1];
   return (
     <SiteShell active="docs">
       <div className={styles.docsLayout}>
         <aside className={styles.docsSidebar}>
-          <p className={styles.sidebarLabel}>Documentation</p>
-          <nav className={styles.docsNav} aria-label="Documentation">
-            {docsLinks.map((link, i) => (
-              <Link key={link.href} href={link.href} aria-current={index === i ? 'page' : undefined}>
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+          <SidebarGroups current={page.slug} />
           <div className={styles.sidebarTry}>
             <p className={styles.sidebarLabel}>Try RecallHQ</p>
             <nav className={styles.docsNav} aria-label="Try RecallHQ">
               <Link href="/playground">Synthetic playground ↗</Link>
               <Link href={DEMO_URL}>Beacon workspace demo ↗</Link>
+              <a href={GITHUB_URL}>Source on GitHub ↗</a>
             </nav>
           </div>
         </aside>
         <main id="main-content" className={styles.docsArticle}>
-          <p className={styles.breadcrumbs}>Docs / {pages[key][0]}</p>
-          <h1>{pages[key][0]}</h1>
-          <p className={styles.docsIntro}>{pages[key][1]}</p>
+          <details className={styles.mobileDocsNav}>
+            <summary>
+              Documentation <span>{page.label} ▾</span>
+            </summary>
+            <SidebarGroups current={page.slug} />
+          </details>
+          {page.slug ? (
+            <>
+              <p className={styles.breadcrumbs}>
+                Docs / {section?.title} / {page.label}
+              </p>
+              <h1>{page.title}</h1>
+              <p className={styles.docsIntro}>{page.description}</p>
+            </>
+          ) : (
+            <header className={styles.docsHero}>
+              <p className={styles.eyebrow}>
+                <BookOpen size={14} aria-hidden="true" /> Documentation
+              </p>
+              <h1>Ask your team chat. Get grounded, cited answers.</h1>
+              <p className={styles.docsIntro}>
+                RecallHQ is a Slack bot that answers questions from your team’s own conversations. It searches the channels you can see, and
+                every answer links to the messages it came from.
+              </p>
+              <div className={styles.actions}>
+                <InstallLink />
+                <Link href="/playground" className={styles.secondaryButton}>
+                  <Play size={15} aria-hidden="true" /> Playground
+                </Link>
+                <Link href={DEMO_URL} className={styles.secondaryButton}>
+                  Demo workspace
+                </Link>
+                <a href={GITHUB_URL} className={styles.secondaryButton}>
+                  <FaGithub size={15} aria-hidden="true" /> GitHub
+                </a>
+              </div>
+            </header>
+          )}
           <div className={styles.docsBody}>
-            <Documentation page={key} />
+            <Documentation page={page.slug} />
           </div>
           <nav className={styles.docsNext} aria-label="Adjacent documentation pages">
-            {index > 0 ? <Link href={docsLinks[index - 1].href}>← {docsLinks[index - 1].label}</Link> : <span />}
-            {index < docsLinks.length - 1 && <Link href={docsLinks[index + 1].href}>{docsLinks[index + 1].label} →</Link>}
+            {previous ? (
+              <Link href={docsHref(previous.slug)}>
+                <span>Previous</span>← {previous.label}
+              </Link>
+            ) : (
+              <span />
+            )}
+            {next && (
+              <Link href={docsHref(next.slug)}>
+                <span>Next</span>
+                {next.label} →
+              </Link>
+            )}
           </nav>
         </main>
       </div>

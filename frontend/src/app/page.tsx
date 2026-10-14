@@ -1,10 +1,55 @@
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, BadgeCheck, CalendarRange, FlaskConical, Lock, Search, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
+import { FaGithub } from 'react-icons/fa6';
 
+import { HowItWorks } from '@/components/pipeline-diagram';
 import { InstallLink, SiteShell } from '@/components/site-shell';
 import styles from '@/components/site.module.css';
 import { DEMO_COMMANDS } from '@/lib/demo-answers';
+import { GITHUB_URL } from '@/lib/docs-nav';
 import { DEMO_URL, PUBLIC_BASE_PATH } from '@/lib/public-api';
+
+const features = [
+  {
+    icon: BadgeCheck,
+    title: 'Cited, or not shown',
+    body: (
+      <>
+        Every claim cites a message ID like <code>[slack:…]</code>. If the model cites anything it wasn’t given, you get “I couldn’t verify
+        an answer” instead of a guess.
+      </>
+    ),
+  },
+  {
+    icon: Search,
+    title: 'Finds the exact error code',
+    body: (
+      <>
+        Vector search catches paraphrases; keyword search catches <code>28P01</code>. Both run on every question and are fused by rank.
+      </>
+    ),
+  },
+  {
+    icon: CalendarRange,
+    title: 'Catch up on a date range',
+    body: 'Recap up to 32 days of a channel as updates, decisions, blockers, and next steps. Partial coverage is flagged, not hidden.',
+  },
+  {
+    icon: Lock,
+    title: 'Only channels you’re in',
+    body: 'Membership is checked before retrieval and again before delivery. Replies are private to you, and link back to Slack.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Isolation in the database',
+    body: 'Postgres row-level security scopes every query to one workspace and your channels. Bot tokens are stored encrypted.',
+  },
+  {
+    icon: FlaskConical,
+    title: 'Measured in the open',
+    body: '44 hand-labeled questions over a synthetic team archive. Results are published as they are run, including what isn’t measured yet.',
+  },
+];
 
 export default function HomePage() {
   const example = DEMO_COMMANDS.eng;
@@ -14,26 +59,31 @@ export default function HomePage() {
         <section className={styles.hero}>
           <div>
             <p className={styles.eyebrow}>
-              <span className={styles.eyebrowDot} /> Your team’s memory, in Slack
+              <span className={styles.eyebrowDot} /> A Slack bot for your team’s memory
             </p>
             <h1>
-              The answer is
-              <br />
-              in your chat.
-              <br />
-              <span>Recall it.</span>
+              Ask your team chat. <span>Get grounded, cited answers.</span>
             </h1>
             <p className={styles.lead}>
-              Find the decision, catch up on the conversation, and get back to work. Ask RecallHQ in plain English. Every answer links back
-              to its sources.
+              RecallHQ reads the channels you invite it to. Ask why a decision was made or what you missed, and get a short answer that
+              links to the exact messages behind it.
             </p>
             <div className={styles.actions}>
-              <InstallLink />
-              <Link href={DEMO_URL} className={styles.secondaryButton}>
-                Explore the demo <ArrowRight size={16} aria-hidden="true" />
+              <InstallLink label="Install in Slack" />
+              <Link href="/playground" className={styles.secondaryButton}>
+                Try the playground <ArrowRight size={16} aria-hidden="true" />
               </Link>
+              <Link href={DEMO_URL} className={styles.secondaryButton}>
+                Demo
+              </Link>
+              <a href={GITHUB_URL} className={styles.secondaryButton}>
+                <FaGithub size={16} aria-hidden="true" /> GitHub
+              </a>
             </div>
-            <p className={styles.finePrint}>Invite it to a channel. Your workspace permissions stay in control.</p>
+            <p className={styles.finePrint}>
+              The playground and demo use a fictional team’s archive. No sign-in. <Link href="/docs/self-hosting">Self-host it</Link>{' '}
+              instead.
+            </p>
           </div>
           <div className={styles.conversation} aria-label="Recorded example from the synthetic Beacon archive">
             <div className={styles.conversationHeader}>
@@ -62,49 +112,80 @@ export default function HomePage() {
                 <p className={styles.chatName}>
                   RecallHQ <span>APP</span>
                 </p>
-                <p className={styles.chatAnswer}>{example.result.answer}</p>
-                {example.result.sources.map((source) => (
+                <p className={styles.chatAnswer}>
+                  {example.result.answer}
+                  {example.result.sources.map((_, i) => (
+                    <span key={i} className={styles.cite}>
+                      {i + 1}
+                    </span>
+                  ))}
+                </p>
+                {example.result.sources.map((source, i) => (
                   <Link
                     key={source.id}
                     className={styles.sourcePill}
                     href={`/workspace/beacon/channel/${source.channel}?message=${encodeURIComponent(source.id)}`}
                   >
-                    # {source.channel} · Priya Shah · Sep {new Date(source.created_at).getDate()}
+                    <b>{i + 1}</b> #{source.channel} · {source.author_name} · Sep {new Date(source.created_at).getDate()}
                   </Link>
                 ))}
               </div>
             </div>
             <div className={styles.conversationFooter}>
               <span>Recorded answer · fictional team conversations</span>
-              <Link href="/playground">Try your own question ↗</Link>
+              <Link href="/playground">Ask your own question ↗</Link>
             </div>
           </div>
         </section>
-        <section className={styles.workflow} aria-label="How RecallHQ works">
-          <div>
-            <h2>
-              <span>01</span>Invite to a channel
-            </h2>
-            <p>RecallHQ imports available history and captures new conversations.</p>
-          </div>
-          <div>
-            <h2>
-              <span>02</span>Ask what you need
-            </h2>
-            <p>Find an answer, search messages, or recap a date range.</p>
-          </div>
-          <div>
-            <h2>
-              <span>03</span>Check the source
-            </h2>
-            <p>Private replies include links to the messages behind the answer.</p>
-          </div>
-        </section>
-        <section className={styles.section}>
+
+        <div className={styles.stackStrip} aria-label="Built with">
+          <strong>Under the hood</strong>
+          <span>Postgres + pgvector</span>
+          <span>Full-text search</span>
+          <span>Reciprocal rank fusion</span>
+          <span>OpenRouter Decisions rerank</span>
+          <span>gpt-5.4-mini</span>
+        </div>
+
+        <section className={styles.section} aria-labelledby="how-title">
           <div className={styles.sectionTitle}>
             <div>
-              <p className={styles.eyebrow}>One command. Your team’s context.</p>
-              <h2>Less scrolling. More knowing.</h2>
+              <p className={styles.eyebrow}>How it works</p>
+              <h2 id="how-title">From a Slack thread to an answer you can check.</h2>
+            </div>
+            <Link className={styles.textLink} href="/docs/architecture">
+              Read the architecture <ArrowRight size={15} aria-hidden="true" />
+            </Link>
+          </div>
+          <HowItWorks />
+        </section>
+
+        <section className={styles.section} aria-labelledby="features-title">
+          <div className={styles.sectionTitle}>
+            <div>
+              <p className={styles.eyebrow}>Why teams use it</p>
+              <h2 id="features-title">Less scrolling. Answers you can trust.</h2>
+            </div>
+            <Link className={styles.textLink} href="/docs/evaluation">
+              See the evaluation <ArrowRight size={15} aria-hidden="true" />
+            </Link>
+          </div>
+          <div className={styles.featureGrid}>
+            {features.map(({ icon: Icon, title, body }) => (
+              <div key={title} className={styles.feature}>
+                <Icon size={20} aria-hidden="true" />
+                <h3>{title}</h3>
+                <p>{body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className={styles.section} aria-labelledby="commands-title">
+          <div className={styles.sectionTitle}>
+            <div>
+              <p className={styles.eyebrow}>One command</p>
+              <h2 id="commands-title">Everything starts with /recall.</h2>
             </div>
             <Link className={styles.textLink} href="/docs/commands">
               All commands <ArrowRight size={15} aria-hidden="true" />
@@ -129,9 +210,14 @@ export default function HomePage() {
               <h3>Try it before adding it to Slack.</h3>
               <p>The Beacon playground uses a fictional campus pilot team. No account needed.</p>
             </div>
-            <Link href="/playground" className={styles.secondaryButton}>
-              Open playground <ArrowRight size={15} aria-hidden="true" />
-            </Link>
+            <div>
+              <Link href="/playground" className={styles.primaryButton}>
+                Open playground <ArrowRight size={15} aria-hidden="true" />
+              </Link>
+              <Link href="/docs" className={styles.secondaryButton}>
+                Read the docs
+              </Link>
+            </div>
           </div>
         </section>
       </main>

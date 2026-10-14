@@ -8,6 +8,8 @@ const { spawn } = require('node:child_process');
 const WebSocket = require('next/dist/compiled/ws');
 const base = process.env.SITE_CHECK_URL || 'http://localhost:3000';
 const profile = mkdtempSync(join(tmpdir(), 'recallhq-docs-check-'));
+// SITE_CHECK_SHOTS chooses where screenshots go (default: the OS temp directory).
+const shots = process.env.SITE_CHECK_SHOTS || tmpdir();
 const chrome = spawn(
   'google-chrome',
   ['--headless', '--no-sandbox', '--disable-gpu', '--remote-debugging-port=9234', `--user-data-dir=${profile}`, 'about:blank'],
@@ -47,9 +49,14 @@ async function visit(path) {
   );
   await pause(700);
 }
-async function screenshot(name) {
-  const result = await call('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
-  writeFileSync(join(tmpdir(), `recallhq-${name}.png`), Buffer.from(result.data, 'base64'));
+async function screenshot(name, fullPage = false) {
+  const options = { format: 'png', captureBeyondViewport: fullPage };
+  if (fullPage) {
+    const [width, height] = await evaluate('[window.innerWidth, document.documentElement.scrollHeight]');
+    options.clip = { x: 0, y: 0, width, height: Math.min(height, 12000), scale: 1 };
+  }
+  const result = await call('Page.captureScreenshot', options);
+  writeFileSync(join(shots, `recallhq-${name}.png`), Buffer.from(result.data, 'base64'));
 }
 const source = {
   id: 'synthetic:eng:20260915-01',
@@ -100,26 +107,46 @@ async function tab(name) {
     '/docs/commands',
     '/docs/permissions',
     '/docs/troubleshooting',
+    '/docs/self-hosting',
+    '/docs/slack-bot',
+    '/docs/architecture',
+    '/docs/evaluation',
     '/playground',
   ])
     assert.equal((await fetch(`${base}${path}`)).status, 200, path);
   assert.equal((await fetch(`${base}/docs/missing`)).status, 404);
+  assert.equal((await fetch(`${base}/docs/introduction`)).status, 404);
   assert.equal(
     (await fetch(`${base}/demo`, { redirect: 'manual' })).headers.get('location'),
     `${new URL(base).pathname.replace(/\/$/, '')}/workspace/beacon/channel/eng`,
   );
-  for (const width of [1440, 390]) {
-    await call('Emulation.setDeviceMetricsOverride', { width, height: 1000, deviceScaleFactor: 1, mobile: width === 390 });
-    for (const [path, label] of [
-      ['/', 'home'],
-      ['/docs/commands', 'docs'],
-      ['/playground', 'playground'],
-    ]) {
-      await visit(path);
-      assert.equal(await evaluate('document.documentElement.scrollWidth <= window.innerWidth'), true, `${label} overflow at ${width}`);
-      await screenshot(`${label}-${width}`);
+  // SITE_CHECK_FULL=1 saves full-page screenshots instead of the first viewport.
+  const fullPage = process.env.SITE_CHECK_FULL === '1';
+  for (const scheme of ['light', 'dark']) {
+    await call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: scheme }] });
+    for (const width of [1440, 390]) {
+      await call('Emulation.setDeviceMetricsOverride', { width, height: 1000, deviceScaleFactor: 1, mobile: width === 390 });
+      for (const [path, label] of [
+        ['/', 'home'],
+        ['/docs', 'docs-home'],
+        ['/docs/commands', 'docs'],
+        ['/docs/architecture', 'architecture'],
+        ['/docs/evaluation', 'evaluation'],
+        ['/docs/self-hosting', 'self-hosting'],
+        ['/docs/slack-bot', 'slack-bot'],
+        ['/playground', 'playground'],
+      ]) {
+        await visit(path);
+        assert.equal(
+          await evaluate('document.documentElement.scrollWidth <= window.innerWidth'),
+          true,
+          `${label} overflow at ${width} (${scheme})`,
+        );
+        await screenshot(`${label}-${width}${scheme === 'dark' ? '-dark' : ''}`, fullPage);
+      }
     }
   }
+  await call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: 'light' }] });
   await call('Emulation.setDeviceMetricsOverride', { width: 1440, height: 1000, deviceScaleFactor: 1, mobile: false });
   await visit('/playground');
   await tab('search');
@@ -178,9 +205,9 @@ async function tab(name) {
     console.log('Passed: live browser request to public API with synthetic source links.');
   }
   console.log(
-    'Passed: routes, 404, demo redirect, desktop/mobile overflow, command payloads, citations, loading, empty results, invalid dates, rate limits, retry.',
+    'Passed: routes, 404, demo redirect, desktop/mobile overflow in light and dark, command payloads, citations, loading, empty results, invalid dates, rate limits, retry.',
   );
-  console.log('Screenshots: /tmp/recallhq-{home,docs,playground}-{1440,390}.png and /tmp/recallhq-playground-answer.png');
+  console.log(`Screenshots: ${join(shots, 'recallhq-<page>-{1440,390}[-dark].png')} and recallhq-playground-answer.png`);
 })()
   .catch((error) => {
     console.error(error);

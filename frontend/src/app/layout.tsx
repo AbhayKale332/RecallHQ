@@ -11,9 +11,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'RecallHQ | Your team’s memory in Slack',
+  title: 'RecallHQ | Ask your team chat. Get grounded, cited answers.',
   description:
-    'Ask questions, find decisions, and catch up on Slack conversations with source-linked answers. Explore the docs and public Beacon playground.',
+    'RecallHQ is a Slack bot that answers questions from your team’s conversations with cited, source-linked answers. Read the docs or try the public Beacon playground.',
 };
 
 const RootLayout = ({ children }: Readonly<PropsWithChildren>) => {
