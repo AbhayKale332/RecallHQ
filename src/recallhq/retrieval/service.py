@@ -17,14 +17,30 @@ LOG = logging.getLogger("recallhq.retrieval")
 MESSAGE_FIELDS = "id, channel_id AS channel, author_id AS author, author_name, text, created_at, thread_root_id, permalink, source_revision"
 
 
+STOPWORDS = frozenset(
+    "a an and any are as at be been but by can could did do does for from had has have how i if in into is it its "
+    "me my no not of on or our so than that the their them then there these they this to us was we were what when "
+    "where which who whom why will with would you your about after before did ever get got just should".split()
+)
+
+
+def lexical_query(query: str) -> str | None:
+    """OR together the query's content words, so one exact term like an error code is enough to match."""
+    terms = dict.fromkeys(t for t in re.findall(r"[a-z0-9_]+", query.lower()) if t not in STOPWORDS)
+    return " | ".join(terms) or None
+
+
 def db(context: QueryContext = DEMO_CONTEXT):
     return connect(SETTINGS, context)
 
 
-def retrieve(query: str, after: datetime | None = None, before: datetime | None = None, channel: str | None = None, limit: int = 12, *, context: QueryContext = DEMO_CONTEXT) -> list[dict]:
+def retrieve(query: str, after: datetime | None = None, before: datetime | None = None, channel: str | None = None, limit: int = 12, *, context: QueryContext = DEMO_CONTEXT, mode: str = "hybrid") -> list[dict]:
+    """Hybrid RRF retrieval. ``mode`` "dense" or "lexical" runs one arm only (evaluation ablations)."""
+    if mode not in ("hybrid", "dense", "lexical"):
+        raise ValueError(f"unknown retrieval mode: {mode}")
     if not SETTINGS.openai_api_key:
         raise HTTPException(503, "Search is temporarily unavailable")
-    vector = OpenAI(api_key=SETTINGS.openai_api_key, timeout=20, max_retries=0).embeddings.create(
+    vector = None if mode == "lexical" else OpenAI(api_key=SETTINGS.openai_api_key, timeout=20, max_retries=0).embeddings.create(
         model=SETTINGS.embedding_model, dimensions=SETTINGS.embedding_dimension, input=query
     ).data[0].embedding
     filters = ["source = %s", "workspace_id = %s", "channel_id = ANY(%s)"]
@@ -40,13 +56,14 @@ def retrieve(query: str, after: datetime | None = None, before: datetime | None 
         params.append(channel)
     where = " AND ".join(filters)
     with db(context) as conn:
-        semantic = conn.execute(
+        semantic = [] if vector is None else conn.execute(
             f"SELECT message_ids FROM chunks WHERE {where} AND embedding IS NOT NULL ORDER BY embedding <=> %s::vector LIMIT 30",
             (*params, json.dumps(vector)),
         ).fetchall()
-        lexical = conn.execute(
-            f"SELECT message_ids FROM chunks WHERE {where} AND tsv @@ websearch_to_tsquery('simple', %s) ORDER BY ts_rank(tsv, websearch_to_tsquery('simple', %s)) DESC LIMIT 30",
-            (*params, query, query),
+        terms = None if mode == "dense" else lexical_query(query)
+        lexical = [] if terms is None else conn.execute(
+            f"SELECT message_ids FROM chunks WHERE {where} AND tsv @@ to_tsquery('simple', %s) ORDER BY ts_rank(tsv, to_tsquery('simple', %s)) DESC LIMIT 30",
+            (*params, terms, terms),
         ).fetchall()
         scores: dict[str, float] = {}
         for weight, result in ((1.0, semantic), (1.0, lexical)):
