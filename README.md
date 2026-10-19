@@ -30,6 +30,7 @@ It runs in two ways:
 - **Slack bot.** It can be installed in more than one workspace. Invite it into a
   channel, and it imports the history Slack makes available and captures new
   messages. Results are private and only cover channels you belong to.
+  See [Add to Slack](https://recall.abhaykale.me/docs/installation) and [Your first answer](https://recall.abhaykale.me/docs/quickstart).
 - **Public demo.** An anonymous, read-only workspace called "Beacon" with about 2,200
   synthetic messages, so anyone can try it without connecting real data.
 
@@ -62,7 +63,13 @@ The public Beacon demo supports `/ask`, `/search` and `/catchup` over the synthe
 messages. Anonymous use is limited to 3 commands per minute and 20 per day per IP,
 plus 200 per day across the whole site.
 
+More in the docs: [Command reference](https://recall.abhaykale.me/docs/commands) ·
+[Permissions & data](https://recall.abhaykale.me/docs/permissions) · [Troubleshooting](https://recall.abhaykale.me/docs/troubleshooting).
+
 ## How it works
+
+The docs site walks through this in more detail:
+**[Model architecture](https://recall.abhaykale.me/docs/architecture)**.
 
 ### Architecture
 
@@ -150,7 +157,8 @@ Rerank settings:
 ## Evaluation
 
 Full method, metric definitions and limitations are in
-**[docs/evaluation.md](docs/evaluation.md)**.
+**[docs/evaluation.md](docs/evaluation.md)** and on the docs site under
+**[Evaluations](https://recall.abhaykale.me/docs/evaluation)**.
 
 - **Data:** 2,233 synthetic messages from a fictional student team across 5 channels,
   and 44 hand-written questions (38 answerable, 6 unanswerable).
@@ -185,6 +193,8 @@ project, so treat these numbers as a sanity check, not a benchmark.
 
 ## Quickstart
 
+The docs site has the full guide: **[Run locally](https://recall.abhaykale.me/docs/self-hosting)**.
+
 Requires Python 3.12, [uv](https://docs.astral.sh/uv/) and Docker.
 
 ```bash
@@ -205,7 +215,8 @@ To run the frontend (docs, playground and Beacon demo), see
 
 ## Slack bot setup
 
-See **[docs/slack-bot.md](docs/slack-bot.md)** for creating the Slack app, running
+See **[docs/slack-bot.md](docs/slack-bot.md)** (also on the docs site as
+**[Set up your own Slack bot](https://recall.abhaykale.me/docs/slack-bot)**) for creating the Slack app, running
 it locally through a tunnel, the full command reference, ingestion and recovery
 behaviour, database roles, and tests. To generate the app manifest:
 
